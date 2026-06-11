@@ -1,6 +1,6 @@
 # archviz-skills
 
-<img width="1568" height="907" alt="68747470733a2f2f69696c692e696f2f664c45575435782e706e67" src="https://github.com/user-attachments/assets/19051e35-7745-4cd8-bb8e-b97a45e999b0" />
+
 
 Restrained information visualization skill pack for AI agents.
 
