@@ -1,14 +1,16 @@
 ---
 name: archviz-skills
 description: |
-  Restrained information visualization skill pack. Every visualization starts with a brief read and three dials.
-  Supports Mermaid, ASCII, data charts, process diagrams, and information icons.
-  Not limited to Mermaid. Text-first, preview-compatible, anti-slop.
-version: 0.0.6
-author: archsueh
+  Restrained information visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
+  Supports Mermaid, ASCII, self-contained HTML, Python (Plotly), and Three.js 3D archviz. Text-first, preview-compatible, anti-slop.
+  Default mode is 2D infoviz; enter 3D only when the brief mentions building, floorplan, structure, or spatial walkthrough.
+  Use when the user asks for diagram, visualization, chart, gantt, sankey, mindmap, flowchart, xychart, 可视化, 架构图, 流程图,
+  信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, or 3D building/archviz.
 license: MIT
-triggers: |
-  diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
+metadata:
+  version: "0.0.7"
+  author: archsueh
+  triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
 ---
 
 # archviz-skills
@@ -247,13 +249,15 @@ Actual files live in `templates/`. Current inventory (do not hardcode counts in 
 
 ```
 templates/
-├── mermaid/    15 files (flowchart, mindmap, gantt, sankey, scoring, network, distribution, diverging-bar, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
+├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
+│               flowchart + mindmap: inline Mermaid (no standalone .mmd)
 ├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
 ├── html/       14 files (bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, self-contained, threejs-archviz, threejs-floorplan)
 └── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
 ```
 
 Prefer reading the specific template file under `templates/<mode>/` at use time instead of relying on this list.
+Flowchart and mindmap have no template files — generate inline using tokens from DESIGN.md.
 ---
 
 ## 13. TROUBLESHOOTING

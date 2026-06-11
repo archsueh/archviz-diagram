@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.0.7 (2026-06-11)
+
+**skill-creator compliance + documentation sync**
+
+### Fixed
+- **SKILL.md frontmatter**: `triggers`/`version`/`author` moved into `description` + `metadata` (passes Codex `quick_validate.py`)
+- **§12 template list**: removed nonexistent `flowchart.mmd`/`mindmap.mmd`; noted inline generation
+- **README**: version badge 0.0.5 → 0.0.7, HTML count 14, 3D mode routing, examples index
+
+### Added
+- **agents/openai.yaml**: Codex UI metadata (`display_name`, `default_prompt`, `brand_color`)
+
 ## 0.0.6 (2026-06-11)
 
 **3D architectural visualization — Three.js + animejs integration**
