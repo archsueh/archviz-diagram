@@ -1,0 +1,57 @@
+# ASCII Flowchart Template (for terminal / README, no Mermaid)
+# Follows DESIGN.md ASCII shape vocabulary + arrow semantics
+# Max 80 columns, monospace font assumed
+
+# ── Simple Process Flow ──
+
+┌─────────┐     ┌─────────┐     ┌─────────┐
+│  Input  │────►│ Process │────►│ Output  │
+└─────────┘     └─────────┘     └─────────┘
+
+# ── Decision Flow ──
+
+┌─────────┐     ╭───────────╮
+│  Start  │────►│  Decision │
+└─────────┘     ╰─────┬─────╯
+                 Yes ◄─┤─► No
+                  │         │
+                  ▼         ▼
+            ┌─────────┐ ┌─────────┐
+            │ Path A  │ │ Path B  │
+            └────┬────┘ └────┬────┘
+                 │           │
+                 ▼           ▼
+            ┌─────────────────────┐
+            │      Merge          │
+            └─────────────────────┘
+
+# ── Layered System ──
+
+╔═══════════════════════════════════════╗
+║            Presentation               ║
+║  ┌─────────┐  ┌─────────┐            ║
+║  │  View   │──│  Route  │            ║
+║  └────┬────┘  └────┬────┘            ║
+╠═══════╪════════════╪═════════════════╣
+║            Business Logic             ║
+║       │            │                 ║
+║       ▼            ▼                 ║
+║  ┌─────────┐  ┌─────────┐            ║
+║  │ Service │──│  Model  │            ║
+║  └────┬────┘  └────┬────┘            ║
+╠═══════╪════════════╪═════════════════╣
+║            Data Layer                 ║
+║       │            │                 ║
+║       ▼            ▼                 ║
+║  ┌─────────┐  ┌─────────┐            ║
+║  │  Store  │  │   API   │            ║
+║  └─────────┘  └─────────┘            ║
+╚═══════════════════════════════════════╝
+
+# Legend:
+# ────► = primary flow
+# - - ► = secondary flow (use ┄┄┄► if terminal supports)
+# ═════ = emphasis / strong connection
+# ┌─┐   = regular node
+# ╔═╗   = important / sovereign node
+# ╭─╮   = decision

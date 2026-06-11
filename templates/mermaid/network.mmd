@@ -1,0 +1,18 @@
+%% Network/Relationship Graph (archviz-skills)
+%% Use for: dependencies, ecosystems, entity relationships
+%% Env: Mermaid flowchart (preview-compatible) or Python networkx
+%% Dials: Complexity 6, Density 4, Restraint 7
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e8e4e0', 'primaryTextColor': '#f5f5f4', 'primaryBorderColor': '#a8a29e', 'lineColor': '#a8a29e', 'fontSize': '13px'}}}%%
+flowchart LR
+    A[Service A] -->|depends| B[Service B]
+    A -->|depends| C[Service C]
+    B -->|calls| D[Database]
+    C -->|calls| D
+    C -->|publishes| E[Queue]
+    E -->|consumes| A
+    B -.->|optional| F[Cache]
+
+    style A fill:#e8e4e0,stroke:#002FA7,stroke-width:2px,color:#1B365D
+    style D fill:#e4e8f0,stroke:#94a3b8,color:#0a0a0a
+    style F fill:#f5f5f4,stroke:#d6d3d1,color:#44403c

@@ -1,0 +1,46 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#fafaf8',
+  'primaryTextColor': '#0a0a0a',
+  'primaryBorderColor': '#e0e0e0',
+  'lineColor': '#e0e0e0',
+  'fontSize': '14px'
+}}}%%
+%% ⚠️ ADVANCED RENDER ONLY (per mermaid-arc-skills DESIGN.md "Text-first, preview-compatible source")
+%% architecture-beta guizang Swiss (S05/S17). DO NOT paste raw into previewed .md (lexer risk).
+%% For source: use flowchart+subgraph compat (single IKB, hairline groups).
+architecture-beta
+    group core(cloud)[Core Layer]
+    service kernel[Kernel] in core
+    service engine[Engine] in core
+
+    group middle(database)[Middle Layer]
+    service api[API] in middle
+    service data[Data] in middle
+
+    group outer(cloud)[Outer Layer]
+    service ui[UI] in outer
+    service ext[External] in outer
+
+    kernel --> api
+    engine --> data
+    api --> ui
+    data --> ext
+
+    classDef coreLayer fill:#f0f0ee,stroke:#002FA7,color:#0a0a0a
+    classDef middleLayer fill:#f0f0ee,stroke:#FFD500,color:#0a0a0a
+    classDef outerLayer fill:#f0f0ee,stroke:#C5E803,color:#0a0a0a
+
+    class core coreLayer
+    class middle middleLayer
+    class outer outerLayer
+
+%% Guizang Swiss Rules Applied:
+%% - Single accent: IKB #002FA7 (or swap to Lemon Yellow #FFD500 etc. from guizang themes-swiss.md)
+%% - Grid: subgraphs aligned to 12/16 col, generous whitespace
+%% - Typography: large labels weight 200 (ExtraLight), small 500+
+%% - Hairline: use thin edges, no rounded (Mermaid default ok, avoid custom round)
+%% - For guizang S17/P17 System Diagram slot: render SVG (geometry only), labels via HTML grid in template
+%% - Swiss locked: map to S17 "System Diagram" or S05 "Three Layers" – no new layouts
+%% - Render with guizang Swiss accent, embed in guizang template-swiss.html S17
+%% - Follow guizang P0: structure over decoration, grid to 上, hairline as scalpel
+%% - No text in final SVG if possible; use architecture-beta groups for layers (S05/S17)

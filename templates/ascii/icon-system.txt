@@ -1,0 +1,45 @@
+# Icon System Template (for archviz-skills info visualization)
+
+# Follows DESIGN.md restrained principles + research report icon guidelines.
+# Minimal line icons for categories, nodes, arrows, states in viz.
+# Unified grid, single IKB accent (#002FA7), no emoji/clutter.
+# Dual: ASCII for terminal, SVG for render.
+# Pre-check: count limited, semantic value only, align to shape vocab.
+
+## Shape Vocabulary (ASCII + extend to SVG)
+┌─┐ = regular node / category
+╔═╗ = sovereign / core / important
+╭─╮ = decision / choice
+●   = data point / milestone
+→   = primary flow / arrow
+- - → = secondary / dashed
+═══→ = emphasized / strong
+
+## Examples
+# Category icons (for bar/treemap labels)
+[Category A]  ┌────┐
+              │ A  │
+              └────┘
+
+# Process icons (flowchart)
+Start ──► Process ──► End
+        ╭────╮
+        │Decision│
+        ╰────╯
+
+# State icons
+✓ Done   ○ In Progress   ! Warning
+
+# Data viz icons (scatter/heatmap)
+● Point   □ Area   ─ Line
+
+## Rules
+- Max 80 cols for ASCII.
+- Consistent scale, no decoration.
+- For personal context: direct, match habit (simplified Chinese if labels, no filler).
+- Combine with main viz: e.g. icons in labels for Gantt categories or Sankey nodes.
+- Output: ASCII text or simple SVG paths.
+
+# Legend:
+# Use sparingly; only when adds clarity without visual noise.
+# Align to tokens: warm paper bg, IKB lines.

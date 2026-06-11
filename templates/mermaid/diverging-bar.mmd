@@ -1,0 +1,11 @@
+%% Diverging Bar — Deviation from baseline (archviz-skills)
+%% Use for: comparing against reference value, sentiment ±, performance vs target
+%% Env: Mermaid xychart-beta (horizontal) or Python
+%% Dials: Complexity 3, Density 4, Restraint 7
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e8e4e0', 'primaryTextColor': '#f5f5f4', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+xychart-beta
+    title "Performance vs Target (±%)"
+    x-axis ["Product A", "Product B", "Product C", "Product D", "Product E"]
+    y-axis "Deviation %" -30 --> 30
+    bar [-15, 8, -5, 22, -12]
