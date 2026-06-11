@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.0.6 (2026-06-11)
+
+**3D architectural visualization — Three.js + animejs integration**
+
+### Added
+- **DESIGN.md §3D Architectural Visualization**: 6 archviz types (structure shell / floor plan / interior / structural overlay / section cut / multi-floor nav), 3D tokens, constraints, 3D anti-patterns
+- **SKILL.md 3D archviz mode**: environment routing (3D → Three.js self-contained HTML), stack spec (Three.js + animejs + OrbitControls), content type "spatial/3D"
+- **2 Three.js templates**: `threejs-archviz.html` (building structure shell with section cut, wireframe toggle, camera presets), `threejs-floorplan.html` (multi-floor navigation with animejs transitions, explode view)
+- **1 teaching example**: `teaching-building-3d.html` (4层教学楼：门厅/教室/办公/屋顶，楼层切换+分解视图)
+- **Triggers**: three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
+
+### Changed
+- **SKILL.md type selection table**: +3 rows for 3D (building structure, floor plan, section cut)
+- **SKILL.md environment routing**: +3D/archviz row (Three.js self-contained HTML)
+- **SKILL.md Brief Inference**: content type now includes "spatial/3D"
+
 ## 0.0.5 (2026-06-11)
 
 **Teaching/academic chart gaps + anti-patterns + mixed-type strategy + real examples**

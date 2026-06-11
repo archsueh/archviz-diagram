@@ -4,11 +4,11 @@ description: |
   Restrained information visualization skill pack. Every visualization starts with a brief read and three dials.
   Supports Mermaid, ASCII, data charts, process diagrams, and information icons.
   Not limited to Mermaid. Text-first, preview-compatible, anti-slop.
-version: 0.0.5
+version: 0.0.6
 author: archsueh
 license: MIT
 triggers: |
-  diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph
+  diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
 ---
 
 # archviz-skills
@@ -47,6 +47,9 @@ Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pi
 | Dependencies | dependency graph | `mermaid/dependency-network.mmd` |
 | Multi-criteria scoring | radar or diverging bar | `html/radar.html` / `mermaid/diverging-bar.mmd` |
 | Simple (≤5 items) | **TABLE, not chart** | — |
+| **3D: Building structure** | Three.js structure shell | `html/threejs-archviz.html` |
+| **3D: Floor plan** | Three.js extruded floor | `html/threejs-floorplan.html` |
+| **3D: Section cut** | Three.js ClippingPlane | `html/threejs-archviz.html` |
 
 **Mixed types** (when data spans categories):
 - Process + timeline → flowchart with gantt sub-section (split into 2 diagrams)
@@ -68,6 +71,15 @@ Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pi
 | Obsidian/preview | lightweight Mermaid / ASCII / self-contained HTML |
 | Terminal | pure ASCII (pyfiglet, boxes) |
 | Deliverables | Python (Plotly/Matplotlib) |
+| **3D / archviz** | **Three.js self-contained HTML (CDN import)** |
+
+**3D archviz mode** (when brief = building/structure/spatial):
+- Stack: Three.js + animejs (camera transitions) + OrbitControls
+- Output: self-contained HTML with CDN imports (no build step)
+- Types: structure shell / floor plan extrusion / section cut / multi-floor nav
+- Tokens: inherits 2D palette + adds `structure=#a8a29e`, `floor=#e8e4e0`, `accent-3d=#002FA7`
+- Constraints: procedural geometry preferred, max 3 lights, responsive resize, animejs for camera moves
+- Full rules → DESIGN.md §3D Architectural Visualization
 
 Full rules → DESIGN.md. Templates → templates/.
 
@@ -78,7 +90,7 @@ Full rules → DESIGN.md. Templates → templates/.
 Before generating, read these signals:
 
 1. **Context** — paper, design log, PPT, product doc, personal note
-2. **Content type** — hierarchical, sequential, relational, quantitative, temporal
+2. **Content type** — hierarchical, sequential, relational, quantitative, temporal, **spatial/3D**
 3. **Audience** — reviewers, clients, dev team, self
 4. **Vibe** — "restrained", "clean", "academic", "playful"
 5. **Existing style** — match palette/font/layout already established
@@ -237,7 +249,7 @@ Actual files live in `templates/`. Current inventory (do not hardcode counts in 
 templates/
 ├── mermaid/    15 files (flowchart, mindmap, gantt, sankey, scoring, network, distribution, diverging-bar, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
 ├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
-├── html/       12 files (bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, self-contained)
+├── html/       14 files (bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, self-contained, threejs-archviz, threejs-floorplan)
 └── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
 ```
 

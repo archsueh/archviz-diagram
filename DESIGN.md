@@ -116,6 +116,54 @@ Based on Few's 7 relationships + Shneiderman's 6 data types + teaching/academic 
 
 ---
 
+## 3D Architectural Visualization (Three.js)
+
+When the brief calls for building structure, interior walkthrough, or spatial analysis — switch from 2D diagram mode to 3D archviz mode.
+
+**Stack**: Three.js (rendering) + animejs (UI transitions) + OrbitControls (navigation)
+
+**3D Archviz Types**:
+
+| Type | Use Case | Complexity |
+|---|---|---|
+| Structure shell | Building envelope, column grid, floor slabs | Low — wireframe + transparent surfaces |
+| Floor plan extrusion | 2D plan → 3D floor with walls | Medium — ExtrudeGeometry from SVG/DXF paths |
+| Interior walkthrough | Room layout, furniture, lighting | High — GLTF models + baked lighting |
+| Structural overlay | Load paths, stress visualization on 3D model | Medium — color-mapped geometry |
+| Section cut | Exploded axonometric, cutaway views | Medium — ClippingPlanes |
+| Multi-floor navigation | Floor selector with camera animation | Medium — animejs camera tween |
+
+**3D Tokens** (inherits 2D palette, adds spatial):
+
+| Token | Value | Use |
+|---|---|---|
+| structure | `#a8a29e` (border gray) | Wireframe, grid lines |
+| floor | `#e8e4e0` (surface) | Slab fill, ground plane |
+| accent-3d | `#002FA7` (IKB) | Highlighted structure, active floor |
+| ambient | `0xf5f5f4` | Hemisphere light (sky) |
+| ground | `0xd6d3d1` | Hemisphere light (ground) |
+
+**3D Constraints**:
+- Self-contained HTML only (no external model dependencies for templates)
+- Procedural geometry preferred (BoxGeometry, PlaneGeometry) over loaded GLTF
+- Max 3 light sources (1 ambient + 1 directional + 1 hemisphere)
+- Camera: PerspectiveCamera, FOV 50-60, near 0.1, far 1000
+- OrbitControls: enableDamping=true, dampingFactor=0.05
+- animejs for camera transitions (duration 800-1200ms, easeInOutCubic)
+- Responsive: resize listener mandatory
+- Performance: requestAnimationFrame loop, dispose geometry on teardown
+
+**Anti-patterns (3D specific)**:
+| Anti-pattern | Fix |
+|---|---|
+| Too many real-time shadows | Bake lighting, use shadow only for hero object |
+| Unbounded camera | Set minDistance/maxDistance/polar angle limits |
+| No loading state | Show progress bar for GLTF loads |
+| Janky camera jump | Use animejs tween, never direct position set |
+| No mobile fallback | Reduce geometry complexity, disable shadows on mobile |
+
+---
+
 ## Validation
 
 **Pre-gen**: Brief done? Dials set? Tokens locked? Labels short? Gantt: codes+table+ASCII?
