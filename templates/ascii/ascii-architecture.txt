@@ -1,57 +1,40 @@
-# ASCII Architecture Template (for terminal / README)
-# Follows DESIGN.md ASCII shape vocabulary
-# Use for system architecture, layered closed loops, component diagrams
+# ASCII Architecture Template (plain text, no box-drawing chars)
 
-# ── Three-Layer Architecture (Aver example) ──
+# Three-Layer Architecture
 
-╔═══════════════════════════════════════════════════════╗
-║                   .md 数据主权                         ║
-║            Local-first · 被动AI · 完整归档              ║
-╚═════════════════════╤═════════════════════════════════╝
-                      │
-        ┌─────────────┼─────────────┐
-        │             │             │
-        ▼             ▼             ▼
-┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-│  Money 量化  │ │ Knowledge 闪 │ │ Sentiment 仪 │
-│    台账      │ │   念采集     │ │   式回响     │
-├──────────────┤ ├──────────────┤ ├──────────────┤
-│ · 日均成本   │ │ · MD-native  │ │ · 里程碑触发 │
-│ · 日期分离   │ │ · 元数据关联 │ │ · 购入引导   │
-│ · 卖出结算   │ │ · Zettlr协同 │ │ · 卖出告别   │
-└──────┬───────┘ └──────┬───────┘ └──────┬───────┘
-       │                │                │
-       └────────────────┼────────────────┘
-                        │
-                        ▼
-              ┌──────────────────┐
-              │   完整 .md 归档   │
-              │  财务+技术+情感   │
-              └──────────────────┘
+[[System Core]]
+  Local-first / Passive AI / Full Archive
 
-# ── System Architecture ──
+    |           |           |
+    v           v           v
 
-                    ┌─────────────┐
-                    │   Gateway   │
-                    └──────┬──────┘
-                           │
-           ┌───────────────┼───────────────┐
-           │               │               │
-           ▼               ▼               ▼
-    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-    │   Auth      │ │   Core API  │ │   Storage   │
-    │  Service    │ │   Service   │ │   Service   │
-    └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
-           │               │               │
-           └───────────────┼───────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │  Database   │
-                    └─────────────┘
+[Money]     [Knowledge]  [Sentiment]
+  |             |            |
+  Daily cost    MD-native    Milestone trigger
+  Date split    Metadata     Buy guide
+  Sell close    Zettlr sync  Sell farewell
+
+    |           |            |
+    v           v            v
+
+[[Complete .md Archive]]
+  Finance + Tech + Emotion
+
+# System Architecture
+
+         [Gateway]
+             |
+    +--------+--------+
+    |        |        |
+[Auth]   [Core API] [Storage]
+    |        |        |
+    +--------+--------+
+             |
+        [Database]
 
 # Legend:
-# ╔═╗ = sovereign / core (double border)
-# ┌─┐ = regular component
-# ─── = primary connection
-#  │  = downward flow
-# Use monospace font, max 80 columns
+# [[x]] = sovereign / core
+# [x]   = regular component
+# -->   = primary connection
+# |     = downward flow
+# +--+  = junction

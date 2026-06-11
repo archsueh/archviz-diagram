@@ -7,7 +7,7 @@ Restrained information visualization skill pack for AI agents.
 Every visualization starts with a **brief read** and **three dials** — not a default template.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.0.8-blue.svg)
+![Version](https://img.shields.io/badge/version-0.0.9-blue.svg)
 
 ---
 
@@ -62,7 +62,8 @@ cp -r archviz-skills ~/.hermes/skills/creative/archviz-skills
 archviz-skills/
 ├── SKILL.md              # Execution workflow + anti-patterns
 ├── agents/openai.yaml    # Codex UI metadata
-├── DESIGN.md             # Design system + visualization taxonomy (+ §3D)
+├── DESIGN.md             # Design system, Stitch 9-section format (+ Extended: taxonomy, Aver, 3D)
+├── preview.html          # Visual catalog: palettes, type scale, node/edge styles
 ├── README.md             # This file
 ├── CONTRIBUTING.md       # Contribution guide
 ├── CHANGELOG.md          # Version history
@@ -96,13 +97,21 @@ archviz-skills/
 
 ## Design system
 
-See [DESIGN.md](DESIGN.md) for:
-- Token system (5 palette presets)
-- Contrast rule (luminance-based)
-- Typography hierarchy (越大越细)
-- Visualization taxonomy (Few + Shneiderman)
-- 3D architectural visualization (Three.js + animejs)
-- Anti-homogenization rules
+[DESIGN.md](DESIGN.md) follows the Stitch DESIGN.md 9-section format (per [awesome-design-md](https://github.com/VoltAgent/awesome-design-md)):
+
+1. Visual Theme & Atmosphere (+ Agent-Readable Contract)
+2. Color Palette & Roles — semantic names + hex + role, 5 palette systems, luminance contrast gate
+3. Typography Rules (越大越细 hierarchy)
+4. Component Stylings — nodes, edges, groups, gantt, tables, Mermaid init
+5. Layout Principles — three dials + whitespace philosophy
+6. Depth & Elevation — flat by doctrine
+7. Do's and Don'ts
+8. Responsive Behavior + degradation strategy
+9. Agent Prompt Guide — quick color reference + ready-to-use prompts
+
+Extended sections: visualization taxonomy (Few + Shneiderman), Aver signature patterns, 3D archviz (Three.js + animejs), validation gates.
+
+[preview.html](preview.html) is the visual catalog (swatches, type scale, node/edge vocabulary) — open it in a browser.
 
 ---
 

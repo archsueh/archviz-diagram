@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, or 3D building/archviz.
 license: MIT
 metadata:
-  version: 0.0.8
+  version: 0.0.9
   author: archsueh
   triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
 ---
@@ -258,16 +258,28 @@ confidence: {palette: "✅", layout: "✅", nodes: "⚠️"}
 
 ## 11. ASCII MODE
 
-Box-drawing chars in monospace. Max 80 columns.
+Plain text only. Max 80 columns. **No box-drawing characters** (┌─┐╔═╗╰─╯等)——在多数终端、聊天窗口、非等宽字体环境下会乱码。
 
-| Shape | Char |
+**允许的符号：**
+| 元素 | 符号 |
 |---|---|
-| Regular node | `┌─┐└─┘` |
-| Important | `╔═╗╚═╝` |
-| Decision | `╭─╮╰─╯` |
-| Primary flow | `─────►` |
-| Secondary | `- - -►` |
-| Emphasized | `═════►` |
+| 节点 | `[文本]` 或 `(文本)` |
+| 重要节点 | `[[文本]]` 或 `((文本))` |
+| 决策 | `{文本}` |
+| 箭头 | `-->` `-->` `==>` |
+| 虚线 | `--->` |
+| 竖线 | `\|` |
+| 分隔 | `---` `===` |
+
+**示例：**
+```
+[Input] --> [Process] --> [Output]
+                |
+                v
+           {Decision}
+           /        \
+      [Path A]    [Path B]
+```
 
 Tools: `pyfiglet` (headers), `boxes` (borders), `cowsay` (annotations)
 

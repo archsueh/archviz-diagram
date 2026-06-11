@@ -1,19 +1,27 @@
 # DESIGN.md — archviz-skills Design System
 
-Plain-text design system for all visualizations. Inspired by VoltAgent/awesome-design-md + Google Stitch DESIGN.md.
+Plain-text design system for all visualizations, structured in the [Stitch DESIGN.md format](https://stitch.withgoogle.com/docs/design-md/format/) (9 sections + extended sections), following the VoltAgent/awesome-design-md pattern.
 
-This file is the visual truth source. `SKILL.md` tells agents how to execute; this file tells them what the output should look and feel like.
+This file is the visual truth source. `SKILL.md` tells agents how to execute; this file tells them what the output should look and feel like. §9 is the copy-paste prompt layer. `preview.html` is the visual catalog.
 
 ---
 
-## Atmosphere
+## 1. Visual Theme & Atmosphere
 
-- **Restrained Swiss + Warm Paper**: Clean grids, generous whitespace, hairline as scalpel, structure over decoration
-- **Anti-slop**: No purple gradients, no rainbow nodes, no centered symmetry, no flowchart-for-everything
-- **Text-first, preview-compatible**: Primary output is .mmd that renders cleanly in Obsidian/GitHub/Typora. architecture-beta only for dedicated render pipelines
-- **Data-first**: Make the "why" visible in structure, not decoration
+archviz-skills diagrams read like figures in a well-set academic book — quiet, gridded, and deliberately under-decorated. The canvas is warm paper, not a whiteboard: every neutral carries a beige-stone undertone, lines are hairline-thin, and color appears only when it encodes meaning. Where typical AI-generated diagrams shout (purple gradients, rainbow nodes, centered symmetry), these diagrams state — structure carries the argument, decoration is absent by policy.
 
-## Agent-Readable Contract
+The signature move is **restraint as a dial, not a default**: every diagram starts from a brief read and three explicit dials (COMPLEXITY / DENSITY / RESTRAINT), so the same content can be set austere for a paper or looser for a teaching slide — but it is never shipped on an unexamined default theme. The second signature is **text-first survivability**: the primary artifact is plain text (.mmd, ASCII) that renders in Obsidian, GitHub, and a terminal; HTML, Python, and 3D are reserved for deliverables that earn them.
+
+**Key characteristics:**
+- Warm paper neutrals (`#f5f0eb`, `#f5f5f4`, `#a8a29e`) — no cool grays, no pure black/white surfaces
+- One accent maximum per diagram set — International Klein Blue (`#002FA7`) or Lemon (`#FFD500`), never both
+- Hairline discipline: 1px default strokes, 2px reserved for the single accent
+- Typography weight inverts with size (越大越细，越小越粗) — large titles ExtraLight, small labels SemiBold
+- Sharp corners, no emoji, no gradients, no shadows in diagram bodies
+- Contrast is computed, not guessed: the luminance rule decides light vs dark text
+- Anti-slop: no purple defaults, no rainbow nodes, no flowchart-for-everything, no pie
+
+### Agent-Readable Contract
 
 Every generated diagram should be understandable as a compact design system, not just a code block. Before output, the agent must be able to point to:
 
@@ -29,33 +37,219 @@ Every generated diagram should be understandable as a compact design system, not
 
 ---
 
-## Tokens
+## 2. Color Palette & Roles
 
-**Color** (one system per diagram set, max 1 accent):
+### Shared Neutrals (all systems)
+
+| Name | Hex | Role |
+|---|---|---|
+| **Warm Paper** | `#f5f0eb` | Default surface — node fill in the Warm Paper system |
+| **Paper Beige** | `#e8e4e0` | Legacy/secondary surface; 3D floor slab and ground plane |
+| **Mist White** | `#f5f5f4` | Swiss surface; light text on accent/dark fills ONLY |
+| **Stone Gray** | `#a8a29e` | Default border, line color, 3D wireframe |
+| **Pebble** | `#d6d3d1` | Tertiary fill, Swiss border, hemisphere ground light |
+| **Ink Navy** | `#1B365D` | Primary text on light warm surfaces |
+| **Warm Ink** | `#44403c` | Secondary text, muted nodes |
+| **Charcoal** | `#292524` | Stone Mono text |
+| **Near Black** | `#0a0a0a` | Text on IKB/Lemon system surfaces |
+
+### Accents (max 1 per diagram set)
+
+| Name | Hex | Role |
+|---|---|---|
+| **International Klein Blue (IKB)** | `#002FA7` | Signature accent — core connections, sovereign node border, active floor (3D). Pair with Mist White text on solid fills. |
+| **Lemon** | `#FFD500` | Tech-flavored accent alternative. Pair with Near Black text. |
+
+### Palette Systems (one system per diagram set)
 
 | System | surface | text | border | accent | Use |
 |---|---|---|---|---|---|
-| Warm Paper | #f5f0eb | #1B365D | #a8a29e | — | Default, academic |
-| Swiss Neutral | #f5f5f4 | #1B365D | #d6d3d1 | — | Clean, print |
-| IKB Accent | #e4e8f0 | #0a0a0a | #94a3b8 | #002FA7 | guizang Swiss |
-| Lemon Accent | #f0f4e0 | #0a0a0a | #a8b898 | #FFD500 | Tech |
-| Stone Mono | #e7e5e4 | #292524 | #a8a29e | — | Austerity |
+| **Warm Paper** | `#f5f0eb` | `#1B365D` | `#a8a29e` | — | Default, academic |
+| **Swiss Neutral** | `#f5f5f4` | `#1B365D` | `#d6d3d1` | — | Clean, print |
+| **IKB Accent** | `#e4e8f0` | `#0a0a0a` | `#94a3b8` | `#002FA7` | guizang Swiss |
+| **Lemon Accent** | `#f0f4e0` | `#0a0a0a` | `#a8b898` | `#FFD500` | Tech |
+| **Stone Mono** | `#e7e5e4` | `#292524` | `#a8a29e` | — | Austerity |
 
-**Contrast**: luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → dark text
+**Contrast rule (mandatory, computed)**: `luminance = 0.299R + 0.587G + 0.114B`. Fill luminance < 128 → light text (Mist White); ≥ 128 → dark text (Ink Navy / Near Black / Charcoal).
 
-**Typography** (越大越细，越小越粗):
-- Large titles: weight 200 (ExtraLight), 15-16px
-- Body: weight 300 (Light), 13-14px
-- Small: weight 500-600 (SemiBold), 11-13px
-- Chinese: ≤8 chars/line, consistent language per diagram
+**Token gate**: Any palette with surface luminance ≥128 must use dark text. All five system surfaces are light → they always take dark text. **Never pair warm light surfaces with near-white text.** Mist White as text is legal only on accent fills (IKB) or genuinely dark fills.
 
-**Line & Shape**: 1px default, 2px accent. Sharp corners. No thick borders, no emoji, no gradients.
-
-**Token gate**: Any palette with surface luminance ≥128 must use dark text. Warm Paper and Stone Mono therefore use dark ink by default. Never pair warm light surfaces with near-white text.
+**Rules:** Max 1 accent family — vary lightness, never hue. No AI-purple. Same document = same palette. Gradient-free: emphasis comes from the single accent, border weight, and whitespace.
 
 ---
 
-## Visualization Taxonomy
+## 3. Typography Rules
+
+**Principle: 越大越细，越小越粗** — the larger the text, the lighter the weight.
+
+| Role | Size | Weight | Notes |
+|---|---|---|---|
+| Diagram title | 15–16px | 200 (ExtraLight) | One per diagram, sentence case |
+| Node label / body | 13–14px | 300 (Light) | ≤6 words / ≤8 Chinese chars |
+| Small label / caption / axis | 11–13px | 500–600 (SemiBold) | Legends, units, annotations |
+| ASCII mode | monospace | — | Max 80 columns |
+
+- Labels: ≤6 words / ≤8 Chinese chars / no ALL CAPS / no full sentences (detail goes in the caption)
+- One language per diagram — never mix Chinese and English labels in the same diagram
+- Caption = finding, not title: "Sales dropped 30% in Q3", not "Q3 Sales Chart"
+- Numbers in HTML/Python outputs: tabular figures where the library allows
+
+---
+
+## 4. Component Stylings
+
+### Nodes (shape = semantic role, never decoration)
+
+| Role | Mermaid | ASCII | Styling |
+|---|---|---|---|
+| Process | `[]` | `[text]` | surface fill, 1px Stone border |
+| Important / core | `(( ))` | `[[text]]` | surface fill, 2px accent border (the one emphasis) |
+| Decision | `{}` | `{text}` | surface fill, 1px border |
+| Data / artifact | `[[]]` | `<text>` | Pebble fill |
+| Actor | `(( ))` | `o` | 1px border |
+
+**ASCII rule**: No box-drawing characters (┌─┐╔═╗╰─╯等) — they garble in non-monospace contexts. Use plain `[text]`, `-->`, `|` only.
+
+- Border radius: sharp (0) by default — never mix radii in one diagram
+- Icons: max 1 per group; never emoji
+
+### Edges
+
+| Type | Style | Meaning |
+|---|---|---|
+| Primary | solid `─────►` | Main flow |
+| Secondary | dashed `- - -►` | Optional / feedback path |
+| Emphasized | 2px accent / `═════►` | The single highlighted relation |
+| Labeled | text on edge | Explicit semantics (rituals, conditions) |
+
+Legend mandatory if >2 edge types appear.
+
+### Groups / Subgraphs
+
+Max 4–5 per diagram. Short noun titles. Non-symmetric layout unless content demands symmetry. 1px Stone border, no fill or faint Pebble fill.
+
+### Gantt bars (hard rules)
+
+Codes only inside the block (V1.1, A1) · full names in a mandatory table immediately after · ASCII fallback always included · min bar 3w · 3–6 tasks per section.
+
+### Tables
+
+The preferred "chart" for ≤5 items or 2–3 way comparisons. Plain Markdown, no styling tricks.
+
+### Mermaid init (the token carrier)
+
+```
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#f5f0eb','primaryTextColor':'#1B365D','primaryBorderColor':'#a8a29e','lineColor':'#a8a29e','tertiaryColor':'#d6d3d1','fontSize':'13px'}}}%%
+```
+
+Never ship the default theme. If you change `primaryColor`, recompute `primaryTextColor` with the contrast rule.
+
+---
+
+## 5. Layout Principles
+
+**Three dials** (baseline 4/3/8):
+
+| Dial | Default | Range | Meaning |
+|---|---|---|---|
+| COMPLEXITY | 4 | 1–10 | ≤25–50 nodes at default; >50 → split |
+| DENSITY | 3 | 1–10 | Generous whitespace at default |
+| RESTRAINT | 8 | 1–10 | Monochrome + one accent at default |
+
+Inference: "academic" → 3-5/2-3/9-10 · "playful" → 5-8/3-5/3-5 · "data report" → 6-8/6-8/5-7
+
+**Preferred types (compatibility first):**
+- System/layered → flowchart TD + subgraph (primary for .md source)
+- Hierarchical → mindmap (strip `<br/>`, use `/` separators)
+- Process → flowchart LR; hierarchy → TD
+- Scoring → xychart-beta or mindmap
+- Subgraphs max 4-5, labels ≤8 Chinese chars, non-symmetric
+
+**Whitespace philosophy**: whitespace is the grid made visible. Never fill space; a sparse diagram with a sharp caption beats a dense one. Subgraphs breathe; labels never touch borders.
+
+---
+
+## 6. Depth & Elevation
+
+Diagrams are **flat by doctrine**. Elevation is expressed through line weight and the single accent, not shadows:
+
+| Level | Treatment | Use |
+|---|---|---|
+| Base | 1px Stone border | Every regular node and edge |
+| Emphasis | 2px accent border / accent edge | The one core element per diagram |
+| Grouping | subgraph hairline | Layer/zone containment |
+| HTML charts | at most one whisper shadow on the chart card | Container only, never on data marks |
+| 3D mode | light rig (max 3 lights), not shadow stacks | See §3D — bake lighting, hero-object shadow only |
+
+Anti-elevation rules: no drop shadows on Mermaid/ASCII output, no 3D-effect bars/pies (depth = data dimension, never decoration), no glassmorphism, no gradients.
+
+---
+
+## 7. Do's and Don'ts
+
+### Do
+- Run the brief + set the three dials before generating anything
+- Apply the custom Mermaid init — the default theme is a bug, not a baseline
+- Compute contrast with the luminance rule for every fill/text pairing
+- Keep one accent family per document; vary lightness, not hue
+- Make the "why" visible in structure (ritual edges, sovereign core, labeled transitions)
+- Match the palette already established in the host document
+- Cite hex/px when describing or reviewing output; mark confidence ✅/⚠️/❓
+- Prepare the ASCII fallback whenever the render environment is uncertain
+- Vary the "shot" when the same concept recurs in one document — change type (flowchart → mindmap), emphasis, or perspective; serve content rhythm, not decoration
+
+### Don't
+- Don't pair light warm surfaces with Mist White / near-white text — light surfaces always take dark ink
+- Don't use purple gradients, rainbow nodes, or the Mermaid default theme
+- Don't force non-sequential data into flowcharts, or any data into pies (≤3 slices → table; else treemap/stacked bar)
+- Don't exceed 1 accent, 4–5 subgraphs, 50 nodes, 7 legend items, or 8 Chinese chars per label
+- Don't use emoji, ALL CAPS, mixed corner radii, or 3px+ borders
+- Don't truncate bar-chart Y-axes or put unrelated metrics on a dual Y-axis
+- Don't rely on color as the only channel — add pattern/shape/label for colorblind safety
+- Don't combine >2 visualization types in one diagram — split instead
+- Don't ship without validation (render test, overlap check, legend, caption)
+
+---
+
+## 8. Responsive Behavior
+
+| Output | Behavior |
+|---|---|
+| Mermaid in .md | Narrow-first: short labels + TD orientation prevent horizontal overflow in Obsidian/GitHub mobile |
+| ASCII | Hard cap 80 columns — survives any terminal, `cat`, and diff |
+| Self-contained HTML | Fluid container, `max-width` + viewport meta; canvas resize listener mandatory |
+| Python (Plotly) | `autosize=True`; export both interactive HTML and static for print |
+| 3D (Three.js) | Resize listener mandatory; reduce geometry + disable shadows on mobile; camera distance/polar limits set |
+
+Degradation strategy (when data is too complex): >50 nodes → split into 2–3 linked diagrams with shared legend · >7 categories → aggregate "Other" · mixed data types → primary relationship in the diagram, the rest in a table · preview fails → ASCII fallback · Mermaid syntax error → flowchart TD + subgraph.
+
+---
+
+## 9. Agent Prompt Guide
+
+### Quick Color Reference
+- Default surface: "Warm Paper (#f5f0eb)"
+- Primary text on light: "Ink Navy (#1B365D)"
+- Border / lines: "Stone Gray (#a8a29e)"
+- Accent (one max): "International Klein Blue (#002FA7)" — pair with "Mist White (#f5f5f4)" text on solid fills
+- Tertiary fill: "Pebble (#d6d3d1)"
+
+### Ready-to-use prompts
+- "Create a flowchart TD with subgraphs: Warm Paper (#f5f0eb) nodes, Ink Navy (#1B365D) text, Stone Gray (#a8a29e) 1px borders, using the Mermaid init from DESIGN.md §4. Mark the core node with a 2px International Klein Blue (#002FA7) border — it is the only accent. Labels ≤8 Chinese chars, dials 4/3/8."
+- "Build a Gantt with codes only inside the block (V1.1, A2…), a full-name table immediately after, and an 80-column ASCII fallback. Min bar 3 weeks, 3–6 tasks per section, Warm Paper init."
+- "Render a comparison of 4 items as an xychart-beta bar chart, Warm Paper tokens, Y-axis starting at 0, caption stating the finding. If items ≤5 and exact values are the point, output a Markdown table instead."
+- "Generate a self-contained Three.js HTML: building structure shell, procedural BoxGeometry, Stone Gray (#a8a29e) wireframe, Paper Beige (#e8e4e0) slabs, IKB (#002FA7) active floor, max 3 lights, OrbitControls with damping, animejs v4 camera tweens (`import { animate }`, render loop named `renderLoop`)."
+
+### Iteration guide
+1. One diagram at a time; state the brief reading first ("Reading this as: <type> for <audience>, <vibe>, <palette>")
+2. Reference colors by name + hex — "use Ink Navy (#1B365D)", not "darker text"
+3. To increase emphasis, say "move the accent to X" — never "add another color"
+4. To fix crowding, lower DENSITY or split — never shrink the font below 11px
+5. For render failures, follow the degradation strategy (§8), ending at ASCII
+
+---
+
+## Extended: Visualization Taxonomy
 
 Based on Few's 7 relationships + Shneiderman's 6 data types + teaching/academic gaps:
 
@@ -84,57 +278,20 @@ Based on Few's 7 relationships + Shneiderman's 6 data types + teaching/academic 
 
 ---
 
-## Layout Rules
+## Extended: Signature Patterns (Aver domain)
 
-**Dials** (baseline 4/3/8):
-- COMPLEXITY 4: ≤25-50 nodes
-- DENSITY 3: generous whitespace
-- RESTRAINT 8: monochrome + one accent
+> Synced 2026-06-11 with the Aver design system (cinnabar era). Aver's own UI tokens live in the Aver repo (`aver-design-system`); the patterns below are for **diagrams about Aver** rendered with archviz-skills tokens.
 
-**Preferred types** (compatibility first):
-- System/layered → flowchart TD + subgraph (primary for .md source)
-- Hierarchical → mindmap (strip `<br/>`, use `/` separators)
-- Process → flowchart TD/LR
-- Scoring → xychart-beta or mindmap
-- Subgraphs max 4-5, labels ≤8 Chinese chars, non-symmetric
+- Core = .md 数据主权 (sovereign, strongest border — the single accent)
+- V1 loop as the spine: 物件 → 陪伴证据 → 告别归档 (object → evidence → farewell)
+- Layers as groups: Money (量化刻度) / Evidence (陪伴证据) / Sentiment (告别归档) — the legacy Money / Knowledge / Sentiment trio appears only in archived diagrams
+- Ritual edges labeled explicitly (购入仪式, 卖出告别, 里程碑)
+- Accent: single IKB (#002FA7) when the diagram lives in neutral archviz documents; switch the accent slot to Aver cinnabar (#A24A2D) when the diagram is embedded in Aver-branded material — never both, still max 1
+- Aver-embedded diagrams may adopt Aver paper surfaces (#FBF8F2 / #F5F1E9) to match the host document, per "match existing document palette"
 
 ---
 
-## Anti-Homogenization
-
-- Never ship plain default without brief + dials + custom init
-- One accent family, vary lightness not hue
-- Make "why" visible (ritual edges, sovereign core)
-- Match existing document palette
-
-**Variation for recurring concepts**: Same concept in one document = different "shots" each time. Vary type (flowchart → mindmap → architecture), emphasis (ritual edges → core → zoom), perspective (full system → from ritual → from core). Serves content rhythm, not decoration.
-
----
-
-## Shape Vocabulary
-
-| Shape | Mermaid | ASCII |
-|---|---|---|
-| Process | `[]` | `┌─┐└─┘` |
-| Important | `(( ))` | `╔═╗╚═╝` |
-| Decision | `{}` | `╭─╮╰─╯` |
-| Data | `[[]]` | `[artifact]` |
-| Actor | `(( ))` | `o actor` |
-
-**Arrow semantics**: solid=primary, dashed=secondary, labeled=explicit. Legend if >2 types.
-
----
-
-## Signature Patterns (Aver domain)
-
-- Core = .md 数据主权 (sovereign, strongest border)
-- Three layers as groups: Money / Knowledge / Sentiment
-- Ritual edges labeled explicitly (购入仪式, 卖出告别, etc.)
-- Single IKB accent for core connections
-
----
-
-## 3D Architectural Visualization (Three.js)
+## Extended: 3D Architectural Visualization (Three.js)
 
 When the brief calls for building structure, interior walkthrough, or spatial analysis — switch from 2D diagram mode to 3D archviz mode.
 
@@ -155,8 +312,8 @@ When the brief calls for building structure, interior walkthrough, or spatial an
 
 | Token | Value | Use |
 |---|---|---|
-| structure | `#a8a29e` (border gray) | Wireframe, grid lines |
-| floor | `#e8e4e0` (surface) | Slab fill, ground plane |
+| structure | `#a8a29e` (Stone Gray) | Wireframe, grid lines |
+| floor | `#e8e4e0` (Paper Beige) | Slab fill, ground plane |
 | accent-3d | `#002FA7` (IKB) | Highlighted structure, active floor |
 | ambient | `0xf5f5f4` | Hemisphere light (sky) |
 | ground | `0xd6d3d1` | Hemisphere light (ground) |
@@ -189,7 +346,7 @@ When the brief calls for building structure, interior walkthrough, or spatial an
 
 Google/WICG [HTML-in-Canvas](https://github.com/WICG/html-in-canvas) renders real DOM (HTML + CSS) into 2D canvas, WebGL, or WebGPU textures while preserving accessibility, text selection, find-in-page, and DevTools inspection. Chrome Origin Trial: 148–150 (May 2026). Three.js experimental: `THREE.HTMLTexture`.
 
-| Today (v0.0.7) | Future (when stable) |
+| Today | Future (when stable) |
 |---|---|
 | `createLabel()` → offscreen canvas `fillText` → `CanvasTexture` → `Sprite` | Hidden DOM label nodes → `HTMLTexture` / `texElementImage2D` on mesh or sprite |
 | Crude CJK typography, blurry zoom | DESIGN.md typography tokens on real CSS |
@@ -207,11 +364,11 @@ Google/WICG [HTML-in-Canvas](https://github.com/WICG/html-in-canvas) renders rea
 
 ---
 
-## Validation
+## Extended: Validation
 
 **Pre-gen**: Brief done? Dials set? Tokens locked? Labels short? Contract layer complete? Gantt: codes+table+ASCII?
 
-**Post-gen**: Render test? No overlaps? Legend present? Matches document style? Contrast gate pass?
+**Post-gen**: Render test? No overlaps? Legend present? Matches document style? Contrast gate pass? Caption states the finding?
 
 **3D post-gen**: CDN imports resolve? Console clean? Resize works? Camera limits set? Touch/mobile tested?
 
@@ -219,4 +376,4 @@ Google/WICG [HTML-in-Canvas](https://github.com/WICG/html-in-canvas) renders rea
 
 ---
 
-See SKILL.md for execution workflow. See templates/ for concrete examples.
+See SKILL.md for execution workflow. See templates/ for concrete examples. See preview.html for the visual catalog.

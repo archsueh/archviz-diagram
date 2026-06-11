@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.0.9 (2026-06-11)
+
+**DESIGN.md restructured into the Stitch 9-section format + visual catalog**
+
+### Added
+- **DESIGN.md 9-section structure** (per VoltAgent/awesome-design-md): §1 Visual Theme & Atmosphere (prose + key characteristics + Agent-Readable Contract), §2 Color Palette & Roles, §3 Typography Rules, §4 Component Stylings, §5 Layout Principles, §6 Depth & Elevation, §7 Do's and Don'ts, §8 Responsive Behavior, §9 Agent Prompt Guide. Taxonomy, Aver patterns, 3D, and validation moved to Extended sections — no content lost.
+- **Semantic color names**: every token now has name + hex + role (Warm Paper #f5f0eb, Paper Beige #e8e4e0, Mist White #f5f5f4, Stone Gray #a8a29e, Pebble #d6d3d1, Ink Navy #1B365D, Warm Ink #44403c, Charcoal #292524, Near Black #0a0a0a, IKB #002FA7, Lemon #FFD500).
+- **§9 Agent Prompt Guide**: quick color reference + 4 ready-to-use prompts (flowchart, gantt, comparison, 3D shell) + 5-step iteration guide.
+- **§6 Depth & Elevation**: "flat by doctrine" table — emphasis via line weight and the single accent, never shadows.
+- **preview.html**: visual catalog at repo root (neutral/accent swatches, palette system table, type scale, node vocabulary, edge semantics) — the awesome-design-md preview convention.
+
+### Changed
+- **Signature Patterns (Aver domain)** synced with the Aver cinnabar-era system: V1 spine 物件→陪伴证据→告别归档; Money/Evidence/Sentiment naming (legacy Money/Knowledge/Sentiment marked archive-only); accent slot switches to Aver cinnabar #A24A2D inside Aver-branded documents (still max 1); Aver paper surfaces allowed for host-document matching.
+- README design-system section now lists the 9 sections and links preview.html; version badge 0.0.9.
+
 ## 0.0.8 (2026-06-11)
 
 **DESIGN.md philosophy pass — agent-readable contract + contrast correction**
