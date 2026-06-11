@@ -149,7 +149,12 @@ When the brief calls for building structure, interior walkthrough, or spatial an
 - Max 3 light sources (1 ambient + 1 directional + 1 hemisphere)
 - Camera: PerspectiveCamera, FOV 50-60, near 0.1, far 1000
 - OrbitControls: enableDamping=true, dampingFactor=0.05
-- animejs for camera transitions (duration 800-1200ms, easeInOutCubic)
+- animejs v4 for camera transitions (duration 800-1200ms, easeInOutCubic)
+- **animejs v4 API**: `animate(target, props)` — NOT v3's `anime({targets})`. Use `tween()` wrapper.
+- **animejs v4 CDN**: `dist/bundles/anime.esm.js` — NOT `lib/anime.es.js`
+- **Render loop naming**: never name it `animate` (conflicts with animejs import). Use `renderLoop`.
+- **Ground offset**: objects at y=0 bury into ground plane. Set `object.position.y = 2` or `ground.position.y = -0.5`.
+- **CDN verification**: `curl -sI <URL>` must return 200 before committing template.
 - Responsive: resize listener mandatory
 - Performance: requestAnimationFrame loop, dispose geometry on teardown
 
@@ -162,6 +167,26 @@ When the brief calls for building structure, interior walkthrough, or spatial an
 | Janky camera jump | Use animejs tween, never direct position set |
 | No mobile fallback | Reduce geometry complexity, disable shadows on mobile |
 
+**Future: HTML-in-Canvas annotation strategy** (watch — do not adopt until cross-browser stable):
+
+Google/WICG [HTML-in-Canvas](https://github.com/WICG/html-in-canvas) renders real DOM (HTML + CSS) into 2D canvas, WebGL, or WebGPU textures while preserving accessibility, text selection, find-in-page, and DevTools inspection. Chrome Origin Trial: 148–150 (May 2026). Three.js experimental: `THREE.HTMLTexture`.
+
+| Today (v0.0.7) | Future (when stable) |
+|---|---|
+| `createLabel()` → offscreen canvas `fillText` → `CanvasTexture` → `Sprite` | Hidden DOM label nodes → `HTMLTexture` / `texElementImage2D` on mesh or sprite |
+| Crude CJK typography, blurry zoom | DESIGN.md typography tokens on real CSS |
+| Labels not selectable / no a11y | Screen-reader + Cmd+F compatible room/floor names |
+
+**Scope**: 3D templates only (`threejs-floorplan.html`, `threejs-archviz.html`). Default 2D mode (Mermaid, ASCII, HTML charts) stays DOM-native — no change needed.
+
+**Adoption gate** (all must pass before rewriting templates):
+1. Chrome Stable (no flag) OR documented progressive enhancement with Sprite fallback
+2. Three.js `HTMLTexture` documented beyond experiment
+3. Safari or Firefox signals implementation (avoid Chrome-only deliverables)
+4. Self-contained HTML constraint preserved (labels as in-document `<div>`, not external assets)
+
+**Pilot checklist** (post-gate): floor label (`#floor-label` pattern), per-room name + area badge, structural overlay legend on cut plane. Verify resize, camera tween, and mobile still pass §3D post-gen.
+
 ---
 
 ## Validation
@@ -169,6 +194,8 @@ When the brief calls for building structure, interior walkthrough, or spatial an
 **Pre-gen**: Brief done? Dials set? Tokens locked? Labels short? Gantt: codes+table+ASCII?
 
 **Post-gen**: Render test? No overlaps? Legend present? Matches document style?
+
+**3D post-gen**: CDN imports resolve? Console clean? Resize works? Camera limits set? Touch/mobile tested?
 
 **Error recovery**: Simplify → switch type → ASCII fallback. Never ship without validation.
 
