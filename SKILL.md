@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, or 3D building/archviz.
 license: MIT
 metadata:
-  version: "0.0.7"
+  version: 0.0.7
   author: archsueh
   triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
 ---
@@ -82,6 +82,34 @@ Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pi
 - Tokens: inherits 2D palette + adds `structure=#a8a29e`, `floor=#e8e4e0`, `accent-3d=#002FA7`
 - Constraints: procedural geometry preferred, max 3 lights, responsive resize, animejs for camera moves
 - Full rules → DESIGN.md §3D Architectural Visualization
+
+**CDN importmap pattern** (self-contained HTML, zero build):
+```html
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/dist/bundles/anime.esm.js"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { animate } from 'animejs';  // v4: named export, NOT default
+</script>
+```
+
+**Tech stack pitfalls (硬规则，已踩坑验证):**
+
+| Pitfall | Symptom | Fix |
+|---|---|---|
+| animejs CDN 404 | Canvas blank, no errors | v4.4.1 路径是 `dist/bundles/anime.esm.js`，不是 `lib/anime.es.js` |
+| animejs default import | `import anime from 'animejs'` → undefined | v4 是 named export: `import { animate } from 'animejs'` |
+| animejs v3→v4 API | `anime({targets: x, ...})` 报错 | v4 是 `animate(target, params)`，无 `targets` key |
+| `animate` 命名冲突 | 渲染循环函数也叫 `animate` → 覆盖 import | 渲染循环用 `renderLoop` 或 `tick`，不要用 `animate` |
+| Three.js CatmullRom | `CatmullRomCurvePath` 不存在 | 用 `CatmullRomCurve3`（3D 曲线） |
 
 Full rules → DESIGN.md. Templates → templates/.
 
@@ -270,6 +298,9 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | Theme too flashy | Force solarized-light/nord-light |
 | Text unreadable | Check contrast rule (QR) |
 | Too many nodes | Split into subgraphs |
+| Canvas blank (Three.js) | Check console for CDN 404 / import errors |
+| animejs not animating | v4 API: `animate(target, props)` not `anime({targets})` |
+| Render loop stops | Don't name loop function `animate` (conflicts with animejs import) |
 
 ---
 
@@ -304,3 +335,76 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 - [anydesign](https://github.com/archsueh/anydesign) — Design analysis
 
 Full design system → DESIGN.md · Detailed rules → references/ · Research → research/
+
+---
+
+## 16. 3D GOTCHAS (踩坑记录)
+
+Three.js + animejs v4 实战中遇到的坑，按出现顺序记录。
+
+### CDN 依赖（自包含 HTML 模板）
+
+```html
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/dist/bundles/anime.esm.js"
+  }
+}
+</script>
+```
+
+**⚠️ animejs v4 路径不是 `lib/anime.es.js`** — 那是 v3 的路径。v4.4.1 的正确路径是 `dist/bundles/anime.esm.js`。验证方法：`curl -sI <CDN_URL>` 返回 200 才可用。
+
+### animejs v4 API 迁移
+
+| v3（旧） | v4.4.1（当前） |
+|---|---|
+| `import anime from 'animejs'` | `import { animate } from 'animejs'` |
+| `anime({targets: obj, x: 1, duration: 500})` | `animate(obj, {x: 1, duration: 500})` |
+
+**包装函数**（统一写法，避免每次改 API）：
+```js
+import { animate } from 'animejs';
+function tween(target, props) { return animate(target, props); }
+// 用法：tween(camera.position, {x: 6, y: 4, z: 8, duration: 800})
+```
+
+### 命名冲突
+
+```js
+// ❌ 错误 — animate 与 animejs 导入冲突
+function animate() { requestAnimationFrame(animate); renderer.render(scene, camera); }
+animate();
+
+// ✅ 正确 — 用 renderLoop 或其他名称
+function renderLoop() { requestAnimationFrame(renderLoop); renderer.render(scene, camera); }
+renderLoop();
+```
+
+### 地面位置
+
+```js
+// ❌ 物体 y=0 会埋进地面
+scene.add(dryer); // dryer.position.y 默认 0
+
+// ✅ 物体抬高到地面之上
+scene.add(dryer);
+dryer.position.y = 2; // 或者降低地面：gMesh.position.y = -0.5
+```
+
+### 相机动画不要直接赋值
+
+```js
+// ❌ 跳跃式，无过渡
+camera.position.set(6, 4, 8);
+
+// ✅ 用 tween 平滑过渡
+tween(camera.position, {x: 6, y: 4, z: 8, duration: 800, easing: 'easeInOutCubic'});
+```
+
+### 光照数量限制
+
+模板约束 max 3 光源（1 HemisphereLight + 1 DirectionalLight + 1 AmbientLight）。超出会影响性能且难以控制阴影。

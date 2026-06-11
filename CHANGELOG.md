@@ -2,15 +2,18 @@
 
 ## 0.0.7 (2026-06-11)
 
-**skill-creator compliance + documentation sync**
-
-### Fixed
-- **SKILL.md frontmatter**: `triggers`/`version`/`author` moved into `description` + `metadata` (passes Codex `quick_validate.py`)
-- **§12 template list**: removed nonexistent `flowchart.mmd`/`mindmap.mmd`; noted inline generation
-- **README**: version badge 0.0.5 → 0.0.7, HTML count 14, 3D mode routing, examples index
+**3D template hardening — animejs v4 gotchas + ground offset + dependency reference**
 
 ### Added
-- **agents/openai.yaml**: Codex UI metadata (`display_name`, `default_prompt`, `brand_color`)
+- **SKILL.md §16 GOTCHAS**: 6 Three.js + animejs v4 踩坑记录（CDN 路径、API 迁移、命名冲突、地面偏移、相机动画、光照限制）
+- **templates/html/_archviz-deps.html**: CDN 依赖速查文件，含 animejs v4 shim 和使用示例
+- **DESIGN.md 3D constraints**: +5 条（animejs v4 API/CDN、render loop 命名、ground offset、CDN 验证）
+
+### Fixed
+- **hair-dryer-exploded.html**: 物体抬高 `dryer.position.y = 2`，修复埋入地面问题
+- **animejs v4 CDN**: 3 个文件路径从 `lib/anime.es.js` 修正为 `dist/bundles/anime.esm.js`
+- **animejs v4 API**: 3 个文件从 `anime({targets})` 迁移到 `tween(target, props)` 包装
+- **render loop**: threejs-floorplan.html 函数名从 `animate` 改为 `renderLoop` 避免冲突
 
 ## 0.0.6 (2026-06-11)
 
