@@ -86,14 +86,14 @@
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/lib/anime.es.js"
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/dist/bundles/anime.esm.js"
   }
 }
 </script>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import anime from 'animejs';
+import { animate } from 'animejs';
 
 // === Tokens ===
 const C = {
@@ -322,6 +322,12 @@ function makeBody(points, color, roughness = 0.6) {
 
 scene.add(dryer);
 
+// === animejs v4 helper ===
+// v4 API: animate(target, params) — no 'targets' key
+function tween(target, props) {
+  return animate(target, props);
+}
+
 // === Explode state ===
 let exploded = false;
 
@@ -331,22 +337,12 @@ window.toggleExplode = function() {
 
   parts.forEach((part, i) => {
     const d = partData[i];
-    const targets = {};
+    const props = { duration: 1000, easing: 'easeInOutCubic', delay: i * 60 };
 
-    if (d.explodeZ !== undefined) {
-      targets.z = exploded ? d.explodeZ : d.baseZ;
-    }
-    if (d.explodeX !== undefined) {
-      targets.x = exploded ? d.explodeX : (d.baseX || 0);
-    }
+    if (d.explodeZ !== undefined) props.z = exploded ? d.explodeZ : d.baseZ;
+    if (d.explodeX !== undefined) props.x = exploded ? d.explodeX : (d.baseX || 0);
 
-    anime({
-      targets: part.position,
-      ...targets,
-      duration: 1000,
-      easing: 'easeInOutCubic',
-      delay: i * 60,
-    });
+    tween(part.position, props);
   });
 };
 
@@ -360,7 +356,6 @@ renderer.domElement.addEventListener('click', (e) => {
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
 
-  // Collect all meshes from parts
   const meshes = [];
   parts.forEach(p => {
     if (p.isMesh) meshes.push(p);
@@ -369,7 +364,6 @@ renderer.domElement.addEventListener('click', (e) => {
 
   const hits = raycaster.intersectObjects(meshes);
   if (hits.length > 0) {
-    // Find which part group
     let hitObj = hits[0].object;
     let partIdx = parts.findIndex(p => {
       if (p === hitObj) return true;
@@ -379,13 +373,9 @@ renderer.domElement.addEventListener('click', (e) => {
     });
 
     if (partIdx >= 0 && partIdx !== highlighted) {
-      // Reset previous
       if (highlighted !== null) setPartEmissive(highlighted, 0x000000, 0);
-      // Highlight new
       setPartEmissive(partIdx, 0x002FA7, 0.25);
       highlighted = partIdx;
-
-      // Update parts list
       document.querySelectorAll('.part-item').forEach((el, i) => {
         el.style.color = (i === partIdx) ? '#002FA7' : '';
         el.style.fontWeight = (i === partIdx) ? '600' : '';
@@ -413,10 +403,8 @@ document.querySelectorAll('.part-item').forEach((el, i) => {
       e.style.color = (j === i) ? '#002FA7' : '';
       e.style.fontWeight = (j === i) ? '600' : '';
     });
-    // Camera focus on part
     const p = parts[i];
-    anime({
-      targets: ctrl.target,
+    tween(ctrl.target, {
       x: p.position.x, y: p.position.y, z: p.position.z,
       duration: 600, easing: 'easeInOutCubic',
     });
@@ -442,8 +430,8 @@ window.spinSlow = function() {
 
 // === Reset view ===
 window.resetView = function() {
-  anime({ targets: camera.position, x: 6, y: 4, z: 8, duration: 800, easing: 'easeInOutCubic' });
-  anime({ targets: ctrl.target, x: 0, y: 0, z: 0, duration: 800, easing: 'easeInOutCubic' });
+  tween(camera.position, { x: 6, y: 4, z: 8, duration: 800, easing: 'easeInOutCubic' });
+  tween(ctrl.target, { x: 0, y: 0, z: 0, duration: 800, easing: 'easeInOutCubic' });
 };
 
 // Responsive

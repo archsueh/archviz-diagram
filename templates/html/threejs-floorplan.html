@@ -60,14 +60,17 @@
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/lib/anime.es.js"
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/dist/bundles/anime.esm.js"
   }
 }
 </script>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import anime from 'animejs';
+import { animate } from 'animejs';
+
+// animejs v4 helper
+function tween(target, props) { return animate(target, props); }
 
 // === Tokens ===
 const TOKENS = {
@@ -281,12 +284,9 @@ window.goFloor = function(index) {
     const targetOpacity = (i === index) ? 1 : 0.1;
     g.traverse(child => {
       if (child.isMesh && child.material) {
-        anime({
-          targets: child.material,
-          opacity: targetOpacity,
+        tween(child.material, { opacity: targetOpacity,
           duration: 600,
-          easing: 'easeInOutCubic',
-        });
+          easing: 'easeInOutCubic', });
         child.material.transparent = true;
       }
     });
@@ -294,18 +294,12 @@ window.goFloor = function(index) {
 
   // Camera tween to focus on floor
   const targetY = index * FLOOR_H + 5;
-  anime({
-    targets: camera.position,
-    x: 15, y: targetY + 8, z: 15,
+  tween(camera.position, { x: 15, y: targetY + 8, z: 15,
     duration: 800,
-    easing: 'easeInOutCubic',
-  });
-  anime({
-    targets: controls.target,
-    x: 0, y: targetY - 3, z: 0,
+    easing: 'easeInOutCubic', });
+  tween(controls.target, { x: 0, y: targetY - 3, z: 0,
     duration: 800,
-    easing: 'easeInOutCubic',
-  });
+    easing: 'easeInOutCubic', });
 
   updateFloorLabel(floorPlans[index].label);
 };
@@ -317,29 +311,20 @@ window.showAll = function() {
   allFloorGroups.forEach(g => {
     g.traverse(child => {
       if (child.isMesh && child.material) {
-        anime({
-          targets: child.material,
-          opacity: 1,
+        tween(child.material, { opacity: 1,
           duration: 600,
-          easing: 'easeInOutCubic',
-        });
+          easing: 'easeInOutCubic', });
         child.material.transparent = false;
       }
     });
   });
 
-  anime({
-    targets: camera.position,
-    x: 20, y: 18, z: 20,
+  tween(camera.position, { x: 20, y: 18, z: 20,
     duration: 800,
-    easing: 'easeInOutCubic',
-  });
-  anime({
-    targets: controls.target,
-    x: 0, y: 4, z: 0,
+    easing: 'easeInOutCubic', });
+  tween(controls.target, { x: 0, y: 4, z: 0,
     duration: 800,
-    easing: 'easeInOutCubic',
-  });
+    easing: 'easeInOutCubic', });
 
   updateFloorLabel('ALL');
 };
@@ -348,12 +333,9 @@ window.toggleExplode = function() {
   exploded = !exploded;
   allFloorGroups.forEach((g, i) => {
     const targetY = exploded ? i * (FLOOR_H * 1.8) : i * FLOOR_H;
-    anime({
-      targets: g.position,
-      y: targetY,
+    tween(g.position, { y: targetY,
       duration: 800,
-      easing: 'easeInOutCubic',
-    });
+      easing: 'easeInOutCubic', });
   });
 };
 
@@ -365,12 +347,12 @@ window.addEventListener('resize', () => {
 });
 
 // === Render loop ===
-function animate() {
-  requestAnimationFrame(animate);
+function renderLoop() {
+  requestAnimationFrame(renderLoop);
   controls.update();
   renderer.render(scene, camera);
 }
-animate();
+renderLoop();
 </script>
 </body>
 </html>

@@ -67,14 +67,17 @@
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/lib/anime.es.js"
+    "animejs": "https://cdn.jsdelivr.net/npm/animejs@4.4.1/dist/bundles/anime.esm.js"
   }
 }
 </script>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import anime from 'animejs';
+import { animate } from 'animejs';
+
+// animejs v4 helper
+function tween(target, props) { return animate(target, props); }
 
 // Tokens
 const C = {
@@ -242,13 +245,13 @@ window.goFloor = function(i) {
     g.traverse(c => {
       if (c.isMesh && c.material) {
         c.material.transparent = true;
-        anime({ targets: c.material, opacity: gi === i ? 1 : 0.08, duration: 500, easing: 'easeInOutCubic' });
+        tween(c.material, { opacity: gi === i ? 1 : 0.08, duration: 500, easing: 'easeInOutCubic' });
       }
     });
   });
   const ty = i * FH + 5;
-  anime({ targets: camera.position, x: 15, y: ty + 8, z: 15, duration: 800, easing: 'easeInOutCubic' });
-  anime({ targets: ctrl.target, x: 0, y: ty - 3, z: 0, duration: 800, easing: 'easeInOutCubic' });
+  tween(camera.position, { x: 15, y: ty + 8, z: 15, duration: 800, easing: 'easeInOutCubic' });
+  tween(ctrl.target, { x: 0, y: ty - 3, z: 0, duration: 800, easing: 'easeInOutCubic' });
   lbl.textContent = plans[i].label;
   desc.textContent = plans[i].desc;
 };
@@ -258,13 +261,13 @@ window.showAll = function() {
   floorGroups.forEach(g => {
     g.traverse(c => {
       if (c.isMesh && c.material) {
-        anime({ targets: c.material, opacity: 1, duration: 500, easing: 'easeInOutCubic' });
+        tween(c.material, { opacity: 1, duration: 500, easing: 'easeInOutCubic' });
         c.material.transparent = false;
       }
     });
   });
-  anime({ targets: camera.position, x: 18, y: 14, z: 20, duration: 800, easing: 'easeInOutCubic' });
-  anime({ targets: ctrl.target, x: 0, y: 4, z: 0, duration: 800, easing: 'easeInOutCubic' });
+  tween(camera.position, { x: 18, y: 14, z: 20, duration: 800, easing: 'easeInOutCubic' });
+  tween(ctrl.target, { x: 0, y: 4, z: 0, duration: 800, easing: 'easeInOutCubic' });
   lbl.textContent = 'ALL';
   desc.textContent = '全部楼层';
 };
@@ -272,7 +275,7 @@ window.showAll = function() {
 window.toggleExplode = function() {
   exploded = !exploded;
   floorGroups.forEach((g, i) => {
-    anime({ targets: g.position, y: exploded ? i * FH * 2 : i * FH, duration: 800, easing: 'easeInOutCubic' });
+    tween(g.position, { y: exploded ? i * FH * 2 : i * FH, duration: 800, easing: 'easeInOutCubic' });
   });
 };
 
