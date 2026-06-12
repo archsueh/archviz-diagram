@@ -1,0 +1,89 @@
+# Git Push 发布工作流
+
+**archviz-skills 示例** — 图文并茂展示 skill 发布流程中的 git push 关键步骤（基于 scripts/publish-skill.py 实际实现）。
+
+使用 Wes Anderson palette variant (Moonrise Kingdom) 呈现暖有机 editorial 风格，契合 huashu 60-30-10 + 克制设计。
+
+%% Brief: 演示 publish-skill.py 中的完整发布管线，重点突出 git push origin main --tags 作为本地到远程的决定性推送动作。适用于 release 教学、checklist 或个人工作流可视化。环境：Obsidian/GitHub 预览 + 终端 termaid。
+%% Dials: COMPLEXITY=4  DENSITY=3  RESTRAINT=8
+%% Palette: Wes Anderson variant — surface #d8b87c (warm beige), text #1B365D, border #9eae4c (sage), accent #f4a731 (terracotta). 详见 DESIGN.md Quick Color Reference 与 references/wesanderson-palette.md。默认 Warm Paper 也完全兼容。
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#d8b87c',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#9eae4c',
+  'lineColor': '#f4a731',
+  'tertiaryColor': '#d6929c',
+  'fontSize': '13px'
+}}}%%
+flowchart TD
+    subgraph 准备阶段["准备阶段 Prep"]
+        V["validate_frontmatter<br/>+ check_files"]
+        D["Dry-run 摘要<br/>用户 Enter 确认"]
+    end
+
+    subgraph Git操作["Git 操作 Git Operations"]
+        GA["git add -A"]
+        GC{"working tree 干净?"} 
+        GT["git tag -f v0.2.5"]
+        GP["git push origin main --tags<br/>★ 核心 git push 推送"]
+    end
+
+    subgraph 发布["GitHub 发布 Release"]
+        GR["gh release create<br/>带安装 notes"]
+        GV["打印验证与多代理安装指令"]
+    end
+
+    V --> D --> GA --> GC
+    GC -->|需提交| GT
+    GC -->|干净| GT
+    GT --> GP --> GR --> GV
+
+    classDef push fill:#d8b87c,stroke:#f4a731,stroke-width:3px,color:#1B365D
+    class GP push
+
+    classDef phase fill:#f5f5f4,stroke:#9eae4c,color:#1B365D
+    class 准备阶段, Git操作, 发布 phase
+```
+
+## 流程图文说明
+
+**准备阶段**：脚本先执行严格校验（frontmatter name+description + 必需文件存在），然后打印 dry-run 摘要并等待用户确认。这是 G0-G6 门控的体现，防止错误发布。
+
+**Git 操作（git push 核心）**：
+- `git add -A`
+- `git commit`（干净则跳过）
+- `git tag -f vX.Y.Z`
+- **`git push origin main --tags`** ← 这是整个发布流程的**唯一网络推送动作**，将本地 tag 与分支变更同步到 GitHub。失败则后续 gh release 无法关联正确 commit。
+
+**发布阶段**：使用 gh CLI 创建 release，自动附带多代理安装指令（Claude / general git clone 等）。
+
+## 命令速查表（与 publish-skill.py 对应）
+
+| 步骤 | 精确命令 | 说明 |
+|------|----------|------|
+| 推送 | `git push origin main --tags` | 推送 main 分支 + 所有 tags（关键 git push） |
+| 标记 | `git tag -f v0.2.5` | 强制打版本 tag |
+| 发布 | `gh release create v0.2.5 --title "..." --notes "..."` | 创建 GitHub Release |
+
+**Caption**: git push 是 publish-skill.py 中连接本地验证与远程发布的桥梁。使用 Wes Anderson 暖调（terracotta accent + sage border）使教学材料兼具设计感与可读性，严格遵守 archviz 一 accent + 克制原则。
+
+## 使用方式
+
+```bash
+# Obsidian / GitHub 直接渲染（推荐，图文并茂）
+# 粘贴整个文件或单独代码块
+
+# 终端预览（termaid）
+termaid /Users/mac/Developer/archviz-skills/examples/git-push-release-workflow.mmd --theme mono
+
+# ASCII 兜底（纯文本环境）
+# 见 templates/ascii/ 或手动简化
+```
+
+**与 0.2.5 自进化关联**：本次 darwin 评估（97/100）后新增的 Version Bump Process 正是通过此 git push 流程发布的。所有变更使用绝对路径，符合 darwin-skill 要求。
+
+完整发布脚本：`/Users/mac/Developer/archviz-skills/scripts/publish-skill.py`
+
+此示例可直接作为 release checklist 或教学材料使用。

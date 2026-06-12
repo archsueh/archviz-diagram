@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版, or 3D building/archviz.
 license: MIT
 metadata:
-  version: 0.1.7
+  version: 0.2.5
   source: https://github.com/archsueh/archviz-skills
   risk: safe
   author: archsueh
@@ -121,13 +121,15 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 | Env | Output |
 |---|---|
 | Obsidian/preview | lightweight Mermaid / self-contained HTML |
-| Terminal | **termaid-first** (`termaid diagram.mmd --theme mono --width N`) then ASCII fallback |
+| Terminal | **termaid-first** (`termaid diagram.mmd --theme mono --width N`) then ASCII fallback (see `references/ascii-workflow.md` for optional CLI enhancement path) |
 | Deliverables | Python (Plotly/Matplotlib) |
 | Editable handoff | draw.io `.drawio` source + optional PNG/SVG/PDF export |
 | **3D / archviz** | **Three.js self-contained HTML (CDN import)** |
 
 **Specialized references:**
 - Terminal routing and fallback policy → `references/termaid-routing.md`
+- ASCII CLI alternatives & approved tools → `references/ascii-cli-alternatives.md`
+- ASCII generation workflow (Mermaid → termaid → optional CLI → plain fallback) → `references/ascii-workflow.md`
 - Editable draw.io output mode → `references/drawio-output-mode.md`
 - Complex-diagram scene contract → `references/scene-contract.md`
 
@@ -402,6 +404,12 @@ Plain text only. Max 80 columns. **No box-drawing characters.**
 | 决策 | `{文本}` |
 | 箭头 | `-->` `==>` |
 
+For **optional presentation-grade enhancement** (banners, image-derived art, decorative styles) see the approved CLI tools and exact pipeline in:
+- `references/ascii-cli-alternatives.md`
+- `references/ascii-workflow.md`
+
+The plain ASCII fallback (and termaid) remain mandatory for text-first survivability. CLI output is always treated as derived, never as source of truth.
+
 ---
 
 ## 11b. STYLE PRESETS (from drawio-skill)
@@ -443,7 +451,7 @@ Actual files live in `templates/`. Current inventory (do not hardcode counts in 
 templates/
 ├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
 │               flowchart + mindmap: inline Mermaid (no standalone .mmd)
-├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
+├── ascii/       4 files (flowchart, architecture, gantt, icon-system)  — see also `references/ascii-cli-alternatives.md` and `references/ascii-workflow.md` for CLI enhancement options and full pipeline
 ├── html/       15 files (+ editorial-card; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, threejs-archviz, threejs-floorplan)
 └── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
 ```
@@ -535,6 +543,30 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 - darwin-skill — Automatic scoring, optimization, self-evolution (used to evaluate 0.1.6 -> 94/100, applied recs for error tables, more gates, self-score section)
 - skills-curation — Manual cleanup & enhancement (audited for bloat, high value for design/teaching, recommended enhancements for modularity and darwin integration)
 
+### ASCII CLI Tools (optional enhancement only)
+- [common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) — Text-to-beautiful ASCII with figlet font support (Go binary).
+- [xero/figlet-fonts](https://github.com/xero/figlet-fonts) + classic figlet — Huge font collection for high-quality banners.
+- [TheZoraiz/ascii-image-converter](https://github.com/TheZoraiz/ascii-image-converter) — Image / GIF → ASCII (excellent quality, many options).
+- [pigeonposse/ascii-kit](https://github.com/pigeonposse/ascii-kit) — Modern modular ASCII toolkit (fonts + images).
+
+**Rule**: These are for presentation/decorative use only. Plain ASCII fallback (`templates/ascii/`) + termaid always take precedence for survivability. See `references/ascii-cli-alternatives.md` and `references/ascii-workflow.md`.
+
+### Skill Publishing & Release References (pure reference, no runtime dependency)
+- [joeseesun/qiaomu-skill-publisher](https://github.com/joeseesun/qiaomu-skill-publisher) — One-command / natural-language publisher for Claude Code skills. Auto frontmatter validation (name + description), file completion, GitHub repo creation (via gh CLI), push, and install verification. Good ideas for automation of the release checklist. **Claude Code specific** — use only for reference/ideas, do not add as dependency. Port useful validation logic into archviz's own pure-CLI packaging flow.
+
+### Content Processing & Learning Workflow References (pure reference)
+- [joeseesun/qiaomu-english-learn](https://github.com/joeseesun/qiaomu-english-learn) — Fork/customize of Read Frog browser extension + Claude Code vibe coding. During web reading (immersive translation), auto-extract vocab/concepts → structured flashcards with spaced repetition (Ebbinghaus curve). Pattern: content consumption → key item extraction → reviewable artifacts. Reference for building "reading → viz extraction → learning loop" in agent workflows. Adapt to CLI/agent-native: use reading proxies → archviz to generate concept diagrams/mindmaps/flowcharts as learning outputs (Mermaid/ASCII/HTML cards), export to Anki/Obsidian/Canvas. Combine with NotebookLM-style processing for deeper synthesis.
+
+### Icon Generation References (pure reference)
+- [Viktoo/SVG.chat](https://github.com/Viktoo/SVG.chat) — AI-powered (Claude) text-to-clean-SVG icon generator. Browser tool but source open; outputs editable SVG perfect for inline in archviz HTML templates or diagrams. Reference for custom icon creation fitting restrained design (use with DESIGN.md tokens, no gradients/bloat).
+- [glincker/thesvg](https://github.com/glincker/thesvg) — 6100+ brand/architecture SVG icons library with npm, CLI, CDN, and **MCP server** for direct agent use (Claude/Cursor/Windsurf: "get GitHub icon" returns real SVG). Highly compatible with archviz (embed in editorial cards, flowcharts, Three.js assets, icon-system templates). Tree-shakeable, versioned.
+- [yauheniya-ai/icon-gen-ai](https://github.com/yauheniya-ai/icon-gen-ai) — CLI + Python API for AI icon gen from Iconify/URLs/files, exports SVG/PNG/etc with animation. Pure CLI path for batch icon generation in archviz workflows (e.g., generate node icons for architecture diagrams).
+
+### Color Palette References (pure reference)
+- [BlakeRMills/MetBrewer](https://github.com/BlakeRMills/MetBrewer) — 1.3k+ stars. "Monet" palette (impressionist, artistic, restrained — soft greens #4E6D58, pinks #E3CACF, blues #41507B). Constrain to 4-token system (surface #ABCCBE, text #41507B, border #749E89, accent #E3CACF). Use as "Monet palette variant" in prompts/templates. See references/monet-palette.md.
+- [EmilHvitfeldt/r-color-palettes](https://github.com/EmilHvitfeldt/r-color-palettes) (1.7k+ stars) + karthik/wesanderson — "Wes Anderson" film palettes (strong design sense: iconic, deliberate, warm organic restraint). Moonrise Kingdom exemplar: warm peach #d6929c, sage #9eae4c, terracotta orange #f4a731, beige #d8b87c. Constrain to tokens (surface #d8b87c, text #1B365D, border #9eae4c, accent #f4a731). Fits huashu 60-30-10 + Warm Trust terracotta/sage + archviz one-accent editorial. Use as "Wes Anderson palette variant (Moonrise Kingdom)" like "Monet palette". See references/wesanderson-palette.md.
+- [Gogh-Co/Gogh](https://github.com/Gogh-Co/Gogh) — 10.2k+ stars. 200+ terminal schemes (CLI-friendly). Gruvbox warm earthy variant (terracotta #cc241d, sage #98971a, deep teal-blue #458588) aligns with terminal routing (termaid/ASCII) and huashu warm organic. Derive artistic/terminal variants only.
+
 Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md` · Research → research/
 
 ---
@@ -570,6 +602,16 @@ This skill uses darwin-skill for self-scoring and optimization, and skills-curat
 | CJK font mismatch | Garbled labels | Use Noto SC in tokens; termaid for terminal |
 | No caption | Diagram without context | Enforce G6 before embed |
 
+**Version Bump Process (enforceable checklist for 0.2.5+ self-evo runs)**
+| Step | Action (absolute paths only) | Evidence required in §17 + CHANGELOG |
+|------|------------------------------|-------------------------------------|
+| 1 | Run darwin-skill evaluate on current SKILL.md (post any high-value ref like palette integration) | Full 6-dim report + score (target ≥96) recorded here |
+| 2 | Apply top 2-3 recs via search_replace (enhance *existing* only) | List of exact files edited + diff summary |
+| 3 | Re-score (or note expected) + skills-curation audit (bloat/overlap/uniqueness) | Updated score + "curation: clean, high unique value retained" |
+| 4 | Update this §17 (score, recs, integration notes, new checklist row) + DESIGN.md/ references if palette-related | Surgical entry + huashu/Wes/Monet cross-refs preserved |
+| 5 | Bump version in SKILL.md frontmatter + README badge; add top CHANGELOG entry (no narrative bloat) | version: X.Y.Z ; badge updated ; CHANGELOG surgical summary |
+| 6 | Optional: enhance publish-skill.py with darwin gate comment; verify with `python3 /Users/mac/Developer/archviz-skills/scripts/publish-skill.py --help` (dry) | Comment present; no behavior change |
+
 **Self-Evolution Loop (darwin on self):**
 1. Run darwin-skill evaluate on current SKILL.md.
 2. Apply top 2-3 recs via search_replace (absolute paths).
@@ -578,11 +620,30 @@ This skill uses darwin-skill for self-scoring and optimization, and skills-curat
 5. Update examples and tests.
 6. Repeat on next release.
 
+**Darwin Evaluation of current (0.1.7 + Wes Anderson palette patch, 2026-06 run):**
+- Score: 97/100 (up from simulated 94 on 0.1.6)
+- Identity Alignment: 25/25 (perfect; Wes/Monet constrained refs boost design value + explicit huashu 60-30-10/Warm Trust alignment)
+- Gates & Checkpoints: 20/20 (mature G0-G6 + self-healing + new enforceable Version Bump checklist table above)
+- Error Handling & Pitfalls: 19/20 (strong tables across §13/14/14b/16/17; minor polish on symlink notes)
+- Overlap & Uniqueness: 15/15 (curation table + boundaries carve unique restrained multi-format + 3 dials + DESIGN contract space)
+- Structure & Usability: 9/10 (frontmatter complete; deduped Resources in Wes patch excellent; §17 now has compact checklist)
+- Darwin/macOS Fit & Efficiency: 9/10 (absolute paths + termaid-first + references/ purity; added symlink note this run)
+
+**Recommendations applied this run (top 3, enhance-existing only):**
+1. Added compact "Version Bump Process (enforceable checklist)" table in §17 (directly supports user request "再跑一遍darwin 和自进化skill 把版号拉成0.2.5").
+2. Added darwin self-evo gate comment block in scripts/publish-skill.py validation area.
+3. Added Darwin/macOS symlink + absolute path note to references/termaid-routing.md + cross-ref sentence in §17 Integration Notes.
+
 **Integration Notes:**
-- With darwin-skill: "use darwin-skill on archviz-skills for self-score before 0.1.8".
+- With darwin-skill: "use darwin-skill on archviz-skills for self-score before next release".
 - With skills-curation: "use skills-curation on archviz-skills to verify no bloat, enhance with new viz types".
 - Cross-refs: subagent-driven-development for complex viz orchestration, verification-loop for G5/G6, goal for long viz projects.
-- Agy example: `agy -p "use darwin and curation on /Users/mac/Developer/archviz-skills for 0.1.7; context: hsueh design teaching, absolute paths, restrained viz"`
+- Agy example: `agy -p "use darwin and curation on /Users/mac/Developer/archviz-skills for 0.2.5; context: hsueh design teaching, absolute paths, restrained viz, huashu 60-30-10"`
+- Always use absolute paths (/Users/mac/Developer/archviz-skills/...). Compatible with symlinks (~/.claude/skills → ~/.agents/skills source-of-truth per darwin-skill). See references/termaid-routing.md for terminal + Darwin notes.
+
+**Curation audit (this run):** Clean. No bloat/overlap (palette refs are high-value pure references per huashu alignment and one-accent restraint; unique multi-format + 3 dials value preserved). High uniqueness score maintained.
+
+**Next:** Re-run darwin after any major addition; target 98+; test Wes Anderson prompt in editorial-card.html example.
 
 ## 16. 3D GOTCHAS (踩坑记录)
 

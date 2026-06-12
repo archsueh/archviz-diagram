@@ -13,12 +13,19 @@ Each example demonstrates a different output mode and diagram type.
 | `ascii-demo.txt` | ASCII | Flowchart + Gantt + Architecture | Terminal / plain text |
 | `html-demo.html` | Self-contained HTML | Interactive bar chart | Browser / OB HTML block |
 | `python-demo.py` | Python (Plotly) | Scatter + Line | Deliverables / export |
+| `git-push-release-workflow.mmd` | Mermaid (Wes Anderson variant) | Release pipeline + highlighted git push | Skill publishing / git push teaching & checklist |
+| `git-push-release-workflow.html` | Self-contained HTML (Wes Anderson palette) | **图文并茂可视化**（推荐直接打开截图用） | 发布流程演示 + 好截图素材 |
 
 ## Quick test
 
 ```bash
-# Mermaid: paste mermaid-demo.md into Obsidian
-# ASCII: cat ascii-demo.txt
+# Mermaid (default or Wes Anderson palette): paste git-push-release-workflow.mmd or mermaid-demo.md into Obsidian / GitHub
+# Terminal rich render: termaid /Users/mac/Developer/archviz-skills/examples/git-push-release-workflow.mmd --theme mono
+# ASCII fallback: see templates/ascii/ or run with --ascii
 # HTML: open html-demo.html
 # Python: python3 python-demo.py
 ```
+
+**图文并茂 tip**: 
+- 打开 `git-push-release-workflow.html` （自包含，使用 Wes Anderson 调色）直接浏览器全屏截图（推荐！已内置截图提示）。
+- 或 `git-push-release-workflow.mmd` 在 Obsidian/GitHub 渲染查看。

@@ -266,6 +266,22 @@ Degradation strategy (when data is too complex): >50 nodes → split into 2–3 
 - Accent (one max): "International Klein Blue (#002FA7)" — pair with "Mist White (#f5f5f4)" text on solid fills
 - Tertiary fill: "Pebble (#d6d3d1)"
 
+**Monet variant** (constrained from BlakeRMills/MetBrewer, 1.3k+ stars; impressionist, artistic, fits editorial/restrained – soft museum tones from Monet's "Bridge over a Pond of Water Lilies"):
+- surface: #ABCCBE (soft mint)
+- text: #41507B (deep navy)
+- border: #749E89 (sage)
+- accent: #E3CACF (soft rose)
+- tertiary: #C2CAE3 (light periwinkle)
+Use only for specific artistic/educational briefs; always check luminance contrast. Cite as "Monet palette (MetBrewer)". See references/monet-palette.md.
+
+**Wes Anderson variant** (constrained from EmilHvitfeldt/r-color-palettes 1.7k+ stars + karthik/wesanderson; Moonrise Kingdom 2012. Strong design sense — iconic, deliberate, filmic restraint with warm organic identity. Directly echoes huashu-design 60-30-10 + Warm Trust terracotta/sage):
+- surface: #d8b87c (warm beige)
+- text: #1B365D (deep navy / Ink Navy)
+- border: #9eae4c (sage green)
+- accent: #f4a731 (warm terracotta orange — the single 10%)
+- tertiary: #d6929c (soft peach-rose, muted use only)
+Use only for warm-organic / editorial / artistic briefs (huashu Warm Trust echo). Always check luminance contrast. Cite as "Wes Anderson palette variant (Moonrise Kingdom)". See references/wesanderson-palette.md.
+
 ### Ready-to-use prompts
 - "Create a flowchart TD with subgraphs: Warm Paper (#f5f0eb) nodes, Ink Navy (#1B365D) text, Stone Gray (#a8a29e) 1px borders, using the Mermaid init from DESIGN.md §4. Mark the core node with a 2px International Klein Blue (#002FA7) border — it is the only accent. Labels ≤8 Chinese chars, dials 4/3/8."
 - "Build an Editorial Parchment knowledge card (1080×1440): Parchment (#f5f4ed) canvas, Ivory (#faf9f5) card, judgment headline in Georgia 500, one promise line, one Terracotta (#c96442) evidence cue, dark band for secondary context. Caption states the finding. Use templates/html/editorial-card.html."

@@ -7,7 +7,7 @@ Restrained information visualization skill pack for AI agents.
 Every visualization starts with a **brief read** and **three dials** — not a default template.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.1.7-blue.svg)
+![Version](https://img.shields.io/badge/version-0.2.5-blue.svg)
 
 ---
 
@@ -80,6 +80,8 @@ archviz-skills/
 │   └── excalidraw/       # 1 Excalidraw template
 ├── examples/
 │   ├── mermaid-demo.md   # Mermaid bar + flow + gantt
+│   ├── git-push-release-workflow.mmd  # 图文并茂 git push 发布流程 (Wes Anderson variant)
+│   └── git-push-release-workflow.html # 自包含 HTML 预览（直接打开截图用，Wes Anderson 配色）
 │   ├── teaching-building-3d.html  # 4-floor building walkthrough
 │   ├── course-admission-flow.mmd  # Teaching funnel
 │   └── python-demo.py    # Plotly scatter + line

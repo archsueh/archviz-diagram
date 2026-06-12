@@ -37,3 +37,7 @@ termaid diagram.mmd --ascii --width 80
 - Do not use colorful terminal themes by default; `mono` is the default for archviz.
 - Do not exceed 100 columns unless the user explicitly wants wide terminal output.
 
+## Darwin / macOS Fit
+
+Always use absolute paths (/Users/mac/Developer/archviz-skills/...). Compatible with symlinks (~/.claude/skills → ~/.agents/skills as source-of-truth per darwin-skill). See SKILL.md §17 for self-evolution + version bump process. termaid-first + 80-col ASCII fallback remains the text-first survivability contract on Darwin, SSH, CI.
+
