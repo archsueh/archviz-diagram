@@ -12,12 +12,10 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 ---
 
 ## 截图素材 / Screenshot Material (v0.2.5)
+<img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/c416011f-017f-4b21-aa29-5d2f84065876" />
+<img width="1280" height="633" alt="hair-dryer-assembled" src="https://github.com/user-attachments/assets/6be2f9e9-62d1-45cd-bdcc-9ebb733cf0ce" />
 
-<img width="1280" height="633" alt="teaching-building-exploded" src="https://github.com/user-attachments/assets/fb9f418d-626a-41da-9023-7aeb23ae57b7" />
-<img width="1280" height="633" alt="floorplan" src="https://github.com/user-attachments/assets/8407a85c-b466-4ebf-ac99-4c78ae92b74d" />
-<img width="1280" height="633" alt="building-structure" src="https://github.com/user-attachments/assets/3d2b7db1-c288-489b-81c7-cd762f15bbeb" />
-<img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/72165b0e-e093-45ee-84ad-76aa317373e1" />
-<img width="1280" height="633" alt="hair-dryer-assembled" src="https://github.com/user-attachments/assets/0a235759-b4b9-4e41-b900-9a32a6e60dee" />
+
 
 
 
