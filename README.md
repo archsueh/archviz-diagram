@@ -12,29 +12,22 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 ---
 
 ## 截图素材 / Screenshot Material (v0.2.5)
-<img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/c416011f-017f-4b21-aa29-5d2f84065876" />
-<img width="1280" height="633" alt="hair-dryer-assembled" src="https://github.com/user-attachments/assets/6be2f9e9-62d1-45cd-bdcc-9ebb733cf0ce" />
 
+**git push 发布流程 · 图文并茂示例（已 po 到主页）**
 
+<img width="1280" height="633" alt="git-push-release-workflow" src="docs/screenshots/git-push-release-workflow.png" />
 
+使用 Wes Anderson (Moonrise Kingdom) 暖有机配色，嵌入完整发布流程图（git push 步骤 ★ 高亮）。
 
+**直接打开完整版（推荐用于高质量截图）**：  
+[examples/git-push-release-workflow.html](examples/git-push-release-workflow.html)
 
-
-
-- 使用 Wes Anderson (Moonrise Kingdom) 暖有机配色（surface `#d8b87c` 暖米 + accent `#f4a731` 赤陶 + border `#9eae4c` 鼠尾草），完美契合 huashu 60-30-10 + 克制 editorial 风格。
-- 嵌入完整发布流程图（git push 步骤 ★ 高亮）。
-- 带丰富中文/英文图文说明：准备阶段、Git 操作核心、GitHub 发布 + 命令速查表。
-- 页面底部自带截图提示（浏览器打开 → F11 全屏 → 系统截图工具捕获，推荐 16:9 或宽屏）。
-- 自包含，无需依赖，打开即用。
-
-**示例 PNG 截图**（从 Mermaid 渲染，已嵌入主页）：
-
-![git push 发布流程图](docs/screenshots/git-push-release-workflow.png)
+自包含 HTML，Wes Anderson 调色 + 丰富中文/英文图文说明 + 命令表 + 截图提示。浏览器打开 → F11 全屏 → 直接截专业图文并茂素材。
 
 源文件（GitHub 直接渲染 Mermaid）：  
 [examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
 
-此示例同时用于演示本次 0.2.5 darwin 自进化后的发布流程（meta）。
+此示例用于演示 0.2.5 darwin 自进化后的发布流程（meta）。
 
 ---
 
