@@ -119,11 +119,21 @@ Extended sections: visualization taxonomy (Few + Shneiderman), Aver signature pa
 
 ## Related
 
+### Core dependencies
 - [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) — Official Mermaid
 - [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) — 10.3k stars
 - [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) — Swiss PPT
 - [anydesign](https://github.com/archsueh/anydesign) — Design analysis
 
+### 0.1.6 Optimization References
+This release incorporates patterns from the following projects (reviewed for draw.io handoff, Drawnix/Plait support, terminal rendering, skill composition, refinement loops, etc.):
+
+- [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) — Generate draw.io diagrams from natural language (presets, vision self-check, refinement, codebase-to-diagram, exports)
+- [plait-board/drawnix](https://github.com/plait-board/drawnix) — Open-source whiteboard tool with mind maps, flowcharts, freehand, Markdown/Mermaid support
+- [markdown-viewer/skills](https://github.com/markdown-viewer/skills) — Opinionated agent skills for diagrams and visualizations in Markdown
+- [fasouto/termaid](https://github.com/fasouto/termaid) — Render Mermaid diagrams as Unicode art in terminal (18 types, themes, Python API)
+- [DayuanJiang/next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) — Next.js web app integrating AI with draw.io diagrams (natural language create/modify)
+- [Rss3208/Visiomaster](https://github.com/Rss3208/Visiomaster) — AI visualization and diagram generation patterns
 ---
 
 ## License
