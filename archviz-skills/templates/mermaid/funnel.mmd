@@ -1,0 +1,32 @@
+%% Funnel / Conversion Pipeline (archviz-skills)
+%% Use for: conversion rates, recruitment pipeline, application stages, approval workflow
+%% Env: Mermaid (visual) or HTML (precise %). Mermaid funnel not native — use flowchart approximation.
+%% Dials: Complexity 3, Density 4, Restraint 8
+%% Anti-pattern: max 7 stages, label each with % or count, width conveys drop-off
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+flowchart TD
+    A["提交申请\n320人"] -->|审核通过| B["通过初审\n280人 87.5%"]
+    B -->|评审| C["通过复审\n210人 75%"]
+    C -->|公示| D["最终入选\n180人 85.7%"]
+    D -->|入职| E["实际到岗\n168人 93.3%"]
+
+    classDef stage fill:#e8e4e0,stroke:#a8a29e,color:#1B365D
+    classDef highlight fill:#e4e8f0,stroke:#002FA7,color:#0a0a0a
+    class A,B,C,D stage
+    class E highlight
+
+%% Caption: 5 阶段漏斗，初审到到岗整体留存率 52.5%，主要流失在复审环节（25%）
+
+%% ASCII fallback:
+%% 提交申请 (320)
+%%   ╲ 87.5% ╱
+%%   通过初审 (280)
+%%     ╲ 75% ╱
+%%     通过复审 (210)
+%%       ╲ 85.7% ╱
+%%       最终入选 (180)
+%%         ╲ 93.3% ╱
+%%         实际到岗 (168)
+%%
+%% Use decreasing width to show drop-off. Labels: count + %.

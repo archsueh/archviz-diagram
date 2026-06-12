@@ -1,0 +1,48 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#f5f0eb',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#a8a29e',
+  'lineColor': '#002FA7',
+  'fontSize': '13px'
+}}}%%
+%% ⚠️ ADVANCED RENDER ONLY (per mermaid-arc-skills DESIGN.md updated vision "Text-first, preview-compatible source")
+%% This is the FULL architecture-beta version.
+%% DO NOT paste this raw block into .md files that will be viewed in Typora, Obsidian, GitHub, or Mermaid 11.x previews.
+%% It will cause lexer errors on <br/>, Chinese labels, arrows (e.g. "unexpected character: ->[<-").
+%% For any diagram that lives in Markdown source / long documents: use flowchart TD + subgraph COMPATIBLE approximation (see Aver-产品设计全案.md three-layer Variation 1 and three-in-one; it preserves core-as-foundation, ritual edges, IKB accent, layered groups, restrained tokens).
+%% Use this beta template ONLY when feeding to pretty-mermaid / mermaid-rs-renderer / latest full-support cli / Typst for standalone SVG/PDF export.
+%% Design brief (per mermaid-arc-skills 0. inference): architecture diagram for design research paper / guizang Swiss PPT (S05 Three Layers / S17 System Diagram).
+%% Dials: Complexity 5 (layered system), Density 5 (specific practices + rituals), Restraint 9 (single IKB #002FA7 signature accent for "arc" identity + core rituals, hairline, warm paper neutrals, no rainbow, no default mindmap bubbles).
+%% Visual language (inspired by high-design systems like those in awesome-design-md / DESIGN.md collections): sovereign ritual atmosphere on warm paper; Swiss "越大越细，越小越粗" typography; core as data sovereign with strong IKB border; layers as consistent supporting groups; ritual edges as the deliberate design interventions that close the emotional asset loop. Structure > decoration, grid-aligned, geometry focus.
+%% Follows mermaid-arc-skills + guizang locked mode rules + DESIGN.md "preview compatibility first" rule.
+architecture-beta
+    group core(database)[.md 数据主权<br/>Local-first<br/>被动 AI（用户导出调用）<br/>完整归档]
+
+    group money(cloud)[Money 量化台账]
+    service daily[日均成本计算] in money
+    service dates[buyDate vs startDate 分离] in money
+    service sell[卖出结算闭环] in money
+
+    group knowledge(cloud)[Knowledge 闪念采集]
+    service notes[Markdown-native 笔记] in knowledge
+    service meta[使用元数据关联] in knowledge
+    service zettlr[Zettlr 桌面协同] in knowledge
+
+    group sentiment(cloud)[Sentiment 仪式回响]
+    service trigger[仅里程碑触发] in sentiment
+    service guide[购入引导 + 卖出告别] in sentiment
+    service peak[情感峰值补偿] in sentiment
+
+    %% Closed emotional asset loop — the intentional design intervention
+    core -->|购入仪式 引导| money
+    money -->|持有 日常量化 + 时间感知| core
+    core -->|里程碑触发 仪式| sentiment
+    sentiment -->|卖出告别 情感归档| core
+    core -->|闪念采集 被动| knowledge
+    knowledge -->|元数据重组 导出调用| core
+
+    classDef coreCore fill:#f5f0eb,stroke:#002FA7,stroke-width:2px,color:#1B365D
+    classDef layerGroup fill:#f0f0ee,stroke:#a8a29e,color:#44403c
+
+    class core coreCore
+    class money,knowledge,sentiment layerGroup

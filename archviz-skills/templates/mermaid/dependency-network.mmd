@@ -1,0 +1,50 @@
+%% Dependency Network / Critical Path (archviz-skills)
+%% Use for: task dependencies, module relationships, build order, course prerequisites
+%% Env: Mermaid flowchart (primary). architecture-beta for render pipeline.
+%% Dials: Complexity 5, Density 4, Restraint 7
+%% Anti-pattern: cluster by layer, highlight critical path, max 20 nodes per diagram
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+flowchart LR
+    subgraph Phase1["阶段一：基础"]
+        A["需求分析"] --> B["原型设计"]
+        A --> C["技术选型"]
+        B --> D["UI 设计"]
+    end
+
+    subgraph Phase2["阶段二：开发"]
+        C --> E["后端开发"]
+        D --> F["前端开发"]
+        E --> G["API 联调"]
+        F --> G
+    end
+
+    subgraph Phase3["阶段三：交付"]
+        G --> H["集成测试"]
+        H --> I["用户验收"]
+        I --> J["上线部署"]
+    end
+
+    %% Critical path (thicker, accent color)
+    A -.->|依赖| C
+    C ==>|关键路径| E
+    E ==>|关键路径| G
+    G ==>|关键路径| H
+
+    classDef phase fill:#f5f0eb,stroke:#a8a29e,color:#1B365D
+    classDef critical fill:#e4e8f0,stroke:#002FA7,color:#0a0a0a,stroke-width:2px
+    class Phase1,Phase2,Phase3 phase
+    class C,E,G,H critical
+
+%% Caption: 10 个任务，3 阶段，关键路径：技术选型→后端开发→API联调→集成测试
+%% Legend: ══ 关键路径  ── 常规依赖  - - 软依赖
+
+%% ASCII fallback:
+%% Phase 1          Phase 2          Phase 3
+%% ┌──────────┐    ┌──────────┐    ┌──────────┐
+%% │需求分析  │───→│后端开发══│═══→│API联调═══│═══→ 集成测试 → 验收 → 上线
+%% │    │     │    │          │    │          │
+%% │    ├→原型│───→│UI→前端   │───→│          │
+%% │    └→选型│    │          │    │          │
+%% └──────────┘    └──────────┘    └──────────┘
+%% ══ = critical path

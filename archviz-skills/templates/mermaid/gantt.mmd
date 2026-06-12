@@ -1,0 +1,43 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#f5f0eb',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#a8a29e',
+  'lineColor': '#002FA7',
+  'fontSize': '12px'
+}}}%%
+%% Gantt / Timeline — canonical safe pattern per DESIGN.md (iterated from real overflow reports).
+%% Brief: Product roadmap. For any .md that will be previewed, inside gantt use ONLY short codes (V1.1 etc.).
+%% Full mapping + details = immediate table below. ASCII fallback always included for zero-overflow reliability.
+%% Dials: Complexity 3, Density 3, Restraint 9.
+%% Gantt specifics: time axis, category sections, short IDs inside bars, table beside, ASCII companion.
+gantt
+    title Product Roadmap (safe for previewers)
+    dateFormat  YYYY-MM-DD
+    axisFormat  %m/%d
+    section V1 Core
+    V1.1                 :a1, 2026-07-01, 6w
+    V1.2                 :a2, after a1, 7w
+    V1.3                 :a3, after a2, 4w
+    section V2 Enhance
+    V2.1                 :b1, after a3, 5w
+    V2.2                 :b2, after b1, 5w
+
+%% 任务标识表（mandatory companion for source MD）
+| 标识 | 任务         | 时长 | 核心交付                  |
+|------|--------------|------|---------------------------|
+| V1.1 | 环境搭建     | 6w   | Swift 基础 + 项目骨架     |
+| V1.2 | 流水账台账   | 7w   | 录入 + 日均成本 + 持有    |
+| V1.3 | 结算首页     | 4w   | 卖出闭环 + 仪表盘         |
+| V2.1 | iCloud同步   | 5w   | 多设备数据同步            |
+| V2.2 | CSV+图表     | 5w   | 导入 + 分类统计           |
+
+%% ASCII 版（zero-overflow, mono font, always ship with Gantt in .md）
+%% 2026-07   08   09   10   11   12   2027-01
+%% V1
+%% V1.1 环境搭建 |=====|
+%% V1.2 流水账台账     |======|
+%% V1.3 结算首页           |===|
+%% V2
+%% V2.1 iCloud同步            |====|
+%% V2.2 CSV+图表                   |====|
+%% Legend: |===| = duration (proportional), align columns strictly.

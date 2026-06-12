@@ -1,0 +1,49 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#f5f0eb',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#a8a29e',
+  'lineColor': '#002FA7',
+  'fontSize': '12px'
+}}}%%
+%% Sankey / Data Flow example (use sankey-beta if Mermaid supports, else architecture-beta approximation).
+%% ⚠️ If using architecture-beta alt below: same rule as three-layer — render-pipeline only. For .md source use weighted flowchart edges or sankey-beta when safe in your previewer.
+%% Brief: Weighted flows for data transformation or resource movement.
+%% Dials: Complexity 4, Density 4, Restraint 8.
+%% Sankey specifics: Thicker lines for volume, semantic labels on edges, color by category, legend.
+%% Mermaid sankey-beta syntax (if available in your Mermaid version):
+sankey-beta
+    Input [100] --> Process A
+    Input --> Process B
+    Process A [60] --> Output
+    Process B [40] --> Output
+    Waste [20] --> Discard
+
+%% Alternative using architecture-beta for compatibility (groups as stages, edges with weights):
+architecture-beta
+    group input(database)[Input Stage]
+    service raw[Raw Data 100] in input
+
+    group process(cloud)[Processing]
+    service a[Process A 60] in process
+    service b[Process B 40] in process
+
+    group output(database)[Output Stage]
+    service final[Final Output 80] in output
+    service waste[Waste 20] in output
+
+    raw --> a
+    raw --> b
+    a --> final
+    b --> final
+    a --> waste
+    b --> waste
+
+    classDef stage fill:#f5f0eb,stroke:#002FA7,color:#1B365D
+    class input,process,output stage
+
+%% ASCII fallback for terminal: Vertical flow with width indicators.
+%% Input (100)
+%%   |==60==> Process A
+%%   |==40==> Process B
+%% Output (80)   Discard (20)
+%% Use = for volume, --> for direction. Align for readability.

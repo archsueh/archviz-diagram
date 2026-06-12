@@ -1,0 +1,38 @@
+%% 案例：课程评价多维对比（教学评估场景）
+%% 数据关系：决策矩阵 / 多维评分
+%% 环境：Obsidian 预览（表格）/ PPT（雷达图）
+%% Brief: 3门数字媒体课程的教学评价对比，5个维度
+%% Dials: COMPLEXITY=3  DENSITY=4  RESTRAINT=8
+
+%% 表格形式（Obsidian 原生渲染）
+%%
+%% | 评价维度（权重） | 数字影像基础 | 交互设计 | 动态图形 |
+%% |---|---|---|---|
+%% | 教学内容 (25%) | 8.5 | 7.8 | 9.0 |
+%% | 实践环节 (25%) | 9.0 ⬆ | 8.2 | 8.5 |
+%% | 作品质量 (20%) | 8.0 | 8.5 ⬆ | 8.8 ⬆ |
+%% | 创新性 (15%) | 7.5 | 9.0 ⬆ | 8.0 |
+%% | 学生反馈 (15%) | 8.8 ⬆ | 7.5 | 8.2 |
+%% | **加权总分** | **8.38** | **8.18** | **8.58** |
+%%
+%% ⬆ = 该维度最高分。加权后三门课程差距 <0.4，整体教学质量均衡。
+%%
+%% 关键发现：
+%% 1. 动态图形在作品质量和教学内容上领先，但创新性不如交互设计
+%% 2. 数字影像基础的实践环节最强，但创新性评分最低
+%% 3. 交互设计创新性最高（9.0），但学生反馈最低（7.5）
+%%
+%% 可视化建议：
+%% - 表格：PPT / 文档直接用
+%% - 雷达图：用 templates/html/radar.html，5 维 3 线对比
+%% - 降级：若只需 2 门对比 → 横向条形图更清晰
+
+%% Plotly 雷达图（deliverables 环境）:
+%% import plotly.graph_objects as go
+%% categories = ['教学内容','实践环节','作品质量','创新性','学生反馈']
+%% fig = go.Figure()
+%% fig.add_trace(go.Scatterpolar(r=[8.5,9.0,8.0,7.5,8.8], theta=categories, name='数字影像基础', line_color='#002FA7'))
+%% fig.add_trace(go.Scatterpolar(r=[7.8,8.2,8.5,9.0,7.5], theta=categories, name='交互设计', line_color='#a8a29e'))
+%% fig.add_trace(go.Scatterpolar(r=[9.0,8.5,8.8,8.0,8.2], theta=categories, name='动态图形', line_color='#a8b898'))
+%% fig.update_layout(polar=dict(radialaxis=dict(range=[6,10])), showlegend=True)
+%% fig.show()

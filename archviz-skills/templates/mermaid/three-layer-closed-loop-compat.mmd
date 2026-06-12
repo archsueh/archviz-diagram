@@ -1,0 +1,67 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#f5f0eb',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#a8a29e',
+  'lineColor': '#002FA7',
+  'fontSize': '13px'
+}}}%%
+%% Design brief (per mermaid-arc-skills 0. inference + DESIGN.md "Text-first, preview-compatible source" vision):
+%% flowchart TD + subgraph COMPATIBLE approximation of three-layer closed loop.
+%% This is the CANONICAL form for any architecture / arc / layered view that will live inside Markdown source
+%% (research papers, design logs, Obsidian, GitHub READMEs, Typora etc.).
+%% It avoids ALL architecture-beta lexer errors with <br/>, Chinese, arrows in Mermaid 11.x / Typora / Obsidian / GitHub.
+%% Preserves: core as sovereign foundation (strong IKB), three layers as groups, ritual closed-loop edges (explicit labels),
+%% single accent, restrained Swiss + warm paper tokens, "越大越细，越小越粗", hairline, geometry focus.
+%% 
+%% For full-featured beautiful SVG (production PPT/PDF/LaTeX): take the beta version from three-layer-closed-loop.mmd
+%% and feed to pretty-mermaid / mermaid-rs-renderer / latest cli. Do NOT use beta as the source block.
+%% 
+%% Dials: Complexity 5 (layered system), Density 5 (practices + rituals), Restraint 9 (single IKB, hairline, no rainbow).
+%% Visual language: sovereign ritual on warm paper; Swiss typography; core as data sovereign foundation;
+%% layers as groups; ritual edges as design interventions; dashed data主权 from base.
+%% Variation: Use this for system view in recurring three-layer contexts (pair with mindmap philosophy variant).
+%% Follows mermaid-arc-skills + guizang locked mode + DESIGN.md recurring variation + compatibility-first rule.
+flowchart TD
+    subgraph 物质层 ["物质层 · Money"]
+        daily[日均成本计算]
+        dates[buyDate vs startDate 分离]
+        sell[卖出结算闭环]
+    end
+
+    subgraph 思维层 ["思维层 · Knowledge"]
+        notes[Markdown-native 笔记]
+        meta[使用元数据关联]
+        zettlr[Zettlr 桌面协同]
+    end
+
+    subgraph 情感层 ["情感层 · Sentiment"]
+        trigger[仅里程碑触发]
+        guide[购入引导 + 卖出告别]
+        peak[情感峰值补偿]
+    end
+
+    subgraph 核心 [".md 数据主权 / Local-first / 被动 AI / 完整归档"]
+        local[Local-first]
+        passive[被动 AI]
+        archive[完整归档]
+    end
+
+    %% Ritual closed loop flows
+    daily -->|持有日常| dates
+    dates -->|触发卖出| sell
+    sell -->|卖出告别仪式| 核心
+    notes -->|闪念| meta
+    meta -->|被动重组| zettlr
+    zettlr -->|导出调用| 核心
+    trigger -->|里程碑触发| guide
+    guide -->|情感仪式| peak
+    peak -->|峰值补偿归档| 核心
+
+    核心 -.->|"数据主权"| 物质层
+    核心 -.->|"数据主权"| 思维层
+    核心 -.->|"数据主权"| 情感层
+
+    classDef coreCore fill:#f5f0eb,stroke:#002FA7,stroke-width:2px,color:#1B365D
+    classDef layerGroup fill:#f0f0ee,stroke:#a8a29e,color:#44403c
+    class 核心 coreCore
+    class 物质层,思维层,情感层 layerGroup

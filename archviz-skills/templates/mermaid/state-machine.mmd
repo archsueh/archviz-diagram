@@ -1,0 +1,39 @@
+%% State Machine / Lifecycle Diagram (archviz-skills)
+%% Use for: order lifecycle, approval workflow, course states, document status
+%% Env: Mermaid stateDiagram-v2 (native). Preview-compatible.
+%% Dials: Complexity 4, Density 3, Restraint 8
+%% Anti-pattern: max 10 states, label transitions with verbs, start/end explicit
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+stateDiagram-v2
+    [*] --> 草稿: 创建
+    草稿 --> 审核中: 提交
+    审核中 --> 通过: 审核通过
+    审核中 --> 退回: 审核不通过
+    退回 --> 草稿: 修改后重新提交
+    通过 --> 公示: 进入公示期
+    公示 --> 生效: 公示期满
+    公示 --> 异议: 收到异议
+    异议 --> 审核中: 复审
+    生效 --> 归档: 执行完毕
+    归档 --> [*]
+
+    classDef default fill:#e8e4e0,stroke:#a8a29e,color:#1B365D
+    classDef terminal fill:#d6d3d1,stroke:#78716c,color:#1B365D
+
+%% Caption: 课程准入审批流程，7 个状态，退回/异议两个回环路径
+
+%% ASCII fallback:
+%% [*] ──创建──→ 草稿
+%%               │
+%%           提交│
+%%               ▼
+%%            审核中 ──不通过──→ 退回 ──修改──→ 草稿 (回环)
+%%               │
+%%           通过│
+%%               ▼
+%%             公示 ──异议──→ 异议 ──复审──→ 审核中 (回环)
+%%               │
+%%          期满│
+%%               ▼
+%%             生效 ──→ 归档 ──→ [*]

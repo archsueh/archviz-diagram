@@ -1,0 +1,39 @@
+%% 案例：32门课程准入审批全流程（教学管理场景）
+%% 数据关系：状态转换 + 漏斗（嵌套）
+%% 环境：Obsidian 预览 / PPT 投影
+%% Brief: 32门课程提交准入材料，经初审、复审、公示三阶段，展示各环节通过率
+%% Dials: COMPLEXITY=5  DENSITY=4  RESTRAINT=7
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e8e4e0', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+flowchart TD
+    subgraph 提交阶段
+        A["32门课程\n提交准入材料"]
+    end
+
+    subgraph 初审["初审（系主任）"]
+        A --> B["材料完整\n30门 93.8%"]
+        A --> C["需补充\n2门 6.2%"]
+        C -->|补充后| B
+    end
+
+    subgraph 复审["复审（教学委员会）"]
+        B --> D["直接通过\n24门 80%"]
+        B --> E["修改后通过\n5门 16.7%"]
+        B --> F["不通过\n1门 3.3%"]
+        E -->|修改| D
+    end
+
+    subgraph 公示["公示期"]
+        D --> G["生效\n29门"]
+        D --> H["异议\n0门"]
+    end
+
+    classDef pass fill:#e8e4e0,stroke:#a8a29e,color:#1B365D
+    classDef warn fill:#f0f4e0,stroke:#a8b898,color:#0a0a0a
+    classDef fail fill:#f0e8e8,stroke:#b8a0aa,color:#0a0a0a
+    class A,B,D,G pass
+    class C,E warn
+    class F,H fail
+
+%% Caption: 32门课程准入流程，初审通过率 93.8%，复审通过率 96.7%（含修改后通过），
+%% 最终生效 29门（90.6%）。主要卡点在材料完整性（初审）而非质量（复审）。

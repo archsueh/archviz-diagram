@@ -1,0 +1,45 @@
+%% Decision Matrix / Weighted Scorecard (archviz-skills)
+%% Use for: tool selection, course evaluation, vendor comparison, design critique
+%% Env: Mermaid (table) or HTML radar for ≤7 criteria visual comparison
+%% Dials: Complexity 4, Density 5, Restraint 7
+%% Anti-pattern: max 7 criteria, max 5 options, table-first (radar for visual emphasis)
+
+%% Decision matrix — table format (primary, Obsidian-compatible)
+%%
+%% | Criteria (weight) | Option A | Option B | Option C |
+%% |---|---|---|---|
+%% | 成本 (30%) | 8 ⬆ | 6 | 5 |
+%% | 性能 (25%) | 7 | 9 ⬆ | 6 |
+%% | 易用性 (20%) | 6 | 7 | 9 ⬆ |
+%% | 扩展性 (15%) | 9 ⬆ | 7 | 5 |
+%% | 社区 (10%) | 5 | 8 ⬆ | 7 |
+%% | **加权总分** | **7.35** | **7.25** | **6.15** |
+%%
+%% ⬆ = best in category. Bold = winner.
+%% Caption: 成本权重最高时 Option A 胜出；若性能优先则 Option B 更优
+
+%% Radar visualization (for visual emphasis, ≤7 criteria):
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'fontSize': '13px'}}}%%
+%% Note: Mermaid does not natively support radar charts.
+%% Use HTML template (templates/html/radar.html) for rendered radar.
+%% Or use Python (Plotly) for deliverables:
+%%
+%% import plotly.graph_objects as go
+%% fig = go.Figure()
+%% fig.add_trace(go.Scatterpolar(
+%%     r=[8, 7, 6, 9, 5], theta=['成本','性能','易用性','扩展性','社区'],
+%%     fill='toself', name='Option A', line_color='#002FA7'))
+%% fig.add_trace(go.Scatterpolar(
+%%     r=[6, 9, 7, 7, 8], theta=['成本','性能','易用性','扩展性','社区'],
+%%     fill='toself', name='Option B', line_color='#a8a29e'))
+%% fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0,10])))
+%% fig.show()
+
+%% ASCII fallback:
+%% Criteria    A   B   C
+%% 成本 (30%)  ■■■■  ■■■  ■■½
+%% 性能 (25%)  ■■■½  ■■■■½  ■■■
+%% 易用 (20%)  ■■■  ■■■½  ■■■■½
+%% 扩展 (15%)  ■■■■½  ■■■½  ■■½
+%% 社区 (10%)  ■■½  ■■■■  ■■■½
+%% TOTAL:      7.35  7.25  6.15
