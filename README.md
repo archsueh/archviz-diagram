@@ -59,6 +59,10 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 - 页面底部自带截图提示（浏览器打开 → F11 全屏 → 系统截图工具捕获，推荐 16:9 或宽屏）。
 - 自包含，无需依赖，打开即用。
 
+**示例 PNG 截图**（从 Mermaid 渲染，适合嵌入文档）：
+
+![git push 发布流程图](docs/screenshots/git-push-release-workflow.png)
+
 源文件（GitHub 直接渲染 Mermaid）：  
 [examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
 

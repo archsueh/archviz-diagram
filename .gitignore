@@ -47,4 +47,4 @@ temp/
 
 # Project specific
 snapshot.json
-docs/screenshots/
+# (screenshots/ is tracked for examples; do not ignore)

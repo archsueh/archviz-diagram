@@ -18,19 +18,19 @@
   'fontSize': '13px'
 }}}%%
 flowchart TD
-    subgraph 准备阶段["准备阶段 Prep"]
+    subgraph prep ["准备阶段 Prep"]
         V["validate_frontmatter<br/>+ check_files"]
         D["Dry-run 摘要<br/>用户 Enter 确认"]
     end
 
-    subgraph Git操作["Git 操作 Git Operations"]
+    subgraph gitops ["Git 操作 Git Operations"]
         GA["git add -A"]
         GC{"working tree 干净?"} 
         GT["git tag -f v0.2.5"]
         GP["git push origin main --tags<br/>★ 核心 git push 推送"]
     end
 
-    subgraph 发布["GitHub 发布 Release"]
+    subgraph release ["GitHub 发布 Release"]
         GR["gh release create<br/>带安装 notes"]
         GV["打印验证与多代理安装指令"]
     end
@@ -41,10 +41,10 @@ flowchart TD
     GT --> GP --> GR --> GV
 
     classDef push fill:#d8b87c,stroke:#f4a731,stroke-width:3px,color:#1B365D
-    class GP push
-
     classDef phase fill:#f5f5f4,stroke:#9eae4c,color:#1B365D
-    class 准备阶段, Git操作, 发布 phase
+
+    class GP push
+    class prep,gitops,release phase
 ```
 
 ## 流程图文说明
