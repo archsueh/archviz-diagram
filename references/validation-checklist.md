@@ -13,6 +13,8 @@
 - [ ] "Why" and design intervention visible.
 - [ ] Matches existing document style/palette.
 - [ ] If recurring concept: plan variation per DESIGN.md.
+- [ ] Editorial: Family A/B/C/D chosen; G3 ask gate passed if ambiguous.
+- [ ] Editorial: judgment + promise + one evidence (Family A); serif ≤500; no `#ffffff` canvas.
 
 ## Post-Generation
 ### Mermaid

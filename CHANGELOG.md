@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.1.1 (2026-06-12)
+
+**Darwin + skills-curation pass** (target score ≥90 before push)
+
+### Added
+- **When to Use / When NOT to Use** + **Skill Boundaries** table (vs claude-design-card, mermaid-arc-skills).
+- **Checkpoints G0–G6** with STOP conditions and iron rule.
+- **§14b Pitfalls & Red Lines (绝不)** — editorial + diagram hard bans.
+- Editorial error rows in §13; editorial gates in `validation-checklist.md`.
+- Frontmatter: `source`, `risk: safe`, expanded triggers (封面/卡片/排版).
+
+### Changed
+- **§9b** compressed to gate + pointer (token efficiency; detail in `editorial-parchment-language.md`).
+- Darwin re-score: 84 → **92/100** (gates + boundaries + red lines + overlap clarity).
+
+## 0.1.0 (2026-06-12)
+
+**Editorial Parchment language — distilled from claude-design-card**
+
+### Added
+- **`references/editorial-parchment-language.md`**: warm canvas / Terracotta accent / serif+sans split / format families A–D / surface pacing / ask-before-generate / anti-patterns (upstream: [geekjourneyx/claude-design-card](https://github.com/geekjourneyx/claude-design-card)).
+- **`templates/html/editorial-card.html`**: Family B knowledge-card skeleton with Family A/C/D override notes.
+- **DESIGN.md**: Editorial Parchment palette row + Extended Format Families section + ready-to-use editorial prompt.
+- **SKILL.md §9b Editorial Mode**: format routing, compression rule, platform safe zones, workflow ask gate.
+- **QR table**: cover / knowledge card / social square / long-form → `editorial-card.html`.
+- **Anti-patterns**: cover-as-summary, serif 700, cool SaaS white, equal card grid.
+
+### Changed
+- Brief inference signal #8: deliverable intent (diagram vs card vs long-form vs 3D).
+- Palette routing note: Warm Paper+IKB default; Editorial Parchment+Terracotta for cards/covers; host-doc override preserved.
+
 ## 0.0.9 (2026-06-11)
 
 **DESIGN.md restructured into the Stitch 9-section format + visual catalog**

@@ -7,7 +7,7 @@ Restrained information visualization skill pack for AI agents.
 Every visualization starts with a **brief read** and **three dials** — not a default template.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.0.9-blue.svg)
+![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)
 
 ---
 

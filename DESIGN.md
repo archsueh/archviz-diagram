@@ -69,6 +69,13 @@ Every generated diagram should be understandable as a compact design system, not
 | **IKB Accent** | `#e4e8f0` | `#0a0a0a` | `#94a3b8` | `#002FA7` | guizang Swiss |
 | **Lemon Accent** | `#f0f4e0` | `#0a0a0a` | `#a8b898` | `#FFD500` | Tech |
 | **Stone Mono** | `#e7e5e4` | `#292524` | `#a8a29e` | — | Austerity |
+| **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` Terracotta | Cards, covers, publishable HTML ([claude-design-card](https://github.com/geekjourneyx/claude-design-card) lineage) |
+
+**Editorial Parchment notes** (full rules → `references/editorial-parchment-language.md`):
+- Terracotta replaces IKB as the single accent when the brief is editorial / card / cover — never both in one set.
+- Surfaces alternate: Parchment canvas → Ivory card → Dark-Surface band (`#30302e`) → optional Terracotta band (one per page).
+- Typography: serif display at weight 400–500 (never 700) + system-ui body; book line-height 1.55–1.65.
+- Elevation: hairline warm borders + optional ring shadow on card container only — not on chart marks.
 
 **Contrast rule (mandatory, computed)**: `luminance = 0.299R + 0.587G + 0.114B`. Fill luminance < 128 → light text (Mist White); ≥ 128 → dark text (Ink Navy / Near Black / Charcoal).
 
@@ -236,6 +243,7 @@ Degradation strategy (when data is too complex): >50 nodes → split into 2–3 
 
 ### Ready-to-use prompts
 - "Create a flowchart TD with subgraphs: Warm Paper (#f5f0eb) nodes, Ink Navy (#1B365D) text, Stone Gray (#a8a29e) 1px borders, using the Mermaid init from DESIGN.md §4. Mark the core node with a 2px International Klein Blue (#002FA7) border — it is the only accent. Labels ≤8 Chinese chars, dials 4/3/8."
+- "Build an Editorial Parchment knowledge card (1080×1440): Parchment (#f5f4ed) canvas, Ivory (#faf9f5) card, judgment headline in Georgia 500, one promise line, one Terracotta (#c96442) evidence cue, dark band for secondary context. Caption states the finding. Use templates/html/editorial-card.html."
 - "Build a Gantt with codes only inside the block (V1.1, A2…), a full-name table immediately after, and an 80-column ASCII fallback. Min bar 3 weeks, 3–6 tasks per section, Warm Paper init."
 - "Render a comparison of 4 items as an xychart-beta bar chart, Warm Paper tokens, Y-axis starting at 0, caption stating the finding. If items ≤5 and exact values are the point, output a Markdown table instead."
 - "Generate a self-contained Three.js HTML: building structure shell, procedural BoxGeometry, Stone Gray (#a8a29e) wireframe, Paper Beige (#e8e4e0) slabs, IKB (#002FA7) active floor, max 3 lights, OrbitControls with damping, animejs v4 camera tweens (`import { animate }`, render loop named `renderLoop`)."
@@ -275,6 +283,23 @@ Based on Few's 7 relationships + Shneiderman's 6 data types + teaching/academic 
 - "What depends on what?" → dependency graph
 - "What are the states?" → state diagram
 - "How to decide?" → decision matrix + radar
+
+---
+
+## Extended: Editorial Format Families (HTML / card deliverables)
+
+When the brief asks for **cards, covers, or publishable HTML** (not inline Mermaid), route by job contract. Full spec: `references/editorial-parchment-language.md`.
+
+| Family | Job | archviz output | Template |
+|---|---|---|---|
+| **A — Attention** | Click / pause promise | Fixed-size cover HTML | `editorial-card.html` + aspect override |
+| **B — Knowledge artifact** | Stop, understand, save | 1080×1440 card, hero + dark band | `editorial-card.html` |
+| **C — Social square** | Quote / data hero | 1080×1080 single focal | `editorial-card.html` |
+| **D — Long-form** | Reading depth | width-led auto-height HTML | `editorial-card.html` (strip min-height) |
+
+**Compression rule (Family A)**: judgment headline + one promise + one evidence — never 4–6 summary bullets on a cover.
+
+**Ambiguous brief**: state 1 primary family + 2 alternatives before generating (see SKILL.md §Editorial Mode).
 
 ---
 
