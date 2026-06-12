@@ -13,9 +13,11 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 
 ## 截图素材 / Screenshot Material (v0.2.5)
 
-**git push 发布流程 · 图文并茂示例（已 po 到主页）**
+<img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/9ed240f9-81bc-4ef5-8823-550f080b974c" />
+<img width="1280" height="633" alt="hair-dryer-assembled" src="https://github.com/user-attachments/assets/9793fe6a-1832-442d-a1b7-20e2e1526c64" />
 
-<img width="1280" height="633" alt="git-push-release-workflow" src="docs/screenshots/git-push-release-workflow.png" />
+
+<img width="auto" height="633" alt="git-push-release-workflow" src="docs/screenshots/git-push-release-workflow.png" />
 
 使用 Wes Anderson (Moonrise Kingdom) 暖有机配色，嵌入完整发布流程图（git push 步骤 ★ 高亮）。
 
