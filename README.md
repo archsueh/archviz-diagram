@@ -11,6 +11,30 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 
 ---
 
+## 截图素材 / Screenshot Material (v0.2.5)
+
+**图文并茂 git push 发布流程截图素材已 po 到主页**（用 Markdown 图片语法插入 README，GitHub 主页自动渲染显示）。
+
+**推荐直接用于截图**：  
+[examples/git-push-release-workflow.html](examples/git-push-release-workflow.html)
+
+- 使用 Wes Anderson (Moonrise Kingdom) 暖有机配色（surface `#d8b87c` 暖米 + accent `#f4a731` 赤陶 + border `#9eae4c` 鼠尾草），完美契合 huashu 60-30-10 + 克制 editorial 风格。
+- 嵌入完整发布流程图（git push 步骤 ★ 高亮）。
+- 带丰富中文/英文图文说明：准备阶段、Git 操作核心、GitHub 发布 + 命令速查表。
+- 页面底部自带截图提示（浏览器打开 → F11 全屏 → 系统截图工具捕获，推荐 16:9 或宽屏）。
+- 自包含，无需依赖，打开即用。
+
+**示例 PNG 截图**（从 Mermaid 渲染，已嵌入主页）：
+
+![git push 发布流程图](docs/screenshots/git-push-release-workflow.png)
+
+源文件（GitHub 直接渲染 Mermaid）：  
+[examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
+
+此示例同时用于演示本次 0.2.5 darwin 自进化后的发布流程（meta）。
+
+---
+
 ## What this is
 
 A skill for AI agents (Claude Code, Hermes, Codex, etc.) that generates **rational, minimalist, restrained visualizations**. Not just Mermaid — supports ASCII/termaid terminal rendering, self-contained HTML, Python (Plotly), Obsidian Canvas, draw.io handoff guidance, and Three.js 3D archviz.
@@ -43,30 +67,6 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 - **Default (2D infoviz)** — charts, flowcharts, gantt, sankey, tables, teaching diagrams
 - **3D archviz** — only when the brief mentions building, floorplan, structure, section cut, or walkthrough (`templates/html/threejs-*.html`)
 - **Editable handoff** — use draw.io mode when the user needs a diagram that can be edited by architects, teachers, or engineering teams after generation
-
----
-
-## 截图素材 / Screenshot Material (v0.2.5 新增)
-
-仓库主页缺少的图文并茂 git push 发布流程截图素材已就位。
-
-**推荐直接用于截图**：  
-[examples/git-push-release-workflow.html](examples/git-push-release-workflow.html)
-
-- 使用 Wes Anderson (Moonrise Kingdom) 暖有机配色（surface `#d8b87c` 暖米 + accent `#f4a731` 赤陶 + border `#9eae4c` 鼠尾草），完美契合 huashu 60-30-10 + 克制 editorial 风格。
-- 嵌入完整发布流程图（git push 步骤 ★ 高亮）。
-- 带丰富中文/英文图文说明：准备阶段、Git 操作核心、GitHub 发布 + 命令速查表。
-- 页面底部自带截图提示（浏览器打开 → F11 全屏 → 系统截图工具捕获，推荐 16:9 或宽屏）。
-- 自包含，无需依赖，打开即用。
-
-**示例 PNG 截图**（从 Mermaid 渲染，适合嵌入文档）：
-
-![git push 发布流程图](docs/screenshots/git-push-release-workflow.png)
-
-源文件（GitHub 直接渲染 Mermaid）：  
-[examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
-
-此示例同时用于演示本次 0.2.5 darwin 自进化后的发布流程（meta）。
 
 ---
 
