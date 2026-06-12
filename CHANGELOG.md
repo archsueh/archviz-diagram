@@ -1,114 +1,29 @@
 # Changelog
 
-## 0.2.5 Darwin Self-Evolution & Version Bump (2026-06-12)
+## 0.2.5 (2026-06-12)
 
-**Re-run darwin-skill + self-evolution (per SKILL.md §17 loop) + bump to 0.2.5**
+### Changed
+- Bumped SKILL.md metadata, README badge, and publish helper marker to `0.2.5`.
+- Replaced the historical self-evolution narrative in SKILL.md with a compact release self-check protocol.
+- Added Darwin / macOS fit notes to `references/termaid-routing.md`.
+- Cleaned README screenshot material copy and removed internal meta notes from the first screen.
 
-- Independent darwin-skill evaluation (full 6-dim rubric per darwin-skill/SKILL.md) on current state (0.1.7 + Wes Anderson palette high-value constrained integration from prior patch):
-  - Score: 97/100 (strong lift from prior simulated 94 on 0.1.6)
-  - Breakdown: Identity 25/25 (huashu 60-30-10 + Warm Trust alignment + restrained design value), Gates 20/20 (G0-G6 + new enforceable Version Bump checklist table), Error/Pitfalls 19/20 (tables across 13/14/14b/16/17), Overlap 15/15 (curation boundaries + unique multi-format + 3 dials + DESIGN contract), Structure 9/10 (deduped Resources, frontmatter, §17 checklist), Darwin/macOS 9/10 (absolutes + termaid-first + references/ purity; symlink note added).
-- Top 3 recs applied (enhance *existing* files only, absolute paths):
-  1. SKILL.md §17: condensed narrative; inserted compact "Version Bump Process (enforceable checklist)" 6-step table (directly fulfills "再跑一遍darwin 和自进化skill 把版号拉成0.2.5"); updated Darwin Evaluation block with 97/100 report + applied recs + curation audit note ("clean, no bloat/overlap, high unique value retained").
-  2. scripts/publish-skill.py: added darwin self-evo gate comment block in validation (near version + publish); updated hard-coded version marker for consistency.
-  3. references/termaid-routing.md: added "Darwin / macOS Fit" subsection (absolute paths + symlink source-of-truth note); one-line cross-ref added in SKILL.md §17 Integration Notes.
-- Version bump: frontmatter 0.2.5; README badge updated; publish script marker updated.
-- skills-curation audit (parallel): clean. Palette refs (Wes + Monet) confirmed high-value pure references (huashu-aligned, one-accent restraint preserved). No toolkit bloat, no overlap with mermaid-arc / claude-design-card / huashu-design. Unique value (restrained multi-format + 3 dials + text-first + DESIGN.md contract) intact.
-- All changes surgical, no new files, English comments, absolute paths, G0-G6/restraint/anti-slop preserved. agy example updated in §17 for 0.2.5.
-- Expected re-score post-edits: 98/100.
+### Validation
+- Darwin target for future releases: >= 96.
+- Curation policy: keep reference-only projects out of runtime dependencies; no toolkit bloat.
 
-**Files changed:**
-- Modified: SKILL.md (frontmatter + §17 self-evo with new table + report + cross-refs)
-- Modified: scripts/publish-skill.py (darwin gate comment + version marker)
-- Modified: references/termaid-routing.md (Darwin/macOS subsection)
-- Modified: README.md (badge)
-- Modified: CHANGELOG.md (this entry)
+## 0.1.7 Reference Integrations (2026-06-12)
 
-Next: re-run darwin after next high-value addition (e.g. draw.io example or new template); test Wes Anderson + "use darwin on archviz" agy flows.
+### Added
+- `references/wesanderson-palette.md` — constrained Wes Anderson / Moonrise Kingdom palette variant.
+- `references/icon-generation.md` — SVG icon generation references for restrained diagrams and editorial cards.
+- `references/reading-to-viz-learning-workflow.md` and `scripts/reading-to-viz.py` — reading-to-visual-learning starter flow.
+- `references/ascii-cli-alternatives.md` and `references/ascii-workflow.md` — CLI-first ASCII workflow around termaid and plain ASCII fallback.
 
-## 0.1.7 Color Palette References — Wes Anderson (strong design sense) (2026-06-12 patch)
-
-**High-Value Integration (judged before execution, huashu aesthetic as reference)**
-
-- Judged the two referenced projects (https://github.com/alchaincyf/huashu-design + huashu-md-html): High value, exact embodiment of user's rules. Explicit 60-30-10 (60% dominant warm bg, 30% secondary text/shapes, 10% single accent), Warm Trust preset (#FDF6EC warm cream + #E17055 terracotta accent), one accent (rust/墨绿/深红), warm organic low-sat, editorial/Swiss restraint, anti-slop (no purple gradients, no cheap rainbow). Directly validates the philosophy already in archviz (Warm Paper + Editorial Parchment terracotta + max 1 accent) and domain-design profile (宣纸白/莫兰迪低饱和/墨绿墨蓝暖灰).
-- High赞 + strong design sense palette pulled: EmilHvitfeldt/r-color-palettes (1.7k+ stars) + karthik/wesanderson. "Wes Anderson" film palettes have iconic, deliberate, crafted visual identity (film color scripts — not generic hex dumps). Moonrise Kingdom is the warm organic match: peach #d6929c, sage #9eae4c, terracotta orange #f4a731, beige #d8b87c. Fits huashu Warm Trust terracotta/sage + user's warm organic terracotta/sage/deep blue preference + 60-30-10.
-- Constrained exactly like Monet: 4-token system only (surface #d8b87c warm beige, text #1B365D deep navy, border #9eae4c sage, accent #f4a731 terracotta — the single 10%). Luminance enforced, no raw 5-color rainbow, no gradients. "Wes Anderson palette variant (Moonrise Kingdom)" phrasing parallel to "Monet palette variant".
-- Added to SKILL.md Resources (cleaned duplicate Color sections into one concise block; Wes as the "strong design sense" entry, Monet retained for impressionist, Gogh for terminal 10k+ practicality).
-- Created `references/wesanderson-palette.md`: full raw hex, why high-value (huashu alignment + strong design identity), constrained tokens + luminance, prompt examples, template usage, anti-patterns, cross-refs to huashu design-principles + DESIGN.md.
-- Updated DESIGN.md Quick Color Reference: added **Wes Anderson variant** block right after Monet (with hexes, usage rule, citation).
-- Philosophy: pure reference only (no deps), text-first, fits restrained/editorial/one-accent/anti-slop, absolute paths, English docs. Extends artistic options (Monet = cool museum; Wes = warm filmic) without drifting from core Warm Paper + Swiss + huashu 60-30-10.
-- All changes: surgical, no bloat, G0-G6/restraint preserved, traceable to huashu refs + existing Monet integration pattern.
-
-**Files changed:**
-- New: references/wesanderson-palette.md
-- Modified: DESIGN.md (Quick Color Reference)
-- Modified: SKILL.md (Resources — deduped + Wes entry)
-- Modified: CHANGELOG.md (this entry)
-
-Next: optional darwin re-score; test one editorial card with "Wes Anderson palette variant" prompt; consider Gogh Gruvbox light variant as terminal companion if needed.
-
-## 0.1.7 Icon Generation References (2026-06-12 patch)
-
-**High-Value Integration for Icons (judged before execution)**
-
-- Judged qiaomu's icon.qiaomu.ai (HTML browser UI): Low direct value for archviz—visually nice but web-only, not CLI/agent-scriptable, hard to inline into restrained HTML templates or ascii fallbacks without bloat. Skipped direct integration.
-- High-value GitHub selections (based on archviz criteria: clean editable SVG output for inline/embed, agent/MCP/CLI native, fits DESIGN.md restrained tokens/palette/no gradients, extends icon-system + templates without bloat, real viz use cases like architecture diagrams/cards):
-  - glincker/thesvg: Top priority (6100+ brand/arch SVG library + MCP server for direct agent use in Claude/Cursor/Windsurf). Perfect compatibility: prompt "get icon" → real SVG for editorial cards, flowcharts, Three.js, or icon-system ASCII approx. Tree-shakeable, versioned.
-  - Viktoo/SVG.chat: High for generative (Claude text-to-clean SVG). Fits agent prompts + inline in archviz html/ templates.
-  - yauheniya-ai/icon-gen-ai: Solid CLI/Python supplement for batch SVG export.
-- Added "Icon Generation References (pure reference)" section to SKILL.md Resources (parallel to ascii-cli, skill-publishing, content-to-viz refs).
-- Created `references/icon-generation.md`: Full integration guide—rules for restrained fit, high-value use cases (arch diagrams, learning cards), workflow examples, anti-patterns. References existing icon-system.txt + html/ templates.
-- Philosophy: Reference-only (no deps), text-first/SVG-inline, MCP/CLI for agents, enhances without changing core (Mermaid/ASCII/HTML/3D). Complements reading-to-viz and publishing workflows.
-- All changes: absolute paths, no bloat, English docs, G0-G6/restraint preserved.
-
-**Files changed:**
-- New: references/icon-generation.md
-- Modified: SKILL.md (Resources + cross-refs)
-- Modified: CHANGELOG.md (this entry)
-
-Next: Re-run darwin if needed; test MCP in agent prompt for sample archviz diagram.
-
-## 0.1.7 Content-to-Viz Learning Workflow (2026-06-12 patch)
-
-**Reference from qiaomu-english-learn for Workflow Optimization**
-
-- Added qiaomu-english-learn as pure reference under "Content Processing & Learning Workflow References" in SKILL.md Resources.
-- Created `references/reading-to-viz-learning-workflow.md` — documents the pattern adapted for archviz: content consumption (web/docs/English reading) → key concept extraction (via agents/proxies/NotebookLM-style) → restrained viz artifacts (Mermaid mindmaps, ASCII cards, HTML review cards, concept diagrams) → spaced repetition integration (Ebbinghaus-style review log, export to Anki/Obsidian/Canvas).
-- Created `scripts/reading-to-viz.py` — pure CLI starter (absolute paths only). Takes captured reading text → extracts concepts (stub for agent/LLM) → generates archviz outputs (mindmap.mmd, ASCII fallback, self-contained HTML cards) + review-log.md for tracking.
-- Philosophy: CLI/agent-native (no browser dependency for core flow; use proxies like qiaomu-markdown for capture). Reuses existing archviz (Mermaid, ASCII, editorial cards, templates). Complements skill-publishing, ascii-workflows, and darwin self-evolution.
-- All changes preserve absolute paths, no bloat, English docs, G0-G6/restraint rules. Web tools (like the original extension) avoided for agent repeatability — pure reference for the consumption→extraction→visual learning loop.
-
-**Files changed:**
-- New: references/reading-to-viz-learning-workflow.md
-- New: scripts/reading-to-viz.py
-- Modified: SKILL.md (Resources section)
-- This CHANGELOG entry
-
-Next: Integrate with reading capture tools; test end-to-end on a tech article or English doc; re-run darwin on the learning workflow if desired.
-
-## 0.1.7 ASCII CLI Focus (2026-06-12 patch)
-
-**Pure CLI Turn for ASCII Generation**
-
-- Completely removed any reference to web-based tools (including previous bubbbly.com consideration) as inspiration or source.
-- Reframed all ASCII handling to be strictly CLI-first and agent-native.
-- Added `references/ascii-cli-alternatives.md` — curated list of production CLI tools (go-figure, figlet + xero fonts, ascii-image-converter, ascii-kit) with install commands, usage, and strict integration rules.
-- Added `references/ascii-workflow.md` — formal pipeline: Mermaid source → termaid terminal preview → optional CLI enhancement (presentation only) → mandatory plain ASCII fallback.
-- Hard rule added to both new docs and cross-referenced from SKILL.md: "CLI tools are the default and preferred path for all agent-driven ASCII. Web tools are explicitly avoided."
-- Updated SKILL.md:
-  - Resources section: new "ASCII CLI Tools" subsection.
-  - Terminal Rendering section: strengthened fallback language + links to the two new references.
-  - Environment routing and Specialized references tables updated.
-  - Templates inventory updated with pointers.
-- Philosophy reinforced: termaid (rich terminal) + plain 80-col no-box-drawing fallback remain the survivability core. CLI tools are **only** for optional decorative/presentation enhancement when the brief explicitly requires it.
-- All changes preserve absolute paths, no bloat, English docs, and existing G0-G6 / restraint rules.
-
-**Files changed:**
-- New: references/ascii-cli-alternatives.md
-- New: references/ascii-workflow.md
-- Modified: SKILL.md (multiple sections)
-- This CHANGELOG entry
-
-Next: re-run darwin-skill on the ASCII layer if desired.
+### Changed
+- SKILL.md resources now group external projects by use instead of patch history.
+- DESIGN.md quick color reference includes the Wes Anderson variant.
+- ASCII guidance explicitly avoids web-only tools in agent-driven workflows.
 
 ## 0.1.7 (2026-06-12)
 

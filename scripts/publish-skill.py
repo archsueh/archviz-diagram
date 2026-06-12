@@ -108,9 +108,9 @@ def publish(skill_dir: Path, private: bool = False):
 
     version = "0.2.5"  # TODO: read from SKILL.md metadata or bump script
     tag = f"v{version}"
-    # Darwin self-evo gate (per SKILL.md §17 Version Bump Process checklist):
+    # Darwin self-evo gate (per SKILL.md §16 Release Self-Check):
     # Confirm prior darwin re-score (target ≥96) + full Version Bump checklist executed + CHANGELOG surgical entry
-    # before gh release. Cross-ref: /Users/mac/Developer/archviz-skills/SKILL.md §17 and CHANGELOG.md.
+    # before gh release. Cross-ref: /Users/mac/Developer/archviz-skills/SKILL.md §16 and CHANGELOG.md.
     # Absolute paths only. No new deps or behavior change.
     repo_name = "archviz-skills"   # or derive from name
 

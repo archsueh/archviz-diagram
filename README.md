@@ -1,6 +1,4 @@
-[git-push-release-workflow.html](https://github.com/user-attachments/files/28890337/git-push-release-workflow.html)# archviz-skills
-
-
+# archviz-skills
 
 Restrained information visualization skill pack for AI agents.
 
@@ -11,22 +9,18 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 
 ---
 
-## 截图素材 / Screenshot Material (v0.2.5)
+## Screenshot Material
 
 <img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/9ed240f9-81bc-4ef5-8823-550f080b974c" />
 <img width="1280" height="633" alt="hair-dryer-assembled" src="https://github.com/user-attachments/assets/9793fe6a-1832-442d-a1b7-20e2e1526c64" />
 
-
-
-**直接打开完整版（推荐用于高质量截图）**：  
+Open the complete screenshot sheet:
 [examples/git-push-release-workflow.html](examples/git-push-release-workflow.html)
 
-自包含 HTML，Wes Anderson 调色 + 丰富中文/英文图文说明 + 命令表 + 截图提示。浏览器打开 → F11 全屏 → 直接截专业图文并茂素材。
+Self-contained HTML screenshot sheet with Wes Anderson palette, command table, and Mermaid source. Open in a browser, enter full screen, and capture the final visual.
 
-源文件（GitHub 直接渲染 Mermaid）：  
+Mermaid source:
 [examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
-
-此示例用于演示 0.2.5 darwin 自进化后的发布流程（meta）。
 
 ---
 

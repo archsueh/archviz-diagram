@@ -531,17 +531,14 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 - [anydesign](https://github.com/archsueh/anydesign) — Design analysis
 - [claude-design-card](https://github.com/geekjourneyx/claude-design-card) — Editorial Parchment language (distilled in `references/editorial-parchment-language.md`)
 
-### 0.1.6 Optimization References
-- [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) — Draw.io generation with refinement & codebase-to-diagram (primary ref for editable handoff)
-- [plait-board/drawnix](https://github.com/plait-board/drawnix) — Open-source whiteboard (mindmap + flowchart + freehand + Markdown/Mermaid) (ref for Drawnix/Plait support)
-- [markdown-viewer/skills](https://github.com/markdown-viewer/skills) — Opinionated agent skills for diagrams & viz in Markdown (ref for skill composition & packaging)
-- [fasouto/termaid](https://github.com/fasouto/termaid) — Terminal Unicode rendering of 18 Mermaid types (ref for termaid-first terminal mode)
-- [DayuanJiang/next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) — Next.js AI + draw.io editor with natural language & image input (ref for refinement loops & AI-assisted editing)
-- [Rss3208/Visiomaster](https://github.com/Rss3208/Visiomaster) — AI visualization patterns (supporting ref for multi-view & refinement)
-
-### 0.1.7 Darwin + Curation + Self-Evolution
-- darwin-skill — Automatic scoring, optimization, self-evolution (used to evaluate 0.1.6 -> 94/100, applied recs for error tables, more gates, self-score section)
-- skills-curation — Manual cleanup & enhancement (audited for bloat, high value for design/teaching, recommended enhancements for modularity and darwin integration)
+### Reference Sources
+- [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) — editable draw.io handoff, refinement loops, codebase-to-diagram patterns.
+- [plait-board/drawnix](https://github.com/plait-board/drawnix) — whiteboard data model, mind map / flowchart / freehand hybrid patterns.
+- [markdown-viewer/skills](https://github.com/markdown-viewer/skills) — agent skill composition and Markdown-first visualization packaging.
+- [fasouto/termaid](https://github.com/fasouto/termaid) — terminal Unicode rendering policy and termaid-first fallback.
+- [DayuanJiang/next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) — AI-assisted draw.io editing flow.
+- darwin-skill — release self-check and scoring protocol.
+- skills-curation — bloat / overlap audit before publishing.
 
 ### ASCII CLI Tools (optional enhancement only)
 - [common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) — Text-to-beautiful ASCII with figlet font support (Go binary).
@@ -567,85 +564,45 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 - [EmilHvitfeldt/r-color-palettes](https://github.com/EmilHvitfeldt/r-color-palettes) (1.7k+ stars) + karthik/wesanderson — "Wes Anderson" film palettes (strong design sense: iconic, deliberate, warm organic restraint). Moonrise Kingdom exemplar: warm peach #d6929c, sage #9eae4c, terracotta orange #f4a731, beige #d8b87c. Constrain to tokens (surface #d8b87c, text #1B365D, border #9eae4c, accent #f4a731). Fits huashu 60-30-10 + Warm Trust terracotta/sage + archviz one-accent editorial. Use as "Wes Anderson palette variant (Moonrise Kingdom)" like "Monet palette". See references/wesanderson-palette.md.
 - [Gogh-Co/Gogh](https://github.com/Gogh-Co/Gogh) — 10.2k+ stars. 200+ terminal schemes (CLI-friendly). Gruvbox warm earthy variant (terracotta #cc241d, sage #98971a, deep teal-blue #458588) aligns with terminal routing (termaid/ASCII) and huashu warm organic. Derive artistic/terminal variants only.
 
-Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md` · Research → research/
+Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md`
 
 ---
 
-## 17. SELF-EVOLUTION & DARWIN INTEGRATION (0.1.7)
+## 16. RELEASE SELF-CHECK
 
-This skill uses darwin-skill for self-scoring and optimization, and skills-curation for audit.
+Use darwin-skill for release scoring and skills-curation for bloat / overlap audit. Keep process history in CHANGELOG; keep this section as the executable protocol.
 
-**Darwin Evaluation of 0.1.6 (simulated run):**
-- Score: 94/100
-- Identity Alignment: 25/25 (perfect for hsueh: design, teaching, AI viz, system cleanliness)
-- Gates & Checkpoints: 19/20 (strong G0-G6, self-healing, but enhance with darwin self-score gate)
-- Error Handling & Pitfalls: 18/20 (good 14b and anti-patterns; add specific viz error table)
-- Overlap & Uniqueness: 15/15 (unique restrained multi-format + 3D + draw.io)
-- Structure & Usability: 9/10 (excellent, minor: more cross-refs to darwin/curation)
-- Darwin/macOS Fit: 8/10 (good absolute paths, termaid; add symlink notes)
+**Target**
+- Darwin score: >= 96 before release.
+- Curation result: no toolkit bloat, no duplicated rendering path, no reference-only dependency promoted to runtime dependency.
+- Edited files: list exact paths in CHANGELOG, but do not paste full scoring narratives into SKILL.md.
 
-**Recommendations applied for 0.1.7:**
-- Added explicit "Self-Evolution & Darwin Integration" section with score, recs, and integration notes.
-- Added viz-specific Error Handling Table (e.g., for rendering fails, token bloat in large 3D, contrast fails).
-- Integrated triggers with darwin-skill (e.g., "use darwin on archviz").
-- Enhanced Pitfalls with darwin self-optimization example.
-- Added to RESOURCES the darwin and curation links.
-- Bumped version, updated CHANGELOG with this run.
+**Version bump checklist**
+| Step | Action | Evidence |
+|------|--------|----------|
+| 1 | Evaluate current SKILL.md with darwin-skill | Score + top 2-3 recommendations |
+| 2 | Apply only high-value recommendations | Existing files enhanced; no new bloat |
+| 3 | Run skills-curation audit | Bloat / overlap result recorded |
+| 4 | Update version metadata | SKILL.md frontmatter + README badge |
+| 5 | Update CHANGELOG | Surgical summary only |
+| 6 | Verify publish helper if changed | `python3 /Users/mac/Developer/archviz-skills/scripts/publish-skill.py --help` |
 
-**Error Handling Table (new for 0.1.7):**
+**Common release failures**
 | Failure | Symptom | Fix / Gate |
 |---------|---------|------------|
-| Render fail (Mermaid syntax) | Blank or error in viewer | Fallback to flowchart + subgraph; re-validate with G5 |
-| Token overflow in large diagram | Agent context exceeded | Split per degradation strategy; use scene-contract |
-| Contrast fail | Unreadable text | Enforce G2 luminance check before ship |
-| 3D CDN 404 | Canvas blank | Use verified v4 paths; test with preview.html |
-| CJK font mismatch | Garbled labels | Use Noto SC in tokens; termaid for terminal |
-| No caption | Diagram without context | Enforce G6 before embed |
+| Mermaid render fail | Blank preview or parser error | Simplify diagram; re-check G5 |
+| Token overflow | Diagram exceeds agent context | Split output; use scene-contract |
+| Contrast fail | Labels unreadable | Enforce G2 luminance before ship |
+| 3D CDN failure | Canvas blank | Use verified dependency paths; test HTML locally |
+| CJK font mismatch | Garbled labels | Use CJK-safe fonts or terminal fallback |
+| Missing caption | Diagram lacks interpretation | Enforce G6 before embed |
 
-**Version Bump Process (enforceable checklist for 0.2.5+ self-evo runs)**
-| Step | Action (absolute paths only) | Evidence required in §17 + CHANGELOG |
-|------|------------------------------|-------------------------------------|
-| 1 | Run darwin-skill evaluate on current SKILL.md (post any high-value ref like palette integration) | Full 6-dim report + score (target ≥96) recorded here |
-| 2 | Apply top 2-3 recs via search_replace (enhance *existing* only) | List of exact files edited + diff summary |
-| 3 | Re-score (or note expected) + skills-curation audit (bloat/overlap/uniqueness) | Updated score + "curation: clean, high unique value retained" |
-| 4 | Update this §17 (score, recs, integration notes, new checklist row) + DESIGN.md/ references if palette-related | Surgical entry + huashu/Wes/Monet cross-refs preserved |
-| 5 | Bump version in SKILL.md frontmatter + README badge; add top CHANGELOG entry (no narrative bloat) | version: X.Y.Z ; badge updated ; CHANGELOG surgical summary |
-| 6 | Optional: enhance publish-skill.py with darwin gate comment; verify with `python3 /Users/mac/Developer/archviz-skills/scripts/publish-skill.py --help` (dry) | Comment present; no behavior change |
+**Agy example**
+```bash
+agy -p "use darwin and curation on /Users/mac/Developer/archviz-skills before release; context: restrained viz, absolute paths, no bloat"
+```
 
-**Self-Evolution Loop (darwin on self):**
-1. Run darwin-skill evaluate on current SKILL.md.
-2. Apply top 2-3 recs via search_replace (absolute paths).
-3. Re-score; target ≥95.
-4. Use skills-curation to audit for bloat/overlap.
-5. Update examples and tests.
-6. Repeat on next release.
-
-**Darwin Evaluation of current (0.1.7 + Wes Anderson palette patch, 2026-06 run):**
-- Score: 97/100 (up from simulated 94 on 0.1.6)
-- Identity Alignment: 25/25 (perfect; Wes/Monet constrained refs boost design value + explicit huashu 60-30-10/Warm Trust alignment)
-- Gates & Checkpoints: 20/20 (mature G0-G6 + self-healing + new enforceable Version Bump checklist table above)
-- Error Handling & Pitfalls: 19/20 (strong tables across §13/14/14b/16/17; minor polish on symlink notes)
-- Overlap & Uniqueness: 15/15 (curation table + boundaries carve unique restrained multi-format + 3 dials + DESIGN contract space)
-- Structure & Usability: 9/10 (frontmatter complete; deduped Resources in Wes patch excellent; §17 now has compact checklist)
-- Darwin/macOS Fit & Efficiency: 9/10 (absolute paths + termaid-first + references/ purity; added symlink note this run)
-
-**Recommendations applied this run (top 3, enhance-existing only):**
-1. Added compact "Version Bump Process (enforceable checklist)" table in §17 (directly supports user request "再跑一遍darwin 和自进化skill 把版号拉成0.2.5").
-2. Added darwin self-evo gate comment block in scripts/publish-skill.py validation area.
-3. Added Darwin/macOS symlink + absolute path note to references/termaid-routing.md + cross-ref sentence in §17 Integration Notes.
-
-**Integration Notes:**
-- With darwin-skill: "use darwin-skill on archviz-skills for self-score before next release".
-- With skills-curation: "use skills-curation on archviz-skills to verify no bloat, enhance with new viz types".
-- Cross-refs: subagent-driven-development for complex viz orchestration, verification-loop for G5/G6, goal for long viz projects.
-- Agy example: `agy -p "use darwin and curation on /Users/mac/Developer/archviz-skills for 0.2.5; context: hsueh design teaching, absolute paths, restrained viz, huashu 60-30-10"`
-- Always use absolute paths (/Users/mac/Developer/archviz-skills/...). Compatible with symlinks (~/.claude/skills → ~/.agents/skills source-of-truth per darwin-skill). See references/termaid-routing.md for terminal + Darwin notes.
-
-**Curation audit (this run):** Clean. No bloat/overlap (palette refs are high-value pure references per huashu alignment and one-accent restraint; unique multi-format + 3 dials value preserved). High uniqueness score maintained.
-
-**Next:** Re-run darwin after any major addition; target 98+; test Wes Anderson prompt in editorial-card.html example.
-
-## 16. 3D GOTCHAS (踩坑记录)
+## 17. 3D GOTCHAS (踩坑记录)
 
 Three.js + animejs v4 实战中遇到的坑，按出现顺序记录。
 
