@@ -1,0 +1,100 @@
+{
+  "nodes": [
+    {
+      "id": "center",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 260,
+      "height": 60,
+      "color": "5",
+      "text": "## 核心主题"
+    },
+    {
+      "id": "branch1",
+      "type": "text",
+      "x": -320,
+      "y": -140,
+      "width": 220,
+      "height": 50,
+      "color": "1",
+      "text": "### 分支 A"
+    },
+    {
+      "id": "branch2",
+      "type": "text",
+      "x": 320,
+      "y": -140,
+      "width": 220,
+      "height": 50,
+      "color": "2",
+      "text": "### 分支 B"
+    },
+    {
+      "id": "branch3",
+      "type": "text",
+      "x": -320,
+      "y": 140,
+      "width": 220,
+      "height": 50,
+      "color": "3",
+      "text": "### 分支 C"
+    },
+    {
+      "id": "branch4",
+      "type": "text",
+      "x": 320,
+      "y": 140,
+      "width": 220,
+      "height": 50,
+      "color": "4",
+      "text": "### 分支 D"
+    },
+    {
+      "id": "leaf1a",
+      "type": "text",
+      "x": -480,
+      "y": -240,
+      "width": 180,
+      "height": 40,
+      "text": "细节 A1"
+    },
+    {
+      "id": "leaf1b",
+      "type": "text",
+      "x": -160,
+      "y": -240,
+      "width": 180,
+      "height": 40,
+      "text": "细节 A2"
+    },
+    {
+      "id": "leaf2a",
+      "type": "text",
+      "x": 160,
+      "y": -240,
+      "width": 180,
+      "height": 40,
+      "text": "细节 B1"
+    },
+    {
+      "id": "leaf2b",
+      "type": "text",
+      "x": 480,
+      "y": -240,
+      "width": 180,
+      "height": 40,
+      "text": "细节 B2"
+    }
+  ],
+  "edges": [
+    {"id": "e1", "fromNode": "center", "fromSide": "top", "toNode": "branch1", "toSide": "bottom", "color": "1"},
+    {"id": "e2", "fromNode": "center", "fromSide": "top", "toNode": "branch2", "toSide": "bottom", "color": "2"},
+    {"id": "e3", "fromNode": "center", "fromSide": "bottom", "toNode": "branch3", "toSide": "top", "color": "3"},
+    {"id": "e4", "fromNode": "center", "fromSide": "bottom", "toNode": "branch4", "toSide": "top", "color": "4"},
+    {"id": "e5", "fromNode": "branch1", "fromSide": "top", "toNode": "leaf1a", "toSide": "bottom"},
+    {"id": "e6", "fromNode": "branch1", "fromSide": "top", "toNode": "leaf1b", "toSide": "bottom"},
+    {"id": "e7", "fromNode": "branch2", "fromSide": "top", "toNode": "leaf2a", "toSide": "bottom"},
+    {"id": "e8", "fromNode": "branch2", "fromSide": "top", "toNode": "leaf2b", "toSide": "bottom"}
+  ]
+}

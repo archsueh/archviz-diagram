@@ -1,338 +1,82 @@
-<!--
-  Three.js Building Structure Visualization (archviz-skills)
-  Use for: building envelope, column grid, floor slabs, structural shell, section cut
-  Stack: Three.js (CDN) + animejs (CDN) + OrbitControls
-  Dials: Complexity 5, Density 4, Restraint 7
-  Tokens: structure=#a8a29e, floor=#e8e4e0, accent-3d=#002FA7
-  Self-contained: no build step, no external models
--->
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Building Structure — archviz-skills</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #f5f5f4; font-family: -apple-system, 'Helvetica Neue', sans-serif; overflow: hidden; }
-  #canvas { width: 100vw; height: 100vh; display: block; }
-  #ui {
-    position: fixed; top: 20px; left: 20px; z-index: 10;
-    display: flex; gap: 8px; flex-direction: column;
-  }
-  .btn {
-    background: #e8e4e0; border: 1px solid #a8a29e; color: #1B365D;
-    padding: 8px 16px; font-size: 13px; cursor: pointer;
-    font-weight: 500; letter-spacing: 0.02em;
-    transition: background 0.2s;
-  }
-  .btn:hover { background: #d6d3d1; }
-  .btn.active { background: #002FA7; color: #f5f5f4; border-color: #002FA7; }
-  #info {
-    position: fixed; bottom: 20px; left: 20px; z-index: 10;
-    color: #78716c; font-size: 12px; line-height: 1.6;
-  }
-</style>
+<html><head><meta charset="utf-8"><title>3D Architecture</title>
+<style>body{margin:0;overflow:hidden;background:#f5f0eb}canvas{display:block}</style>
 </head>
 <body>
-<div id="ui">
-  <button class="btn active" onclick="showView('perspective')">透视</button>
-  <button class="btn" onclick="showView('top')">俯视</button>
-  <button class="btn" onclick="showView('front')">正立面</button>
-  <button class="btn" onclick="showView('section')">剖面</button>
-  <button class="btn" onclick="toggleWireframe()">线框</button>
-</div>
-<div id="info">
-  建筑结构可视化 · archviz-skills<br>
-  鼠标拖拽旋转 · 滚轮缩放 · 右键平移
-</div>
-<canvas id="canvas"></canvas>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-// === Tokens (archviz-skills DESIGN.md) ===
-const TOKENS = {
-  structure: 0xa8a29e,   // wireframe, grid
-  floor:     0xe8e4e0,   // slab fill
-  accent:    0x002FA7,   // highlight, active floor
-  text:      0x1B365D,
-  ambient:   0xf5f5f4,   // hemisphere sky
-  ground:    0xd6d3d1,   // hemisphere ground
-};
-
-// === Scene setup ===
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+<!-- Three.js 3D Architecture — archviz-skills -->
+<!-- Use for: building visualization, spatial walkthrough, 3D structure -->
+<!-- Requires: three.js (CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf5f0eb);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
+document.body.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(TOKENS.ambient);
-scene.fog = new THREE.Fog(TOKENS.ambient, 30, 80);
+// Materials (restrained palette)
+const matWall = new THREE.MeshStandardMaterial({color: 0xe8e4e0, roughness: 0.9});
+const matAccent = new THREE.MeshStandardMaterial({color: 0x002FA7, roughness: 0.3});
+const matFloor = new THREE.MeshStandardMaterial({color: 0xd6d3d1, roughness: 0.8});
 
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(15, 12, 18);
+// Floor
+const floor = new THREE.Mesh(new THREE.BoxGeometry(12, 0.2, 8), matFloor);
+floor.position.y = -0.1;
+floor.receiveShadow = true;
+scene.add(floor);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.minDistance = 5;
-controls.maxDistance = 50;
-controls.maxPolarAngle = Math.PI / 2 + 0.1;
-controls.target.set(0, 3, 0);
+// Walls
+function addWall(x, y, z, w, h, d) {
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matWall);
+  wall.position.set(x, y, z);
+  wall.castShadow = true;
+  wall.receiveShadow = true;
+  scene.add(wall);
+}
+addWall(0, 1.5, -4, 12, 3, 0.2);   // back
+addWall(-6, 1.5, 0, 0.2, 3, 8);     // left
+addWall(6, 1.5, 0, 0.2, 3, 8);      // right
 
-// === Lights (max 3) ===
-const hemiLight = new THREE.HemisphereLight(TOKENS.ambient, TOKENS.ground, 0.6);
-scene.add(hemiLight);
+// Accent element
+const accent = new THREE.Mesh(new THREE.BoxGeometry(2, 2.5, 0.3), matAccent);
+accent.position.set(0, 1.25, -3.8);
+scene.add(accent);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-dirLight.position.set(10, 15, 8);
+// Columns
+for (let i = -4; i <= 4; i += 4) {
+  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 3, 8), matWall);
+  col.position.set(i, 1.5, 2);
+  col.castShadow = true;
+  scene.add(col);
+}
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(5, 8, 5);
 dirLight.castShadow = true;
-dirLight.shadow.mapSize.set(1024, 1024);
-dirLight.shadow.camera.near = 0.5;
-dirLight.shadow.camera.far = 50;
-dirLight.shadow.camera.left = -15;
-dirLight.shadow.camera.right = 15;
-dirLight.shadow.camera.top = 15;
-dirLight.shadow.camera.bottom = -15;
 scene.add(dirLight);
 
-const ambLight = new THREE.AmbientLight(0xffffff, 0.15);
-scene.add(ambLight);
+camera.position.set(8, 6, 10);
+camera.lookAt(0, 1, 0);
 
-// === Materials ===
-const matStructure = new THREE.MeshStandardMaterial({
-  color: TOKENS.structure, roughness: 0.8, metalness: 0.1
-});
-const matFloor = new THREE.MeshStandardMaterial({
-  color: TOKENS.floor, roughness: 0.9, metalness: 0.0
-});
-const matAccent = new THREE.MeshStandardMaterial({
-  color: TOKENS.accent, roughness: 0.5, metalness: 0.2
-});
-const matWire = new THREE.MeshBasicMaterial({
-  color: TOKENS.structure, wireframe: true, transparent: true, opacity: 0.3
-});
-const matGlass = new THREE.MeshStandardMaterial({
-  color: 0xb0c4de, roughness: 0.1, metalness: 0.3, transparent: true, opacity: 0.3
-});
-
-// === Building geometry (procedural) ===
-const building = new THREE.Group();
-const FLOORS = 4;
-const FLOOR_H = 3.2;
-const WIDTH = 12;
-const DEPTH = 8;
-const COL_R = 0.25;
-const SLAB_H = 0.3;
-
-// Ground plane
-const groundGeo = new THREE.PlaneGeometry(40, 40);
-const groundMesh = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({ color: 0xd6d3d1, roughness: 1 }));
-groundMesh.rotation.x = -Math.PI / 2;
-groundMesh.receiveShadow = true;
-scene.add(groundMesh);
-
-// Grid helper
-const grid = new THREE.GridHelper(40, 40, 0xa8a29e, 0xd6d3d1);
-grid.material.transparent = true;
-grid.material.opacity = 0.4;
-scene.add(grid);
-
-// Floor slabs + columns
-const columnGeo = new THREE.CylinderGeometry(COL_R, COL_R, FLOOR_H, 8);
-const slabGeo = new THREE.BoxGeometry(WIDTH, SLAB_H, DEPTH);
-
-const floorGroups = [];
-
-for (let i = 0; i <= FLOORS; i++) {
-  const floorGroup = new THREE.Group();
-  floorGroup.userData.floorIndex = i;
-
-  // Slab
-  const slab = new THREE.Mesh(slabGeo, matFloor.clone());
-  slab.position.y = i * FLOOR_H;
-  slab.castShadow = true;
-  slab.receiveShadow = true;
-  floorGroup.add(slab);
-
-  // Columns (4 corners + 2 mid-span)
-  if (i < FLOORS) {
-    const positions = [
-      [-WIDTH/2 + 0.5, 0, -DEPTH/2 + 0.5],
-      [ WIDTH/2 - 0.5, 0, -DEPTH/2 + 0.5],
-      [-WIDTH/2 + 0.5, 0,  DEPTH/2 - 0.5],
-      [ WIDTH/2 - 0.5, 0,  DEPTH/2 - 0.5],
-      [ 0, 0, -DEPTH/2 + 0.5],
-      [ 0, 0,  DEPTH/2 - 0.5],
-    ];
-    positions.forEach(([x, _, z]) => {
-      const col = new THREE.Mesh(columnGeo, matStructure.clone());
-      col.position.set(x, i * FLOOR_H + FLOOR_H / 2, z);
-      col.castShadow = true;
-      floorGroup.add(col);
-    });
-
-    // Walls (partial, for visual interest)
-    const wallGeo = new THREE.BoxGeometry(WIDTH, FLOOR_H - SLAB_H, 0.15);
-    const wall = new THREE.Mesh(wallGeo, matGlass);
-    wall.position.set(0, i * FLOOR_H + FLOOR_H / 2, -DEPTH / 2);
-    floorGroup.add(wall);
-  }
-
-  building.add(floorGroup);
-  floorGroups.push(floorGroup);
+// Orbit
+let angle = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  angle += 0.003;
+  camera.position.x = 10 * Math.cos(angle);
+  camera.position.z = 10 * Math.sin(angle);
+  camera.lookAt(0, 1, 0);
+  renderer.render(scene, camera);
 }
-
-scene.add(building);
-
-// === Section cut (ClippingPlane) ===
-const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-let sectionMode = false;
-
-function toggleSection() {
-  sectionMode = !sectionMode;
-  if (sectionMode) {
-    renderer.clippingPlanes = [clipPlane];
-    renderer.localClippingEnabled = true;
-  } else {
-    renderer.clippingPlanes = [];
-    renderer.localClippingEnabled = false;
-  }
-}
-
-// === Wireframe toggle ===
-let wireframeOn = false;
-window.toggleWireframe = function() {
-  wireframeOn = !wireframeOn;
-  building.traverse(child => {
-    if (child.isMesh) {
-      if (wireframeOn) {
-        child.userData.originalMaterial = child.material;
-        child.material = matWire;
-      } else if (child.userData.originalMaterial) {
-        child.material = child.userData.originalMaterial;
-      }
-    }
-  });
-};
-
-// === Camera presets with animejs-style tween ===
-const VIEWS = {
-  perspective: { pos: [15, 12, 18], target: [0, 3, 0] },
-  top:         { pos: [0, 25, 0.01], target: [0, 0, 0] },
-  front:       { pos: [0, 6, 20], target: [0, 6, 0] },
-  section:     { pos: [18, 6, 0], target: [0, 6, 0] },
-};
-
-// Simple animejs-style tween (no external dependency needed for camera)
-function tweenCamera(toPos, toTarget, duration = 1000) {
-  const fromPos = camera.position.clone();
-  const fromTarget = controls.target.clone();
-  const toP = new THREE.Vector3(...toPos);
-  const toT = new THREE.Vector3(...toTarget);
-  const startTime = performance.now();
-
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  }
-
-  function update() {
-    const elapsed = performance.now() - startTime;
-    const t = Math.min(elapsed / duration, 1);
-    const e = easeInOutCubic(t);
-
-    camera.position.lerpVectors(fromPos, toP, e);
-    controls.target.lerpVectors(fromTarget, toT, e);
-    controls.update();
-
-    if (t < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-
-window.showView = function(name) {
-  const v = VIEWS[name];
-  if (!v) return;
-
-  // Update button states
-  document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-
-  // Section view enables clipping
-  if (name === 'section') {
-    if (!sectionMode) toggleSection();
-  } else {
-    if (sectionMode) toggleSection();
-  }
-
-  tweenCamera(v.pos, v.target);
-};
-
-// === Highlight floor on hover ===
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-let highlightedFloor = null;
-
-renderer.domElement.addEventListener('mousemove', (e) => {
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(building.children, true);
-
-  if (intersects.length > 0) {
-    const floorGroup = intersects[0].object.parent;
-    if (floorGroup !== highlightedFloor && floorGroup.userData.floorIndex !== undefined) {
-      // Reset previous
-      if (highlightedFloor) {
-        highlightedFloor.traverse(c => {
-          if (c.isMesh && c.material.emissive) c.material.emissive.setHex(0x000000);
-        });
-      }
-      // Highlight new
-      floorGroup.traverse(c => {
-        if (c.isMesh && c.material.emissive) c.material.emissive.setHex(0x1a1a2e);
-      });
-      highlightedFloor = floorGroup;
-    }
-  } else {
-    if (highlightedFloor) {
-      highlightedFloor.traverse(c => {
-        if (c.isMesh && c.material.emissive) c.material.emissive.setHex(0x000000);
-      });
-      highlightedFloor = null;
-    }
-  }
-});
-
-// === Responsive ===
+animate();
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-// === Render loop ===
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-animate();
 </script>
-</body>
-</html>
+</body></html>

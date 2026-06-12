@@ -1,0 +1,72 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "type": "text",
+      "x": 400,
+      "y": 200,
+      "width": 240,
+      "height": 60,
+      "color": "6",
+      "text": "## 项目中心\n核心概念"
+    },
+    {
+      "id": "2",
+      "type": "text",
+      "x": 50,
+      "y": 50,
+      "width": 180,
+      "height": 50,
+      "color": "1",
+      "text": "研究问题"
+    },
+    {
+      "id": "3",
+      "type": "text",
+      "x": 750,
+      "y": 50,
+      "width": 180,
+      "height": 50,
+      "color": "2",
+      "text": "设计方法"
+    },
+    {
+      "id": "4",
+      "type": "text",
+      "x": 50,
+      "y": 350,
+      "width": 180,
+      "height": 50,
+      "color": "3",
+      "text": "理论框架"
+    },
+    {
+      "id": "5",
+      "type": "text",
+      "x": 750,
+      "y": 350,
+      "width": 180,
+      "height": 50,
+      "color": "4",
+      "text": "原型验证"
+    },
+    {
+      "id": "6",
+      "type": "text",
+      "x": 400,
+      "y": 450,
+      "width": 200,
+      "height": 50,
+      "color": "5",
+      "text": "论文产出"
+    }
+  ],
+  "edges": [
+    {"id": "e1", "fromNode": "1", "fromSide": "top", "toNode": "2", "toSide": "bottom", "label": "驱动"},
+    {"id": "e2", "fromNode": "1", "fromSide": "top", "toNode": "3", "toSide": "bottom", "label": "执行"},
+    {"id": "e3", "fromNode": "2", "fromSide": "bottom", "toNode": "4", "toSide": "top", "label": "支撑"},
+    {"id": "e4", "fromNode": "3", "fromSide": "bottom", "toNode": "5", "toSide": "top", "label": "验证"},
+    {"id": "e5", "fromNode": "4", "fromSide": "bottom", "toNode": "6", "toSide": "left", "label": "引用"},
+    {"id": "e6", "fromNode": "5", "fromSide": "bottom", "toNode": "6", "toSide": "right", "label": "产出"}
+  ]
+}

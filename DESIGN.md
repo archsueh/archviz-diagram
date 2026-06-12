@@ -81,6 +81,31 @@ Every generated diagram should be understandable as a compact design system, not
 
 **Token gate**: Any palette with surface luminance ≥128 must use dark text. All five system surfaces are light → they always take dark text. **Never pair warm light surfaces with near-white text.** Mist White as text is legal only on accent fills (IKB) or genuinely dark fills.
 
+### Dark Mode Palettes
+
+Mirror every light palette with a dark counterpart. Same accent, inverted surface/text.
+
+| System | surface | text | border | accent | Use |
+|---|---|---|---|---|---|
+| **Warm Paper Dark** | `#1a1814` | `#e8e4e0` | `#44403c` | — | Default dark |
+| **Swiss Neutral Dark** | `#0a0a0a` | `#d6d3d1` | `#333333` | — | Clean dark |
+| **IKB Accent Dark** | `#0d1117` | `#c9d1d9` | `#30363d` | `#58a6ff` | guizang dark |
+| **Lemon Accent Dark** | `#0d1117` | `#c9d1d9` | `#30363d` | `#e3b341` | Tech dark |
+| **Stone Mono Dark** | `#1c1917` | `#d6d3d1` | `#44403c` | — | Austerity dark |
+
+**Dark mode rules:**
+- Same accent hue, lighter tint (IKB `#002FA7` → `#58a6ff`; Lemon `#FFD500` → `#e3b341`)
+- Surface: near-black with warm undertone (never pure `#000000`)
+- Text: light gray (never pure `#ffffff`)
+- Border: 1-2 stops lighter than surface
+- Diagram init: swap `primaryColor`/`primaryTextColor`/`primaryBorderColor` to dark values
+- Auto-detect: use CSS `prefers-color-scheme: dark` for HTML templates; manual toggle for Mermaid
+
+**Mermaid dark init:**
+```
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1814', 'primaryTextColor': '#e8e4e0', 'primaryBorderColor': '#44403c', 'lineColor': '#58a6ff', 'tertiaryColor': '#2a2520', 'fontSize': '13px'}}}%%
+```
+
 **Rules:** Max 1 accent family — vary lightness, never hue. No AI-purple. Same document = same palette. Gradient-free: emphasis comes from the single accent, border weight, and whitespace.
 
 ---

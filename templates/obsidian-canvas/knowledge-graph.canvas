@@ -1,0 +1,112 @@
+{
+  "nodes": [
+    {
+      "id": "project",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 240,
+      "height": 60,
+      "color": "5",
+      "text": "## 项目名称"
+    },
+    {
+      "id": "research",
+      "type": "text",
+      "x": -400,
+      "y": -120,
+      "width": 200,
+      "height": 50,
+      "color": "1",
+      "text": "### 调研"
+    },
+    {
+      "id": "design",
+      "type": "text",
+      "x": 0,
+      "y": -200,
+      "width": 200,
+      "height": 50,
+      "color": "2",
+      "text": "### 设计"
+    },
+    {
+      "id": "develop",
+      "type": "text",
+      "x": 400,
+      "y": -120,
+      "width": 200,
+      "height": 50,
+      "color": "3",
+      "text": "### 开发"
+    },
+    {
+      "id": "test",
+      "type": "text",
+      "x": 400,
+      "y": 120,
+      "width": 200,
+      "height": 50,
+      "color": "4",
+      "text": "### 测试"
+    },
+    {
+      "id": "ship",
+      "type": "text",
+      "x": 0,
+      "y": 200,
+      "width": 200,
+      "height": 50,
+      "color": "6",
+      "text": "### 发布"
+    },
+    {
+      "id": "doc",
+      "type": "text",
+      "x": -400,
+      "y": 120,
+      "width": 200,
+      "height": "50",
+      "color": "1",
+      "text": "### 文档"
+    },
+    {
+      "id": "note-research",
+      "type": "text",
+      "x": -600,
+      "y": -240,
+      "width": 160,
+      "height": 40,
+      "text": "竞品分析"
+    },
+    {
+      "id": "note-design",
+      "type": "text",
+      "x": -100,
+      "y": -320,
+      "width": 160,
+      "height": 40,
+      "text": "设计规范"
+    },
+    {
+      "id": "note-dev",
+      "type": "text",
+      "x": 600,
+      "y": -240,
+      "width": 160,
+      "height": 40,
+      "text": "技术选型"
+    }
+  ],
+  "edges": [
+    {"id": "e1", "fromNode": "project", "fromSide": "left", "toNode": "research", "toSide": "right", "color": "1"},
+    {"id": "e2", "fromNode": "project", "fromSide": "top", "toNode": "design", "toSide": "bottom", "color": "2"},
+    {"id": "e3", "fromNode": "project", "fromSide": "right", "toNode": "develop", "toSide": "left", "color": "3"},
+    {"id": "e4", "fromNode": "develop", "fromSide": "bottom", "toNode": "test", "toSide": "top", "color": "4"},
+    {"id": "e5", "fromNode": "test", "fromSide": "bottom", "toNode": "ship", "toSide": "right", "color": "6"},
+    {"id": "e6", "fromNode": "project", "fromSide": "left", "toNode": "doc", "toSide": "right", "color": "1"},
+    {"id": "e7", "fromNode": "research", "fromSide": "left", "toNode": "note-research", "toSide": "right"},
+    {"id": "e8", "fromNode": "design", "fromSide": "left", "toNode": "note-design", "toSide": "right"},
+    {"id": "e9", "fromNode": "develop", "fromSide": "right", "toNode": "note-dev", "toSide": "left"}
+  ]
+}
