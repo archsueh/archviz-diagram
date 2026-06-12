@@ -46,6 +46,26 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 
 ---
 
+## 截图素材 / Screenshot Material (v0.2.5 新增)
+
+仓库主页缺少的图文并茂 git push 发布流程截图素材已就位。
+
+**推荐直接用于截图**：  
+[examples/git-push-release-workflow.html](examples/git-push-release-workflow.html)
+
+- 使用 Wes Anderson (Moonrise Kingdom) 暖有机配色（surface `#d8b87c` 暖米 + accent `#f4a731` 赤陶 + border `#9eae4c` 鼠尾草），完美契合 huashu 60-30-10 + 克制 editorial 风格。
+- 嵌入完整发布流程图（git push 步骤 ★ 高亮）。
+- 带丰富中文/英文图文说明：准备阶段、Git 操作核心、GitHub 发布 + 命令速查表。
+- 页面底部自带截图提示（浏览器打开 → F11 全屏 → 系统截图工具捕获，推荐 16:9 或宽屏）。
+- 自包含，无需依赖，打开即用。
+
+源文件（GitHub 直接渲染 Mermaid）：  
+[examples/git-push-release-workflow.mmd](examples/git-push-release-workflow.mmd)
+
+此示例同时用于演示本次 0.2.5 darwin 自进化后的发布流程（meta）。
+
+---
+
 ## Quick start
 
 ```bash
@@ -79,12 +99,12 @@ archviz-skills/
 │   ├── obsidian-canvas/  # 3 Obsidian Canvas templates
 │   └── excalidraw/       # 1 Excalidraw template
 ├── examples/
-│   ├── mermaid-demo.md   # Mermaid bar + flow + gantt
-│   ├── git-push-release-workflow.mmd  # 图文并茂 git push 发布流程 (Wes Anderson variant)
-│   └── git-push-release-workflow.html # 自包含 HTML 预览（直接打开截图用，Wes Anderson 配色）
-│   ├── teaching-building-3d.html  # 4-floor building walkthrough
-│   ├── course-admission-flow.mmd  # Teaching funnel
-│   └── python-demo.py    # Plotly scatter + line
+│   ├── git-push-release-workflow.html  # **图文并茂截图素材**（Wes Anderson 配色，自包含 HTML，直接打开截图）
+│   ├── git-push-release-workflow.mmd   # 图文并茂 git push 发布流程 (Wes Anderson variant)
+│   ├── mermaid-demo.md                 # Mermaid bar + flow + gantt
+│   ├── teaching-building-3d.html       # 4-floor building walkthrough
+│   ├── course-admission-flow.mmd       # Teaching funnel
+│   └── python-demo.py                  # Plotly scatter + line
 └── references/           # Detailed rules (gantt, style, validation, draw.io, terminal routing)
 ```
 
