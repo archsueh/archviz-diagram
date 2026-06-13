@@ -47,4 +47,4 @@ temp/
 
 # Project specific
 snapshot.json
-# (screenshots/ is tracked for examples; do not ignore)
+# (screenshots/ is tracked for examples; do not ignore).venv/
