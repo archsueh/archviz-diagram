@@ -1,0 +1,70 @@
+<!-- archviz-skills html-effectiveness sample | 2026-06-13 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Process Flow</title>
+<style>
+:root {
+  --av-surface: #ffffff; --av-bg: #f5f5f7; --av-border: #e0e0e4;
+  --av-text-primary: #1d1d1f; --av-text-secondary: #6e6e73;
+  --av-accent: #0071e3; --av-accent-subtle: #e8f2fd;
+  --av-success: #34c759; --av-warning: #ff9f0a;
+  --av-radius: 12px; --av-shadow: 0 1px 3px rgba(0,0,0,.08);
+  --av-font: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+}
+.dark {
+  --av-surface: #1c1c1e; --av-bg: #000000; --av-border: #38383a;
+  --av-text-primary: #f5f5f7; --av-text-secondary: #98989d;
+  --av-accent: #0a84ff; --av-accent-subtle: #0a84ff18;
+  --av-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+* { margin: 0; box-sizing: border-box; }
+body { font-family: var(--av-font); background: var(--av-bg); color: var(--av-text-primary);
+  padding: 2rem; line-height: 1.5; transition: background .3s, color .3s;
+  display: flex; flex-direction: column; align-items: center; min-height: 100vh; justify-content: center; }
+.toggle { position: fixed; top: 1rem; right: 1rem; background: var(--av-surface);
+  border: 1px solid var(--av-border); border-radius: 8px; padding: .4rem .8rem;
+  cursor: pointer; font-size: .85rem; color: var(--av-text-secondary); }
+.toggle:hover { color: var(--av-accent); }
+h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: .3rem; }
+.subtitle { color: var(--av-text-secondary); font-size: .85rem; margin-bottom: 2.5rem; }
+.flow { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; justify-content: center; }
+.step { display: flex; flex-direction: column; align-items: center; width: 130px; text-align: center; }
+.circle { width: 48px; height: 48px; border-radius: 50%; background: var(--av-surface);
+  border: 2px solid var(--av-accent); display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.1rem; color: var(--av-accent); margin-bottom: .6rem;
+  transition: background .2s, color .2s; }
+.step:hover .circle { background: var(--av-accent); color: #fff; }
+.step-title { font-size: .8rem; font-weight: 600; margin-bottom: .2rem; }
+.step-desc { font-size: .7rem; color: var(--av-text-secondary); }
+.arrow { display: flex; align-items: center; height: 48px; padding: 0 .3rem; }
+.arrow-shaft { width: 28px; height: 2px; background: var(--av-border); position: relative; }
+.arrow-shaft::after { content: ''; position: absolute; right: -1px; top: -4px;
+  border: 5px solid transparent; border-left: 6px solid var(--av-border); }
+@media (max-width: 700px) {
+  .flow { flex-direction: column; align-items: center; }
+  .arrow { height: auto; transform: rotate(90deg); padding: .3rem 0; }
+  .step { width: 180px; }
+}
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.documentElement.classList.toggle('dark');document.body.classList.toggle('dark')">◐ Theme</button>
+<h1>Deployment Pipeline</h1>
+<p class="subtitle">From code commit to production</p>
+<div class="flow">
+  <div class="step"><div class="circle">1</div><div class="step-title">Commit</div><div class="step-desc">Push to repo</div></div>
+  <div class="arrow"><div class="arrow-shaft"></div></div>
+  <div class="step"><div class="circle">2</div><div class="step-title">Build</div><div class="step-desc">CI compiles & bundles</div></div>
+  <div class="arrow"><div class="arrow-shaft"></div></div>
+  <div class="step"><div class="circle">3</div><div class="step-title">Test</div><div class="step-desc">Automated suite</div></div>
+  <div class="arrow"><div class="arrow-shaft"></div></div>
+  <div class="step"><div class="circle">4</div><div class="step-title">Stage</div><div class="step-desc">Preview deploy</div></div>
+  <div class="arrow"><div class="arrow-shaft"></div></div>
+  <div class="step"><div class="circle">5</div><div class="step-title">Ship</div><div class="step-desc">Production release</div></div>
+</div>
+<script>if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.classList.add('dark');document.body.classList.add('dark');}</script>
+</body>
+</html>

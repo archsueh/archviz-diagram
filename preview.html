@@ -4,6 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>archviz-skills — Design System Preview</title>
+<!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->
+<style id="archviz-theme-vars">
+:root, [data-palette="warm-paper"] {
+  --av-surface: #f5f0eb; --av-surface-alt: #e8e4e0; --av-surface-raised: #faf9f5;
+  --av-text-primary: #1B365D; --av-text-secondary: #5e5d59; --av-text-tertiary: #87867f;
+  --av-border: #d6d3d1; --av-accent: #002FA7; --av-accent-soft: rgba(0,47,167,0.12);
+  --av-chart-1: #002FA7; --av-chart-2: #94a3b8; --av-chart-3: #a8a29e; --av-chart-4: #d6d3d1; --av-chart-5: #c96442; --av-chart-6: #5e5d59;
+}
+[data-palette="swiss-neutral"] {
+  --av-surface: #f8f8f6; --av-surface-alt: #efeeec; --av-surface-raised: #ffffff;
+  --av-text-primary: #1a1a18; --av-text-secondary: #5f5e5a; --av-text-tertiary: #88877f;
+  --av-border: #d9d8d4; --av-accent: #185FA5;
+  --av-chart-1: #185FA5; --av-chart-2: #0F6E56; --av-chart-3: #534AB7; --av-chart-4: #993C1D;
+}
+[data-palette="editorial-parchment"] {
+  --av-surface: #f5f4ed; --av-surface-alt: #e8e6dc; --av-surface-raised: #faf9f5;
+  --av-text-primary: #141413; --av-text-secondary: #5e5d59; --av-text-tertiary: #87867f;
+  --av-border: #c9c7bc; --av-accent: #c96442;
+  --av-chart-1: #c96442; --av-chart-2: #5e5d59; --av-chart-3: #87867f; --av-chart-4: #b0aea5;
+}
+[data-palette="ikb-dark"], [data-theme="dark"]:not([data-palette]) {
+  --av-surface: #1a1a2e; --av-surface-alt: #252540; --av-surface-raised: #2a2a45;
+  --av-text-primary: #e8e6de; --av-text-secondary: #b4b2a9; --av-text-tertiary: #888780;
+  --av-border: rgba(255,255,255,0.15); --av-accent: #6B8AFF;
+  --av-chart-1: #6B8AFF; --av-chart-2: #5DCAA5; --av-chart-3: #AFA9EC; --av-chart-4: #F0997B;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-palette]):not([data-theme]) {
+    --av-surface: #1a1a2e; --av-surface-alt: #252540; --av-surface-raised: #2a2a45;
+    --av-text-primary: #e8e6de; --av-text-secondary: #b4b2a9; --av-text-tertiary: #888780;
+    --av-border: rgba(255,255,255,0.15); --av-accent: #6B8AFF;
+    --av-chart-1: #6B8AFF; --av-chart-2: #5DCAA5; --av-chart-3: #AFA9EC; --av-chart-4: #F0997B;
+  }
+}
+#archviz-theme-toggle{position:fixed;top:12px;right:12px;z-index:9999;background:var(--av-surface-raised);border:1px solid var(--av-border);border-radius:8px;padding:6px 12px;font:12px/1 system-ui,sans-serif;color:var(--av-text-secondary);cursor:pointer;transition:background 0.2s;backdrop-filter:blur(8px);}
+#archviz-theme-toggle:hover{background:var(--av-surface-alt);border-color:var(--av-text-tertiary);}
+</style>
 <style>
   :root{
     --warm-paper:#f5f0eb; --paper-beige:#e8e4e0; --mist:#f5f5f4; --stone:#a8a29e;
@@ -85,17 +122,6 @@
     <tr><td class="sys"><i style="background:#e4e8f0"></i>IKB Accent</td><td>#e4e8f0</td><td>#0a0a0a</td><td>#94a3b8</td><td style="color:#002FA7;font-weight:600">#002FA7</td><td>guizang Swiss</td></tr>
     <tr><td class="sys"><i style="background:#f0f4e0"></i>Lemon Accent</td><td>#f0f4e0</td><td>#0a0a0a</td><td>#a8b898</td><td style="font-weight:600">#FFD500</td><td>Tech</td></tr>
     <tr><td class="sys"><i style="background:#e7e5e4"></i>Stone Mono</td><td>#e7e5e4</td><td>#292524</td><td>#a8a29e</td><td>—</td><td>Austerity</td></tr>
-    <tr><td class="sys"><i style="background:#f5f4ed"></i>Editorial Parchment</td><td>#f5f4ed</td><td>#141413</td><td>#e8e6dc</td><td style="color:#c96442;font-weight:600">#c96442</td><td>Cards, covers, publishable HTML</td></tr>
-  </table>
-
-  <h2>Dark Mode Palettes</h2>
-  <table>
-    <tr><th>System</th><th>surface</th><th>text</th><th>border</th><th>accent</th><th>Use</th></tr>
-    <tr><td class="sys"><i style="background:#1a1814"></i>Warm Paper Dark</td><td>#1a1814</td><td>#e8e4e0</td><td>#44403c</td><td>—</td><td>Default dark</td></tr>
-    <tr><td class="sys"><i style="background:#0a0a0a"></i>Swiss Neutral Dark</td><td>#0a0a0a</td><td>#d6d3d1</td><td>#333333</td><td>—</td><td>Clean dark</td></tr>
-    <tr><td class="sys"><i style="background:#0d1117"></i>IKB Accent Dark</td><td>#0d1117</td><td>#c9d1d9</td><td>#30363d</td><td style="color:#58a6ff;font-weight:600">#58a6ff</td><td>guizang dark</td></tr>
-    <tr><td class="sys"><i style="background:#0d1117"></i>Lemon Accent Dark</td><td>#0d1117</td><td>#c9d1d9</td><td>#30363d</td><td style="color:#e3b341;font-weight:600">#e3b341</td><td>Tech dark</td></tr>
-    <tr><td class="sys"><i style="background:#1c1917"></i>Stone Mono Dark</td><td>#1c1917</td><td>#d6d3d1</td><td>#44403c</td><td>—</td><td>Austerity dark</td></tr>
   </table>
 
   <h2>Type scale — 越大越细，越小越粗</h2>
@@ -126,5 +152,49 @@
 
   <footer>archviz-skills · DESIGN.md visual catalog · Stitch DESIGN.md format · MIT</footer>
 </main>
+<script>
+(function() {
+  'use strict';
+  const PALETTES = {
+    'warm-paper':          { label: 'Warm Paper',    mode: 'light' },
+    'swiss-neutral':       { label: 'Swiss Neutral',  mode: 'light' },
+    'editorial-parchment': { label: 'Editorial',      mode: 'light' },
+    'ikb-dark':            { label: 'IKB Dark',       mode: 'dark'  },
+  };
+  window.ARCHVIZ_PALETTES = PALETTES;
+  let currentPalette = 'warm-paper';
+  function applyPalette(name) {
+    if (!PALETTES[name]) return;
+    currentPalette = name;
+    document.documentElement.setAttribute('data-palette', name);
+    document.documentElement.setAttribute('data-theme', PALETTES[name].mode);
+    localStorage.setItem('archviz-palette', name);
+    updateToggleLabel();
+  }
+  function toggleTheme() {
+    const order = ['warm-paper','swiss-neutral','editorial-parchment','ikb-dark'];
+    applyPalette(order[(order.indexOf(currentPalette)+1)%order.length]);
+  }
+  function getCurrentPalette() { return currentPalette; }
+  function isDark() { return PALETTES[currentPalette]?.mode === 'dark'; }
+  function updateToggleLabel() {
+    const btn = document.getElementById('archviz-theme-toggle');
+    if (btn) btn.textContent = PALETTES[currentPalette]?.label || currentPalette;
+  }
+  function init() {
+    const saved = localStorage.getItem('archviz-palette');
+    if (saved && PALETTES[saved]) applyPalette(saved);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyPalette('ikb-dark');
+    const btn = document.createElement('button');
+    btn.id = 'archviz-theme-toggle';
+    btn.textContent = PALETTES[currentPalette]?.label || 'Theme';
+    btn.addEventListener('click', toggleTheme);
+    document.body.appendChild(btn);
+  }
+  window.archvizTheme = { applyPalette, toggleTheme, getCurrentPalette, isDark, init };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 </body>
 </html>

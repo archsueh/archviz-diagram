@@ -1,0 +1,79 @@
+<!-- archviz-skills html-effectiveness sample | 2026-06-13 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Animated Bar Race</title>
+<style>
+:root {
+  --av-surface: #ffffff; --av-bg: #f5f5f7; --av-border: #e0e0e4;
+  --av-text-primary: #1d1d1f; --av-text-secondary: #6e6e73;
+  --av-accent: #0071e3; --av-accent-subtle: #e8f2fd;
+  --av-success: #34c759; --av-warning: #ff9f0a;
+  --av-radius: 12px; --av-shadow: 0 1px 3px rgba(0,0,0,.08);
+  --av-font: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --av-mono: 'SF Mono', 'Menlo', monospace;
+}
+.dark {
+  --av-surface: #1c1c1e; --av-bg: #000000; --av-border: #38383a;
+  --av-text-primary: #f5f5f7; --av-text-secondary: #98989d;
+  --av-accent: #0a84ff; --av-accent-subtle: #0a84ff18;
+  --av-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+* { margin: 0; box-sizing: border-box; }
+body { font-family: var(--av-font); background: var(--av-bg); color: var(--av-text-primary);
+  padding: 2rem; line-height: 1.5; transition: background .3s, color .3s;
+  display: flex; justify-content: center; }
+.toggle { position: fixed; top: 1rem; right: 1rem; background: var(--av-surface);
+  border: 1px solid var(--av-border); border-radius: 8px; padding: .4rem .8rem;
+  cursor: pointer; font-size: .85rem; color: var(--av-text-secondary); }
+.toggle:hover { color: var(--av-accent); }
+.chart-wrap { max-width: 500px; width: 100%; }
+h1 { font-size: 1.3rem; font-weight: 600; margin-bottom: .3rem; }
+.subtitle { font-size: .82rem; color: var(--av-text-secondary); margin-bottom: 1.5rem; }
+.bar-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
+.bar-label { width: 70px; font-size: .78rem; font-weight: 500; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 28px; background: var(--av-surface); border-radius: 6px;
+  border: 1px solid var(--av-border); overflow: hidden; position: relative; }
+.bar-fill { height: 100%; width: 0; border-radius: 5px; transition: width 1.2s cubic-bezier(.25,.46,.45,.94);
+  display: flex; align-items: center; padding-left: .6rem; }
+.bar-fill span { font-size: .72rem; font-family: var(--av-mono); font-weight: 600; color: #fff;
+  opacity: 0; transition: opacity .3s .8s; }
+.bar-fill.animated span { opacity: 1; }
+.colors-0 { background: linear-gradient(90deg, #0071e3, #40a0ff); }
+.colors-1 { background: linear-gradient(90deg, #34c759, #6ee78a); }
+.colors-2 { background: linear-gradient(90deg, #ff9f0a, #ffbe4d); }
+.colors-3 { background: linear-gradient(90deg, #af52de, #d18eff); }
+.colors-4 { background: linear-gradient(90deg, #ff375f, #ff6b8a); }
+.colors-5 { background: linear-gradient(90deg, #5856d6, #8583e8); }
+.legend { margin-top: 1rem; font-size: .72rem; color: var(--av-text-secondary); }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.documentElement.classList.toggle('dark');document.body.classList.toggle('dark')">◐ Theme</button>
+<div class="chart-wrap" id="chart">
+  <h1>Tech Stack Popularity</h1>
+  <p class="subtitle">Developer survey results, 2026</p>
+  <div class="bar-row" data-value="87"><span class="bar-label">TypeScript</span><div class="bar-track"><div class="bar-fill colors-0"><span>87%</span></div></div></div>
+  <div class="bar-row" data-value="76"><span class="bar-label">Python</span><div class="bar-track"><div class="bar-fill colors-1"><span>76%</span></div></div></div>
+  <div class="bar-row" data-value="63"><span class="bar-label">Rust</span><div class="bar-track"><div class="bar-fill colors-2"><span>63%</span></div></div></div>
+  <div class="bar-row" data-value="55"><span class="bar-label">Go</span><div class="bar-track"><div class="bar-fill colors-3"><span>55%</span></div></div></div>
+  <div class="bar-row" data-value="41"><span class="bar-label">Swift</span><div class="bar-track"><div class="bar-fill colors-4"><span>41%</span></div></div></div>
+  <div class="bar-row" data-value="29"><span class="bar-label">Elixir</span><div class="bar-track"><div class="bar-fill colors-5"><span>29%</span></div></div></div>
+  <div class="legend">Source: synthetic data for illustration</div>
+</div>
+<script>
+(function(){
+  const rows=document.querySelectorAll('.bar-row');
+  function animate(){rows.forEach(function(r,i){
+    setTimeout(function(){var f=r.querySelector('.bar-fill');f.style.width=r.dataset.value+'%';f.classList.add('animated');},i*100);
+  });}
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){if(entries[0].isIntersecting){animate();}},{}).observe(document.getElementById('chart'));
+  }else{animate();}
+  if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.classList.add('dark');document.body.classList.add('dark');}
+})();
+</script>
+</body>
+</html>

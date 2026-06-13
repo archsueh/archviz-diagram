@@ -1,0 +1,81 @@
+<!-- archviz-skills html-effectiveness sample | 2026-06-13 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KPI Ticker</title>
+<style>
+:root {
+  --av-surface: #ffffff; --av-bg: #f5f5f7; --av-border: #e0e0e4;
+  --av-text-primary: #1d1d1f; --av-text-secondary: #6e6e73;
+  --av-accent: #0071e3; --av-accent-subtle: #e8f2fd;
+  --av-success: #34c759; --av-warning: #ff9f0a;
+  --av-radius: 12px; --av-shadow: 0 1px 3px rgba(0,0,0,.08);
+  --av-font: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --av-serif: 'Georgia', 'Noto Serif SC', 'Times New Roman', serif;
+}
+.dark {
+  --av-surface: #1c1c1e; --av-bg: #000000; --av-border: #38383a;
+  --av-text-primary: #f5f5f7; --av-text-secondary: #98989d;
+  --av-accent: #0a84ff; --av-accent-subtle: #0a84ff18;
+  --av-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+* { margin: 0; box-sizing: border-box; }
+body { font-family: var(--av-font); background: var(--av-bg); color: var(--av-text-primary);
+  padding: 2rem; line-height: 1.5; transition: background .3s, color .3s;
+  display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.toggle { position: fixed; top: 1rem; right: 1rem; background: var(--av-surface);
+  border: 1px solid var(--av-border); border-radius: 8px; padding: .4rem .8rem;
+  cursor: pointer; font-size: .85rem; color: var(--av-text-secondary); }
+.toggle:hover { color: var(--av-accent); }
+.ticker { text-align: center; }
+.ticker-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--av-text-secondary); margin-bottom: .4rem; }
+.ticker-value { font-family: var(--av-serif); font-size: 5rem; font-weight: 400;
+  line-height: 1.1; letter-spacing: -.02em; }
+.ticker-sub { display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin-top: .6rem; }
+.ticker-change { font-size: .85rem; font-weight: 600; }
+.up { color: var(--av-success); }
+.sparkline { display: flex; align-items: flex-end; gap: 2px; height: 24px; }
+.spark-bar { width: 6px; border-radius: 2px; background: var(--av-accent); opacity: .7;
+  transition: height .4s cubic-bezier(.4,0,.2,1); }
+.ticker-meta { font-size: .7rem; color: var(--av-text-secondary); margin-top: .8rem; }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.documentElement.classList.toggle('dark');document.body.classList.toggle('dark')">◐ Theme</button>
+<div class="ticker">
+  <div class="ticker-label">Monthly Active Users</div>
+  <div class="ticker-value" id="val">0</div>
+  <div class="ticker-sub">
+    <span class="ticker-change up">▲ 14.2%</span>
+    <div class="sparkline">
+      <div class="spark-bar" style="height:30%"></div>
+      <div class="spark-bar" style="height:45%"></div>
+      <div class="spark-bar" style="height:38%"></div>
+      <div class="spark-bar" style="height:52%"></div>
+      <div class="spark-bar" style="height:60%"></div>
+      <div class="spark-bar" style="height:55%"></div>
+      <div class="spark-bar" style="height:70%"></div>
+      <div class="spark-bar" style="height:68%"></div>
+      <div class="spark-bar" style="height:82%"></div>
+      <div class="spark-bar" style="height:78%"></div>
+      <div class="spark-bar" style="height:90%"></div>
+      <div class="spark-bar" style="height:100%"></div>
+    </div>
+  </div>
+  <div class="ticker-meta">as of June 13, 2026 · updated daily</div>
+</div>
+<script>
+(function(){
+  const target=284739;const el=document.getElementById('val');let current=0;
+  const step=target/60;function tick(){current=Math.min(current+step,target);
+  el.textContent=Math.round(current).toLocaleString();if(current<target)requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+  if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.classList.add('dark');document.body.classList.add('dark');}
+})();
+</script>
+</body>
+</html>

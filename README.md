@@ -1,11 +1,13 @@
-# archviz-skills
+# archviz
 
-Restrained information visualization skill pack for AI agents.
+Restrained 2D information visualization skill pack for AI agents.
 
 Every visualization starts with a **brief read** and **three dials** — not a default template.
 
+> **3D spatial visualization** has been split into [archviz-3d](https://github.com/archsueh/archviz-3d).
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.2.5-blue.svg)
+![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)
 
 ---
 

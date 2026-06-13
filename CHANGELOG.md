@@ -1,5 +1,17 @@
 # Changelog
 
+## Session log (2026-06-13, before sleep)
+
+- Verified full local tree + last-commit messages against the GitHub file list pasted by user (docs/screenshots with git-push PNG + 3d/, examples/ with git-push html/mmd, references/, scripts/, templates/, .gitignore, CHANGELOG, CONTRIBUTING, DESIGN, LICENSE, README, SKILL, preview.html, requirements.txt). All files present and messages align (recent "Update README.md", "docs: add PNG screenshot...", "release: v0.2.5", older v0.0.x on standard files). `git status` clean, no drift.
+
+- Cleaned unnecessary historical process documents: removed the entire "### 0.1.6 Optimization References" section (the long list of early drawio/termaid/drawnix etc. projects) from README.md. This was the main "过程文档" bloat left from the initial optimization pass. "Core dependencies" kept. README structure tree already clean (no old agents/ etc.).
+
+- Git-push screenshot material (PNG in docs/screenshots/ + self-contained HTML in examples/) remains the prominent "截图素材 / Screenshot Material (v0.2.5)" section at the very top of README (using the <img width/height> preview-card style the user manually tuned and showed in screenshot), so the good pictures display directly on the repo homepage.
+
+- Pushed the cleanup (after rebase to integrate any remote manual tweaks).
+
+准备睡了。晚安。
+
 ## 0.2.5 (2026-06-12)
 
 ### Changed

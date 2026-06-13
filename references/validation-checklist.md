@@ -47,3 +47,17 @@
 - Self-contained for papers (caption first = finding).
 
 Run this before shipping any diagram.
+
+## Export & Theme (Phase 1 — HTML templates only)
+- [ ] Template includes `_archviz-theme.html` (CSS vars + toggle button)
+- [ ] Template includes `_archviz-export.html` (export menu + keyboard shortcuts)
+- [ ] All hardcoded hex replaced with `--av-*` CSS variables
+- [ ] `class="archviz-export-target"` on main chart/canvas element
+- [ ] Canvas charts listen for `archviz-theme-changed` event and redraw
+- [ ] T key cycles through 4 palettes (visual change confirmed)
+- [ ] E→P exports PNG at 4× resolution (text sharp, no pixelation)
+- [ ] E→S exports SVG with current theme vars injected
+- [ ] E→C copies to clipboard (or logs fallback)
+- [ ] `prefers-color-scheme: dark` auto-applies IKB Dark palette
+- [ ] Export matches current theme (dark export = dark colors)
+- [ ] File header: `<!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->`

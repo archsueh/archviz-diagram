@@ -1,18 +1,18 @@
 ---
-name: archviz-skills
+name: archviz
 description: |
-  Restrained information visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
-  Supports Mermaid, ASCII/termaid terminal rendering, self-contained HTML, Python (Plotly), Obsidian Canvas, draw.io guidance, and Three.js 3D archviz. Text-first, preview-compatible, anti-slop.
-  Default mode is 2D infoviz; enter 3D only when the brief mentions building, floorplan, structure, or spatial walkthrough.
+  Restrained 2D information visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
+  Supports Mermaid, ASCII, self-contained HTML, Python (Plotly). Text-first, preview-compatible, anti-slop.
+  For 3D spatial visualization (building, floorplan, exploded view) → use archviz-3d.
   Use when the user asks for diagram, visualization, chart, gantt, sankey, mindmap, flowchart, xychart, 可视化, 架构图, 流程图,
-  信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版, or 3D building/archviz.
+  信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
 license: MIT
 metadata:
-  version: 0.2.5
-  source: https://github.com/archsueh/archviz-skills
+  version: 0.0.6
+  source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh
-  triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph, three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
+  triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph
 ---
 
 # archviz-skills
@@ -28,7 +28,7 @@ metadata:
 
 **Good:** "用 archviz 给这份产品全案 §2 画 V1 闭环图" · "Gantt + 任务表 + ASCII fallback" · "内嵌 Warm Paper SVG 到 Obsidian 笔记"
 
-**Bad:** "帮我生成小红书 PNG 并截图上传" → use [claude-design-card](https://github.com/geekjourneyx/claude-design-card) (Bun + Playwright). archviz supplies the **language + HTML skeleton**, not the screenshot CLI.
+**Good:** "帮我生成小红书 PNG 并截图上传" → archviz HTML 模板内置导出（E→P 4× PNG），无需外部工具。若需复杂排版，可搭配 `claude-design-card` 使用 archviz 输出的 HTML 骨架。
 
 ## When NOT to Use
 
@@ -42,7 +42,6 @@ metadata:
 | Need | Use |
 |---|---|
 | Diagram in .md + fallbacks | **archviz-skills** |
-| Editable professional diagram | **archviz-skills draw.io mode** (`references/drawio-output-mode.md`) |
 | Publishable PNG card (14 formats) | claude-design-card |
 | Swiss/guizang Mermaid styling only | mermaid-arc-skills |
 | DESIGN.md for a product brand | anydesign + host DESIGN.md |
@@ -61,6 +60,34 @@ metadata:
 
 **Iron rule:** No ship without G2 contrast check. No Family A cover with >3 text layers.
 
+### ⚠️ ClawHub 发布流程
+**Trigger:** 用户要求发布 skill 到技能商城
+**Rule:** `hermes skills publish` 有安全扫描误报（表格 `| Env | Output |` 被判为 exfiltration）。备用方案：
+1. `hermes skills tap add owner/repo` — 添加为 tap 源（但 search 可能不生效）
+2. 手动提交 https://clawhub.ai/submit — 需要 GitHub OAuth 登录
+3. `hermes skills snapshot export` — 导出本地 skill 快照（仅含 official skills，不含 local）
+
+### ⚠️ NEVER delete references when asked to "optimize"
+**Trigger:** User says "优化" (optimize), "美化" (beautify), "fix", "improve"
+**Rule:** Optimize = improve the EXISTING content. Do NOT delete SVG references, template paths, external links, or supporting files unless the user explicitly says "删除" (delete), "清理" (clean up), or "remove".
+**Failure example:** User asked to "优化一下图表". Agent deleted all SVG references and template paths. User: "谁让你清理 回退 我只是让你优化" (Who told you to clean up? Revert! I only asked you to optimize).
+**Correct approach:** Read the request literally. "优化" = make better. "清理" = remove. These are different operations. When in doubt, ask.
+
+**Self-healing loop** (from drawio-skill pattern, optional for complex diagrams):
+1. Generate diagram
+2. Render to image (Mermaid CLI / termaid / browser screenshot)
+3. Read image with VLM → check for overlaps, clipped labels, unreadable text
+4. If issues found → fix source → re-render (max 2 rounds)
+5. Ship or document remaining ⚠️
+
+**Self-healing validation checklist** (check after every render):
+- Text overflow? (labels clipped, bars too narrow)
+- Node overlap? (elements on top of each other)
+- Arrow crossing? (lines through nodes)
+- Contrast fail? (text unreadable on background)
+- Missing legend? (>2 arrow types without legend)
+- Gantt overflow? (task names wider than bars)
+
 ---
 
 ## QUICK REFERENCE (agent loads this in <5 seconds)
@@ -73,6 +100,7 @@ Contrast:   luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → da
 Labels:     ≤6 words / ≤8 Chinese chars / no ALL CAPS
 Gantt:      codes only inside block + table beside / min 3w / termaid for terminal
 Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pie
+Dark mode:  surface=#1a1814 text=#e8e4e0 accent=#58a6ff (see §11c)
 Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 500 not 700
 ```
 
@@ -92,12 +120,8 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 | Decision/evaluation | decision matrix (table) | `mermaid/decision-matrix.mmd` |
 | State transitions | stateDiagram-v2 | `mermaid/state-machine.mmd` |
 | Dependencies | dependency graph | `mermaid/dependency-network.mmd` |
-| Editable architecture handoff | draw.io XML plan | `references/drawio-output-mode.md` |
 | Multi-criteria scoring | radar or diverging bar | `html/radar.html` / `mermaid/diverging-bar.mmd` |
 | Simple (≤5 items) | **TABLE, not chart** | — |
-| **3D: Building structure** | Three.js structure shell | `html/threejs-archviz.html` |
-| **3D: Floor plan** | Three.js extruded floor | `html/threejs-floorplan.html` |
-| **3D: Section cut** | Three.js ClippingPlane | `html/threejs-archviz.html` |
 | **Cover / hero (click promise)** | Editorial Family A HTML | `html/editorial-card.html` |
 | **Knowledge card (saveable)** | Editorial Family B HTML | `html/editorial-card.html` |
 | **Social square (quote/data)** | Editorial Family C HTML | `html/editorial-card.html` |
@@ -121,27 +145,11 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 | Env | Output |
 |---|---|
 | Obsidian/preview | lightweight Mermaid / self-contained HTML |
-| Terminal | **termaid-first** (`termaid diagram.mmd --theme mono --width N`) then ASCII fallback (see `references/ascii-workflow.md` for optional CLI enhancement path) |
+| Terminal | **termaid** (`termaid diagram.mmd --theme mono`) — 18图类型，6套主题 |
 | Deliverables | Python (Plotly/Matplotlib) |
-| Editable handoff | draw.io `.drawio` source + optional PNG/SVG/PDF export |
-| **3D / archviz** | **Three.js self-contained HTML (CDN import)** |
+| **3D / spatial** | → **archviz-3d** skill (Three.js self-contained HTML) |
 
-**Specialized references:**
-- Terminal routing and fallback policy → `references/termaid-routing.md`
-- ASCII CLI alternatives & approved tools → `references/ascii-cli-alternatives.md`
-- ASCII generation workflow (Mermaid → termaid → optional CLI → plain fallback) → `references/ascii-workflow.md`
-- Editable draw.io output mode → `references/drawio-output-mode.md`
-- Complex-diagram scene contract → `references/scene-contract.md`
-
-**3D archviz mode** (when brief = building/structure/spatial):
-- Stack: Three.js + animejs (camera transitions) + OrbitControls
-- Output: self-contained HTML with CDN imports (no build step)
-- Types: structure shell / floor plan extrusion / section cut / multi-floor nav
-- Tokens: inherits 2D palette + adds `structure=#a8a29e`, `floor=#e8e4e0`, `accent-3d=#002FA7`
-- Constraints: procedural geometry preferred, max 3 lights, responsive resize, animejs for camera moves
-- Full rules → DESIGN.md §3D Architectural Visualization
-
-**CDN importmap pattern** (self-contained HTML, zero build):
+**3D archviz**: 已拆分为独立 skill → [archviz-3d](https://github.com/archsueh/archviz-3d)。当 brief 提到 building/floorplan/structure/spatial/exploded/3D 时，路由到 archviz-3d。
 ```html
 <script type="importmap">
 {
@@ -165,7 +173,7 @@ import { animate } from 'animejs';  // v4: named export, NOT default
 |---|---|---|
 | animejs CDN 404 | Canvas blank, no errors | v4.4.1 路径是 `dist/bundles/anime.esm.js`，不是 `lib/anime.es.js` |
 | animejs default import | `import anime from 'animejs'` → undefined | v4 是 named export: `import { animate } from 'animejs'` |
-| animejs v3→v4 API | `anime({targets: x, ...})` 报错 | v4 是 `animate(target, params)`，无 `targets` key |
+| animejs v3→v4 API | `anime({targets: x, ...})` 报错 | v4 是 `animate(target, params)`，无 `targets` key。详见 archviz-3d |
 | `animate` 命名冲突 | 渲染循环函数也叫 `animate` → 覆盖 import | 渲染循环用 `renderLoop` 或 `tick`，不要用 `animate` |
 | Three.js CatmullRom | `CatmullRomCurvePath` 不存在 | 用 `CatmullRomCurve3`（3D 曲线） |
 
@@ -234,6 +242,34 @@ Labels: ≤6 words · ≤8 Chinese chars · no ALL CAPS · same language per dia
 
 ---
 
+## 3.5. THEME & EXPORT SYSTEM (Phase 1 upgrade)
+
+All self-contained HTML templates include two core modules:
+
+### Theme System (`_archviz-theme.html`)
+- **4 palettes**: Warm Paper (default), Swiss Neutral, Editorial Parchment, IKB Dark
+- **CSS variables**: `--av-surface`, `--av-text-primary`, `--av-accent`, `--av-chart-1..6` etc.
+- **Auto-detect**: `prefers-color-scheme: dark` → IKB Dark
+- **Runtime toggle**: click button (top-right) or press **T** to cycle palettes
+- **Persistence**: `localStorage('archviz-palette')`
+
+### Export System (`_archviz-export.html`)
+- **Keyboard shortcuts**: **T** = cycle theme, **E** = export menu, **E→P** = PNG, **E→S** = SVG, **E→W** = WebP, **E→C** = clipboard
+- **4× raster**: SVG uses native viewBox scaling (not bitmap upscale), canvas uses `renderAtScale()` hook or upscale fallback
+- **SVG export**: injects current CSS vars into cloned SVG → standalone file
+- **Clipboard**: `ClipboardItem` API with console fallback
+- **Export target**: `.archviz-export-target` class on main element, or auto-detect SVG/canvas/article
+
+### Template Integration Rules
+1. Every new HTML template MUST include both modules (paste full content)
+2. All hardcoded hex → CSS variables (`#f5f0eb` → `var(--av-surface)`, `#1B365D` → `var(--av-text-primary)`)
+3. Chart colors → `--av-chart-1` through `--av-chart-6`
+4. Canvas charts MUST listen for `archviz-theme-changed` event to redraw
+5. Add `class="archviz-export-target"` to main chart/canvas element
+6. Reference: `references/export-patterns.md`
+
+---
+
 ## 4. LAYOUT
 
 - Mindmap: auto-layout
@@ -295,58 +331,17 @@ confidence: {palette: "✅", layout: "✅", nodes: "⚠️"}
 1. Brief + 4-layer analysis (§0)
 2. Set dials (§1)
 3. Choose type + environment (§2 + QR table)
-4. Apply tokens (DESIGN.md)
-5. Apply typography (§3)
-6. Apply layout (§4)
-7. Check density (§5)
-8. Quality audit (§7)
-9. Generate code
-10. **Self-healing loop** (§9b)
-11. Embed (caption first = finding)
+4. **If ambiguous card/cover/platform** → state 1 primary format + 2 alternatives, ask ≤3 questions (§Editorial Mode); skip for clear Mermaid/ASCII requests
+5. Apply tokens (DESIGN.md)
+6. Apply typography (§3)
+7. Apply layout (§4)
+8. Check density (§5)
+9. Quality audit (§7)
+10. Generate code
+11. Validate (render test or alignment check)
+12. Embed (caption first = finding)
 
-**Pre-gen checklist:** Brief done? DESIGN.md contract complete? Dials set? Tokens locked? Labels short? Gantt: codes+table? Card/cover: compressed to judgment+promise+one evidence?
-
----
-
-## 9b. SELF-HEALING LOOP (from next-ai-draw-io + drawio-skill)
-
-After generating a diagram, run a validation loop:
-
-```
-Generate → Render → Check → Fix → Re-render (max 2 rounds)
-```
-
-**Step 1: Render**
-- Mermaid: `termaid diagram.mmd --theme mono` (terminal) or paste into Obsidian
-- HTML: open in browser
-- Python: run script
-
-**Step 2: Check** (read the rendered output)
-- Text overflow? (labels clipped, bars too narrow)
-- Node overlap? (elements on top of each other)
-- Arrow crossing? (lines through nodes)
-- Contrast fail? (text unreadable on background)
-- Missing legend? (>2 arrow types without legend)
-- Gantt overflow? (task names wider than bars)
-
-**Step 3: Fix** (if issues found)
-- Text overflow → shorten labels or widen element
-- Node overlap → increase spacing, reduce node count
-- Arrow crossing → reorder nodes, change LR→TD
-- Contrast fail → swap text color per luminance rule
-- Missing legend → add legend block
-- Gantt overflow → codes only + table beside
-
-**Step 4: Re-render** and verify fix
-
-**Stop when:** 0 issues found, or 2 rounds exhausted (report remaining issues to user).
-
-**Terminal validation (termaid):**
-```bash
-# Render and visually inspect
-termaid diagram.mmd --theme mono
-# If output looks wrong, edit .mmd and re-run
-```
+**Pre-gen checklist:** Brief done? DESIGN.md contract complete? Dials set? Tokens locked? Labels short? Gantt: codes+table+ASCII? Card/cover: compressed to judgment+promise+one evidence?
 
 ---
 
@@ -366,80 +361,78 @@ Trigger: 封面、卡片、信息卡、小红书、公众号、分享图、排�
 
 - Inside gantt block: ultra-short codes only (V1.1, A1, B3)
 - Full names: mandatory table immediately after
-- ASCII fallback: always include
+- Terminal rendering: `termaid gantt.mmd --theme mono` (preferred) or plain text fallback
 - Min bar: 3w. Merge short tasks.
 - Section: 3-6 tasks. Group by phase.
 
 ---
 
-## 11. TERMINAL RENDERING
+## 11. ASCII MODE
 
-**Primary: termaid** (`pip install termaid`)
+Plain text only. Max 80 columns. **No box-drawing characters** (┌─┐╔═╗╰─╯等)——在多数终端、聊天窗口、非等宽字体环境下会乱码。
 
-```bash
-# 直接渲染 Mermaid 文件到终端
-termaid diagram.mmd --theme mono
-termaid diagram.mmd --theme terra
-echo 'graph LR; A-->B-->C' | termaid --theme mono
-```
-
-**6种主题:** default, terra, neon, mono, amber, phosphor
-
-**支持18种图:** flowchart, sequence, class, ER, state, block, git, gantt, architecture, pie, treemap, mindmap, timeline, kanban, quadrant, xychart, user journey, packet
-
-**Python API:**
-```python
-from termaid import render
-print(render("graph LR\n  A --> B --> C"))
-```
-
-**Fallback: 纯文本ASCII**（termaid不可用时）
-
-Plain text only. Max 80 columns. **No box-drawing characters.**
-
+**允许的符号：**
 | 元素 | 符号 |
 |---|---|
 | 节点 | `[文本]` 或 `(文本)` |
 | 重要节点 | `[[文本]]` 或 `((文本))` |
 | 决策 | `{文本}` |
-| 箭头 | `-->` `==>` |
+| 箭头 | `-->` `-->` `==>` |
+| 虚线 | `--->` |
+| 竖线 | `\|` |
+| 分隔 | `---` `===` |
 
-For **optional presentation-grade enhancement** (banners, image-derived art, decorative styles) see the approved CLI tools and exact pipeline in:
-- `references/ascii-cli-alternatives.md`
-- `references/ascii-workflow.md`
+**示例：**
+```
+[Input] --> [Process] --> [Output]
+                |
+                v
+           {Decision}
+           /        \
+      [Path A]    [Path B]
+```
 
-The plain ASCII fallback (and termaid) remain mandatory for text-first survivability. CLI output is always treated as derived, never as source of truth.
+**Preferred**: `termaid` (`pip install termaid`) — renders actual Mermaid syntax in terminal. Use `termaid diagram.mmd --theme mono` instead of hand-crafting ASCII when available. 6 themes: default, terra, neon, mono, amber, phosphor. 18 diagram types.
+
+**Fallback tools** (when termaid not installed): `pyfiglet` (headers), `boxes` (borders), `cowsay` (annotations)
+
+**External tool integration**: See `references/external-tools.md` for termaid, drawio-skill (self-healing loop), next-ai-draw-io (MCP), and markdown-viewer/skills (Vega-Lite).
 
 ---
 
 ## 11b. STYLE PRESETS (from drawio-skill)
 
-Save and reuse visual styles across diagrams.
+Save and reuse visual styles across diagrams. Preset format (YAML):
 
-**Preset format (YAML):**
 ```yaml
 # .archviz-preset.yaml
 name: warm-paper-restrained
-tokens:
-  surface: "#f5f0eb"
-  text: "#1B365D"
-  border: "#a8a29e"
-  accent: "#002FA7"
-mermaid_init: "%%{init: {'theme':'base','themeVariables':{'primaryColor':'#f5f0eb','primaryTextColor':'#1B365D','primaryBorderColor':'#a8a29e','lineColor':'#a8a29e','tertiaryColor':'#d6d3d1','fontSize':'13px'}}}%%"
+tokens: {surface: "#f5f0eb", text: "#1B365D", border: "#a8a29e", accent: "#002FA7"}
+mermaid_init: "%%{init: {'theme':'base','themeVariables':{'primaryColor':'#f5f0eb',...}}}%%"
 dials: {complexity: 4, density: 3, restraint: 8}
 ```
 
-**Extract from existing diagram:**
-1. Read the `%%{init:...}%%` block from a .mmd file
-2. Parse `themeVariables` into token names
-3. Save as `.archviz-preset.yaml`
+**Extract from existing diagram**: Read `%%{init:...}%%` block → parse themeVariables → save as preset.
 
-**Apply preset:**
-1. Read `.archviz-preset.yaml` from project root (if exists)
-2. Override DESIGN.md defaults with preset values
-3. Generate diagram using preset tokens
+**Built-in presets**: warm-paper (default), swiss-neutral, ikb-accent, lemon-accent, stone-mono, editorial-parchment, warm-paper-dark, ikb-dark.
 
-**Built-in presets:** warm-paper (default), swiss-neutral, ikb-accent, lemon-accent, stone-mono, editorial-parchment, warm-paper-dark, ikb-dark
+---
+
+## 11c. DARK MODE TOKENS
+
+Mirror every light palette with a dark counterpart. Same accent, inverted surface/text.
+
+| System | surface | text | border | accent |
+|---|---|---|---|---|
+| Warm Paper Dark | `#1a1814` | `#e8e4e0` | `#44403c` | — |
+| IKB Accent Dark | `#0d1117` | `#c9d1d9` | `#30363d` | `#58a6ff` |
+
+**Rules**: Same accent hue, lighter tint. Surface = near-black with warm undertone (never pure `#000000`). Text = light gray (never pure `#ffffff`). Auto-detect via `prefers-color-scheme: dark` for HTML; manual toggle for Mermaid.
+
+**Mermaid dark init:**
+```
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1814', 'primaryTextColor': '#e8e4e0', 'primaryBorderColor': '#44403c', 'lineColor': '#58a6ff', 'tertiaryColor': '#2a2520', 'fontSize': '13px'}}}%%
+```
 
 ---
 
@@ -451,9 +444,11 @@ Actual files live in `templates/`. Current inventory (do not hardcode counts in 
 templates/
 ├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
 │               flowchart + mindmap: inline Mermaid (no standalone .mmd)
-├── ascii/       4 files (flowchart, architecture, gantt, icon-system)  — see also `references/ascii-cli-alternatives.md` and `references/ascii-workflow.md` for CLI enhancement options and full pipeline
+├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
 ├── html/       15 files (+ editorial-card; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, threejs-archviz, threejs-floorplan)
-└── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
+├── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
+├── obsidian-canvas/ 3 files (mindmap, system-architecture, knowledge-graph — .canvas JSON)
+└── excalidraw/  1 file (mindmap.excalidraw.md)
 ```
 
 Prefer reading the specific template file under `templates/<mode>/` at use time instead of relying on this list.
@@ -466,7 +461,7 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 |---|---|
 | Editorial wrong palette | Host doc wins; else Editorial Parchment `#f5f4ed` + Terracotta `#c96442` — never mix with IKB |
 | Cover too dense | Family A: drop to judgment + promise + one evidence; move rest to Family B |
-| Card needs PNG export | Out of scope — hand off HTML to claude-design-card `screenshot.ts` or browser export |
+| Card needs PNG export | Built-in: press E→P for 4× raster PNG, E→S for SVG, E→C for clipboard. See §Export System. |
 | Mindmap fails | Use flowchart/subgraph |
 | Architecture-beta lexer error | Use flowchart TD + subgraph (preview-compatible) |
 | Gantt text overflow | Codes only + table + ASCII fallback |
@@ -521,9 +516,20 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 
 ---
 
-## 15. RESOURCES
+## 致谢
 
-### Core
+本项目参考了以下开源项目：
+
+| 项目 | 作者 | 借鉴内容 |
+|---|---|---|
+| [next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) | DayuanJiang | 自愈循环机制 |
+| [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Agents365-ai | 样式预设系统 |
+| [termaid](https://github.com/fasouto/termaid) | fasouto | 终端Mermaid渲染 |
+
+---
+
+## 16. RESOURCES
+
 - [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) — Official
 - [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) — 10.3k stars
 - [mermaid-rs-renderer](https://github.com/1jehuang/mermaid-rs-renderer) — Fast Rust
@@ -531,78 +537,11 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 - [anydesign](https://github.com/archsueh/anydesign) — Design analysis
 - [claude-design-card](https://github.com/geekjourneyx/claude-design-card) — Editorial Parchment language (distilled in `references/editorial-parchment-language.md`)
 
-### Reference Sources
-- [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) — editable draw.io handoff, refinement loops, codebase-to-diagram patterns.
-- [plait-board/drawnix](https://github.com/plait-board/drawnix) — whiteboard data model, mind map / flowchart / freehand hybrid patterns.
-- [markdown-viewer/skills](https://github.com/markdown-viewer/skills) — agent skill composition and Markdown-first visualization packaging.
-- [fasouto/termaid](https://github.com/fasouto/termaid) — terminal Unicode rendering policy and termaid-first fallback.
-- [DayuanJiang/next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) — AI-assisted draw.io editing flow.
-- darwin-skill — release self-check and scoring protocol.
-- skills-curation — bloat / overlap audit before publishing.
-
-### ASCII CLI Tools (optional enhancement only)
-- [common-nighthawk/go-figure](https://github.com/common-nighthawk/go-figure) — Text-to-beautiful ASCII with figlet font support (Go binary).
-- [xero/figlet-fonts](https://github.com/xero/figlet-fonts) + classic figlet — Huge font collection for high-quality banners.
-- [TheZoraiz/ascii-image-converter](https://github.com/TheZoraiz/ascii-image-converter) — Image / GIF → ASCII (excellent quality, many options).
-- [pigeonposse/ascii-kit](https://github.com/pigeonposse/ascii-kit) — Modern modular ASCII toolkit (fonts + images).
-
-**Rule**: These are for presentation/decorative use only. Plain ASCII fallback (`templates/ascii/`) + termaid always take precedence for survivability. See `references/ascii-cli-alternatives.md` and `references/ascii-workflow.md`.
-
-### Skill Publishing & Release References (pure reference, no runtime dependency)
-- [joeseesun/qiaomu-skill-publisher](https://github.com/joeseesun/qiaomu-skill-publisher) — One-command / natural-language publisher for Claude Code skills. Auto frontmatter validation (name + description), file completion, GitHub repo creation (via gh CLI), push, and install verification. Good ideas for automation of the release checklist. **Claude Code specific** — use only for reference/ideas, do not add as dependency. Port useful validation logic into archviz's own pure-CLI packaging flow.
-
-### Content Processing & Learning Workflow References (pure reference)
-- [joeseesun/qiaomu-english-learn](https://github.com/joeseesun/qiaomu-english-learn) — Fork/customize of Read Frog browser extension + Claude Code vibe coding. During web reading (immersive translation), auto-extract vocab/concepts → structured flashcards with spaced repetition (Ebbinghaus curve). Pattern: content consumption → key item extraction → reviewable artifacts. Reference for building "reading → viz extraction → learning loop" in agent workflows. Adapt to CLI/agent-native: use reading proxies → archviz to generate concept diagrams/mindmaps/flowcharts as learning outputs (Mermaid/ASCII/HTML cards), export to Anki/Obsidian/Canvas. Combine with NotebookLM-style processing for deeper synthesis.
-
-### Icon Generation References (pure reference)
-- [Viktoo/SVG.chat](https://github.com/Viktoo/SVG.chat) — AI-powered (Claude) text-to-clean-SVG icon generator. Browser tool but source open; outputs editable SVG perfect for inline in archviz HTML templates or diagrams. Reference for custom icon creation fitting restrained design (use with DESIGN.md tokens, no gradients/bloat).
-- [glincker/thesvg](https://github.com/glincker/thesvg) — 6100+ brand/architecture SVG icons library with npm, CLI, CDN, and **MCP server** for direct agent use (Claude/Cursor/Windsurf: "get GitHub icon" returns real SVG). Highly compatible with archviz (embed in editorial cards, flowcharts, Three.js assets, icon-system templates). Tree-shakeable, versioned.
-- [yauheniya-ai/icon-gen-ai](https://github.com/yauheniya-ai/icon-gen-ai) — CLI + Python API for AI icon gen from Iconify/URLs/files, exports SVG/PNG/etc with animation. Pure CLI path for batch icon generation in archviz workflows (e.g., generate node icons for architecture diagrams).
-
-### Color Palette References (pure reference)
-- [BlakeRMills/MetBrewer](https://github.com/BlakeRMills/MetBrewer) — 1.3k+ stars. "Monet" palette (impressionist, artistic, restrained — soft greens #4E6D58, pinks #E3CACF, blues #41507B). Constrain to 4-token system (surface #ABCCBE, text #41507B, border #749E89, accent #E3CACF). Use as "Monet palette variant" in prompts/templates. See references/monet-palette.md.
-- [EmilHvitfeldt/r-color-palettes](https://github.com/EmilHvitfeldt/r-color-palettes) (1.7k+ stars) + karthik/wesanderson — "Wes Anderson" film palettes (strong design sense: iconic, deliberate, warm organic restraint). Moonrise Kingdom exemplar: warm peach #d6929c, sage #9eae4c, terracotta orange #f4a731, beige #d8b87c. Constrain to tokens (surface #d8b87c, text #1B365D, border #9eae4c, accent #f4a731). Fits huashu 60-30-10 + Warm Trust terracotta/sage + archviz one-accent editorial. Use as "Wes Anderson palette variant (Moonrise Kingdom)" like "Monet palette". See references/wesanderson-palette.md.
-- [Gogh-Co/Gogh](https://github.com/Gogh-Co/Gogh) — 10.2k+ stars. 200+ terminal schemes (CLI-friendly). Gruvbox warm earthy variant (terracotta #cc241d, sage #98971a, deep teal-blue #458588) aligns with terminal routing (termaid/ASCII) and huashu warm organic. Derive artistic/terminal variants only.
-
-Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md`
+Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md` · Research → research/
 
 ---
 
-## 16. RELEASE SELF-CHECK
-
-Use darwin-skill for release scoring and skills-curation for bloat / overlap audit. Keep process history in CHANGELOG; keep this section as the executable protocol.
-
-**Target**
-- Darwin score: >= 96 before release.
-- Curation result: no toolkit bloat, no duplicated rendering path, no reference-only dependency promoted to runtime dependency.
-- Edited files: list exact paths in CHANGELOG, but do not paste full scoring narratives into SKILL.md.
-
-**Version bump checklist**
-| Step | Action | Evidence |
-|------|--------|----------|
-| 1 | Evaluate current SKILL.md with darwin-skill | Score + top 2-3 recommendations |
-| 2 | Apply only high-value recommendations | Existing files enhanced; no new bloat |
-| 3 | Run skills-curation audit | Bloat / overlap result recorded |
-| 4 | Update version metadata | SKILL.md frontmatter + README badge |
-| 5 | Update CHANGELOG | Surgical summary only |
-| 6 | Verify publish helper if changed | `python3 /Users/mac/Developer/archviz-skills/scripts/publish-skill.py --help` |
-
-**Common release failures**
-| Failure | Symptom | Fix / Gate |
-|---------|---------|------------|
-| Mermaid render fail | Blank preview or parser error | Simplify diagram; re-check G5 |
-| Token overflow | Diagram exceeds agent context | Split output; use scene-contract |
-| Contrast fail | Labels unreadable | Enforce G2 luminance before ship |
-| 3D CDN failure | Canvas blank | Use verified dependency paths; test HTML locally |
-| CJK font mismatch | Garbled labels | Use CJK-safe fonts or terminal fallback |
-| Missing caption | Diagram lacks interpretation | Enforce G6 before embed |
-
-**Agy example**
-```bash
-agy -p "use darwin and curation on /Users/mac/Developer/archviz-skills before release; context: restrained viz, absolute paths, no bloat"
-```
-
-## 17. 3D GOTCHAS (踩坑记录)
+## 16. 3D GOTCHAS (踩坑记录)
 
 Three.js + animejs v4 实战中遇到的坑，按出现顺序记录。
 

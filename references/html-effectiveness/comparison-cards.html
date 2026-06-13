@@ -1,0 +1,79 @@
+<!-- archviz-skills html-effectiveness sample | 2026-06-13 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comparison Cards</title>
+<style>
+:root {
+  --av-surface: #ffffff; --av-bg: #f5f5f7; --av-border: #e0e0e4;
+  --av-text-primary: #1d1d1f; --av-text-secondary: #6e6e73;
+  --av-accent: #0071e3; --av-accent-subtle: #e8f2fd;
+  --av-success: #34c759; --av-warning: #ff9f0a;
+  --av-radius: 12px; --av-shadow: 0 1px 3px rgba(0,0,0,.08);
+  --av-font: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+}
+.dark {
+  --av-surface: #1c1c1e; --av-bg: #000000; --av-border: #38383a;
+  --av-text-primary: #f5f5f7; --av-text-secondary: #98989d;
+  --av-accent: #0a84ff; --av-accent-subtle: #0a84ff18;
+  --av-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+* { margin: 0; box-sizing: border-box; }
+body { font-family: var(--av-font); background: var(--av-bg); color: var(--av-text-primary);
+  padding: 2rem; line-height: 1.5; transition: background .3s, color .3s; display: flex;
+  flex-direction: column; align-items: center; min-height: 100vh; }
+.toggle { position: fixed; top: 1rem; right: 1rem; background: var(--av-surface);
+  border: 1px solid var(--av-border); border-radius: 8px; padding: .4rem .8rem;
+  cursor: pointer; font-size: .85rem; color: var(--av-text-secondary); }
+.toggle:hover { color: var(--av-accent); }
+h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: .3rem; }
+.subtitle { color: var(--av-text-secondary); font-size: .85rem; margin-bottom: 2rem; }
+.row { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 680px; }
+.col { flex: 1; min-width: 260px; background: var(--av-surface); border: 1px solid var(--av-border);
+  border-radius: var(--av-radius); padding: 1.5rem; box-shadow: var(--av-shadow); position: relative; }
+.col.recommended { border-color: var(--av-accent); border-width: 2px; }
+.badge { display: inline-block; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em;
+  background: var(--av-accent); color: #fff; padding: .2rem .55rem; border-radius: 4px;
+  position: absolute; top: -0.6rem; right: 1rem; font-weight: 600; }
+.col-title { font-size: 1.1rem; font-weight: 600; margin-bottom: .8rem; }
+.price { font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem; }
+.price span { font-size: .8rem; font-weight: 400; color: var(--av-text-secondary); }
+ul { list-style: none; padding: 0; }
+li { padding: .35rem 0; font-size: .85rem; color: var(--av-text-secondary); display: flex; align-items: center; gap: .4rem; }
+li::before { content: '✓'; color: var(--av-success); font-weight: 700; }
+.cta { display: block; width: 100%; margin-top: 1.2rem; padding: .6rem; border-radius: 8px;
+  border: 1px solid var(--av-border); background: var(--av-surface);
+  font-family: var(--av-font); font-size: .85rem; cursor: pointer; color: var(--av-text-primary);
+  text-align: center; transition: border-color .2s; }
+.cta:hover { border-color: var(--av-accent); color: var(--av-accent); }
+.cta.primary { background: var(--av-accent); color: #fff; border-color: var(--av-accent); }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.documentElement.classList.toggle('dark');document.body.classList.toggle('dark')">◐ Theme</button>
+<h1>Choose Your Plan</h1>
+<p class="subtitle">Annual billing · Cancel anytime</p>
+<div class="row">
+  <div class="col">
+    <div class="col-title">Starter</div>
+    <div class="price">$12 <span>/mo</span></div>
+    <ul>
+      <li>5 projects</li><li>1 GB storage</li><li>Email support</li><li>Basic analytics</li>
+    </ul>
+    <button class="cta">Get Starter</button>
+  </div>
+  <div class="col recommended">
+    <span class="badge">Recommended</span>
+    <div class="col-title">Pro</div>
+    <div class="price">$29 <span>/mo</span></div>
+    <ul>
+      <li>Unlimited projects</li><li>50 GB storage</li><li>Priority support</li><li>Advanced analytics</li><li>API access</li>
+    </ul>
+    <button class="cta primary">Get Pro</button>
+  </div>
+</div>
+<script>if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.classList.add('dark');document.body.classList.add('dark');}</script>
+</body>
+</html>

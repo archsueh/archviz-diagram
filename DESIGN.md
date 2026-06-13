@@ -81,31 +81,6 @@ Every generated diagram should be understandable as a compact design system, not
 
 **Token gate**: Any palette with surface luminance ≥128 must use dark text. All five system surfaces are light → they always take dark text. **Never pair warm light surfaces with near-white text.** Mist White as text is legal only on accent fills (IKB) or genuinely dark fills.
 
-### Dark Mode Palettes
-
-Mirror every light palette with a dark counterpart. Same accent, inverted surface/text.
-
-| System | surface | text | border | accent | Use |
-|---|---|---|---|---|---|
-| **Warm Paper Dark** | `#1a1814` | `#e8e4e0` | `#44403c` | — | Default dark |
-| **Swiss Neutral Dark** | `#0a0a0a` | `#d6d3d1` | `#333333` | — | Clean dark |
-| **IKB Accent Dark** | `#0d1117` | `#c9d1d9` | `#30363d` | `#58a6ff` | guizang dark |
-| **Lemon Accent Dark** | `#0d1117` | `#c9d1d9` | `#30363d` | `#e3b341` | Tech dark |
-| **Stone Mono Dark** | `#1c1917` | `#d6d3d1` | `#44403c` | — | Austerity dark |
-
-**Dark mode rules:**
-- Same accent hue, lighter tint (IKB `#002FA7` → `#58a6ff`; Lemon `#FFD500` → `#e3b341`)
-- Surface: near-black with warm undertone (never pure `#000000`)
-- Text: light gray (never pure `#ffffff`)
-- Border: 1-2 stops lighter than surface
-- Diagram init: swap `primaryColor`/`primaryTextColor`/`primaryBorderColor` to dark values
-- Auto-detect: use CSS `prefers-color-scheme: dark` for HTML templates; manual toggle for Mermaid
-
-**Mermaid dark init:**
-```
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1a1814', 'primaryTextColor': '#e8e4e0', 'primaryBorderColor': '#44403c', 'lineColor': '#58a6ff', 'tertiaryColor': '#2a2520', 'fontSize': '13px'}}}%%
-```
-
 **Rules:** Max 1 accent family — vary lightness, never hue. No AI-purple. Same document = same palette. Gradient-free: emphasis comes from the single accent, border weight, and whitespace.
 
 ---
@@ -265,22 +240,6 @@ Degradation strategy (when data is too complex): >50 nodes → split into 2–3 
 - Border / lines: "Stone Gray (#a8a29e)"
 - Accent (one max): "International Klein Blue (#002FA7)" — pair with "Mist White (#f5f5f4)" text on solid fills
 - Tertiary fill: "Pebble (#d6d3d1)"
-
-**Monet variant** (constrained from BlakeRMills/MetBrewer, 1.3k+ stars; impressionist, artistic, fits editorial/restrained – soft museum tones from Monet's "Bridge over a Pond of Water Lilies"):
-- surface: #ABCCBE (soft mint)
-- text: #41507B (deep navy)
-- border: #749E89 (sage)
-- accent: #E3CACF (soft rose)
-- tertiary: #C2CAE3 (light periwinkle)
-Use only for specific artistic/educational briefs; always check luminance contrast. Cite as "Monet palette (MetBrewer)". See references/monet-palette.md.
-
-**Wes Anderson variant** (constrained from EmilHvitfeldt/r-color-palettes 1.7k+ stars + karthik/wesanderson; Moonrise Kingdom 2012. Strong design sense — iconic, deliberate, filmic restraint with warm organic identity. Directly echoes huashu-design 60-30-10 + Warm Trust terracotta/sage):
-- surface: #d8b87c (warm beige)
-- text: #1B365D (deep navy / Ink Navy)
-- border: #9eae4c (sage green)
-- accent: #f4a731 (warm terracotta orange — the single 10%)
-- tertiary: #d6929c (soft peach-rose, muted use only)
-Use only for warm-organic / editorial / artistic briefs (huashu Warm Trust echo). Always check luminance contrast. Cite as "Wes Anderson palette variant (Moonrise Kingdom)". See references/wesanderson-palette.md.
 
 ### Ready-to-use prompts
 - "Create a flowchart TD with subgraphs: Warm Paper (#f5f0eb) nodes, Ink Navy (#1B365D) text, Stone Gray (#a8a29e) 1px borders, using the Mermaid init from DESIGN.md §4. Mark the core node with a 2px International Klein Blue (#002FA7) border — it is the only accent. Labels ≤8 Chinese chars, dials 4/3/8."
