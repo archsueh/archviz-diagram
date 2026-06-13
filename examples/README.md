@@ -15,6 +15,7 @@ Each example demonstrates a different output mode and diagram type.
 | `python-demo.py` | Python (Plotly) | Scatter + Line | Deliverables / export |
 | `git-push-release-workflow.mmd` | Mermaid (Wes Anderson variant) | Release pipeline + highlighted git push | Skill publishing / git push teaching & checklist |
 | `git-push-release-workflow.html` | Self-contained HTML (Wes Anderson palette) | **图文并茂可视化**（推荐直接打开截图用） | 发布流程演示 + 好截图素材 |
+| `us-flows.html` | Self-contained HTML (restrained Swiss / archviz tokens) | **Combined Energy Sankey (LLNL exact) + Migration geo-flow map** (interactive perimeter-attach curves, panel, corridors) | Canonical for custom flow attachment + multi-viz consolidation in one Swiss page. Open directly for demo / export. |
 
 ## Quick test
 
@@ -29,3 +30,4 @@ Each example demonstrates a different output mode and diagram type.
 **图文并茂 tip**: 
 - 打开 `git-push-release-workflow.html` （自包含，使用 Wes Anderson 调色）直接浏览器全屏截图（推荐！已内置截图提示）。
 - 或 `git-push-release-workflow.mmd` 在 Obsidian/GitHub 渲染查看。
+- 打开 `us-flows.html`：单一文件内同时呈现精确 LLNL Sankey（paths-first attach）+ Census migration 地图（perimeter curves + highlight）。展示 archviz 复杂 flow 收敛能力 + restrained Swiss 风格。

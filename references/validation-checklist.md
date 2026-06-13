@@ -10,6 +10,7 @@
 - [ ] For Gantt: explicit time data, categories, milestones.
   - **Hard**: inside gantt block only ultra-short codes (V1.1 etc.); full names in immediate table below; ASCII fallback included.
 - [ ] For Sankey: weighted flows, semantic edge labels.
+- [ ] For custom flow (Sankey/map): edges/paths drawn before nodes; verified exact edge or perimeter attachment (no visual gaps/"断掉"). Test with reference image overlay if replicating (LLNL etc.).
 - [ ] "Why" and design intervention visible.
 - [ ] Matches existing document style/palette.
 - [ ] If recurring concept: plan variation per DESIGN.md.

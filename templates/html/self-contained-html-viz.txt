@@ -52,6 +52,9 @@
 %% Notes:
 %% - Self-contained: One file, works in OB (if HTML plugin) or browser.
 %% - Restrained: Warm paper bg, single accent, geometry focus, no junk.
+%% - Constitution (root truth): /Users/mac/Developer/archviz/constitution.md (restraint dials, exact attachment, single-artifact convergence, gotchas mandatory, pure HTML for custom flows).
+%% - Custom flow attachment (Sankey rects + geo circles): use templates/html/_flow-attach.html (perimeter/edge math, paths-first z-order, offsetCurve). Extracted from us-flows.html session.
+%% - Combined multi-viz pages: supported for demonstration (one Swiss container + 2 related vizs, shared tokens/credits, section titles). See examples/us-flows.html (Energy Sankey exact LLNL + Migration map). Never >2 unless deliberate.
 %% - For Python deliverables: Agent can later generate equivalent Plotly code that outputs similar interactive HTML.
 %% - Icons: Embed as Unicode or small SVG in labels if needed.
-%% - Pre-check: Env=Obsidian → this mode. Use report taxonomy for type.
+%% - Pre-check: Env=Obsidian → this mode. Use report taxonomy for type. Always load gotchas.md + constitution before custom flow work.

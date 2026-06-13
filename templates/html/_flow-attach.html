@@ -1,0 +1,132 @@
+<!-- 
+_flow-attach.html — Reusable attachment patterns for custom flow diagrams (Sankey rects + geo circle maps)
+Extracted & documented from 2026-06 real session (us-flows.html + LLNL exact replication + Census migration map)
+
+Core Contract (now in constitution.md Principle III + gotchas):
+- ALWAYS draw <path> flows/edges FIRST in SVG, then <rect>/<circle> nodes on top (z-order covers endpoints cleanly).
+- Compute attach at literal geometry edge/perimeter.
+- Use bezier Q with controlled perpendicular offset for clean non-overlapping curves.
+- Tune to reference image (no invention).
+- Failure = visually "断掉" nodes. Replicate structure 1:1.
+
+Usage:
+- Include via copy-paste or foreignObject in self-contained HTML (or import as module in larger builds).
+- For rect/Sankey: attachRectEdgeRight / attachRectEdgeLeft
+- For circles/map: attachCirclePerimeter
+- For curves: offsetCurve (perpendicular mid offset)
+- Combined pages (Sankey + map in one Swiss container): use shared tokens, call these in the respective <svg> sections.
+
+See: examples/us-flows.html (the canonical combined artifact), references/gotchas.md (2026-06 session section), DESIGN.md tokens.
+-->
+
+<script type="text/template" id="flow-attach-patterns">
+/**
+ * Flow Attachment Utilities (pure, no deps)
+ * For Sankey (rect nodes) and Geo Flow Maps (circle nodes)
+ */
+
+/**
+ * Attach from right edge of a source rect (Sankey left column)
+ * @param {number} x - rect left
+ * @param {number} y - rect top
+ * @param {number} w - rect width
+ * @param {number} h - rect height (for center calc)
+ * @param {number} tx - target x (e.g. center box left)
+ * @param {number} ty - target y
+ * @returns {{startX: number, startY: number, endX: number, endY: number}}
+ */
+function attachRectEdgeRight(x, y, w, h, tx, ty) {
+  const startX = x + w;           // exact right edge
+  const startY = y + h / 2;       // vertical center
+  // For end, caller typically uses left edge of target rect
+  return { startX, startY, endX: tx, endY: ty };
+}
+
+/**
+ * Attach to left edge of a target rect (Sankey right columns)
+ */
+function attachRectEdgeLeft(x, y, w, h, sx, sy) {
+  const endX = x;                 // exact left edge
+  const endY = y + h / 2;
+  return { startX: sx, startY: sy, endX, endY };
+}
+
+/**
+ * Attach from perimeter of a source circle (geo map)
+ * @param {number} cx, cy, r - circle
+ * @param {number} tx, ty - target center
+ */
+function attachCirclePerimeter(cx, cy, r, tx, ty) {
+  const dx = tx - cx;
+  const dy = ty - cy;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const startX = cx + r * ux;
+  const startY = cy + r * uy;
+  // Caller subtracts target radius for end
+  return { startX, startY };
+}
+
+/**
+ * Perimeter attach for target circle (subtract radius)
+ */
+function attachCirclePerimeterEnd(cx, cy, r, sx, sy) {
+  const dx = sx - cx;
+  const dy = sy - cy;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const endX = cx + r * ux;
+  const endY = cy + r * uy;
+  return { endX, endY };
+}
+
+/**
+ * Controlled quadratic curve with perpendicular offset (avoids overlap, Swiss clean)
+ * Use after computing start/end attach points.
+ * @param {number} sx,sy,ex,ey
+ * @param {number} offset - perpendicular distance (positive/negative for side)
+ */
+function offsetCurve(sx, sy, ex, ey, offset = 18) {
+  const mx = (sx + ex) / 2;
+  const my = (sy + ey) / 2;
+  const dx = ex - sx;
+  const dy = ey - sy;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const nx = -dy / len;  // perpendicular
+  const ny = dx / len;
+  const cx = mx + nx * offset;
+  const cy = my + ny * offset;
+  return `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
+}
+
+// Example usage (Sankey style, from us-flows.html energy section):
+// const s = attachRectEdgeRight(20, 390, 108, 130, 355, 388);
+// const pathD = offsetCurve(s.startX, s.startY, 355, 388, 20); // adjust offset per visual
+
+// Example usage (map style):
+// const from = statesData.CA; const to = statesData.TX;
+// const rFrom = 7 + Math.abs(from.net) / 140;
+// const start = attachCirclePerimeter(from.x, from.y, rFrom, to.x, to.y);
+// const rTo = ...;
+// const end = attachCirclePerimeterEnd(to.x, to.y, rTo, start.startX, start.startY); // reuse
+// const d = offsetCurve(start.startX, start.startY, end.endX, end.endY, 18);
+// <path d={d} ... />
+</script>
+
+<!-- 
+For full combined page skeleton (Sankey section + Map section in one Swiss container):
+See examples/us-flows.html for production usage.
+Copy the <style> section for .section-title, .viz-area, shared .legend/.footer.
+
+Recommended pattern for new combined work:
+1. One .container (Warm Paper, hairline border)
+2. Header with title + credit
+3. <div class="section-title">Energy...</div> + diagram
+4. <div class="section-title">Migration...</div> + viz-area (flex map + panel)
+5. Shared footer with all sources + "combined single version" note
+6. Call attach utilities in each <svg>'s script
+
+Update gotchas.md + this file when the attach math or combined framing evolves.
+-->

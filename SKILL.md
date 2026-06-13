@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
 license: MIT
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh
@@ -117,7 +117,7 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 | Timeline | gantt | `mermaid/gantt.mmd` |
 | Distribution | histogram/box | `mermaid/distribution.mmd` |
 | Correlation | scatter/heatmap | `python/scatter-plot.py` |
-| Flow/network | sankey | `mermaid/sankey.mmd` |
+| Flow/network | sankey (or pure SVG/JS) | `mermaid/sankey.mmd` or examples/us-flows.html | Custom Sankey + geo flow with exact edge/perimeter attach (paths/circles first, bezier + offset). Use pure HTML for attachment-critical or Mermaid-incompatible cases. See gotchas for LLNL replication + map lessons. |
 | Funnel/conversion | funnel chart | `html/funnel.html` |
 | Decision/evaluation | decision matrix (table) | `mermaid/decision-matrix.mmd` |
 | State transitions | stateDiagram-v2 | `mermaid/state-machine.mmd` |
@@ -135,6 +135,7 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 - Flow + metrics → sankey with tooltip/badge annotations
 - Decision + scoring → decision matrix → radar for top candidates
 - **Rule: never combine >2 types in one diagram. Split instead.**
+- Exception for demonstration: deliberate "combined page" (one Swiss container HTML with 2 related high-fidelity vizs, e.g. Sankey + geo-flow map, shared tokens/credits) is allowed and valuable when user wants breadth in single artifact (see examples/us-flows.html and gotchas "consolidation"). Still apply restraint: shared palette, minimal prose, clear section titles.
 
 **Degradation strategy** (when data is too complex):
 1. >50 nodes → split into 2-3 linked diagrams with shared legend
@@ -473,6 +474,8 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | Canvas blank (Three.js) | Check console for CDN 404 / import errors |
 | animejs not animating | v4 API: `animate(target, props)` not `anime({targets})` |
 | Render loop stops | Don't name loop function `animate` (conflicts with animejs import) |
+| Custom flow nodes "断掉" / bad attach | Paths drawn after nodes or wrong endpoint math | Draw all flow <path> first, then <rect>/<circle> on top. Compute attach = center ± (half-size or r) * unit vector from angle. See examples/us-flows.html + gotchas. |
+| Multiple viz files for same data | User eventually demands "combine into one + clean the rest" | Converge early to single canonical Swiss HTML (shared tokens, one container). Pure attachment + restrained color from energy iteration. |
 
 ---
 

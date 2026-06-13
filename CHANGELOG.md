@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.0 (2026-06-14)
+
+### Added
+- `constitution.md`: Project-level governance document codifying 6 core principles (Restraint as Dial, Text-First Survivability, Exact Fidelity, Color Restraint, Single Artifact Convergence, Gotchas as Living SSOT)
+- `templates/html/_flow-attach.html`: Reusable flow attachment utilities (attachRectEdgeRight/Left, attachCirclePerimeter, offsetCurve) extracted from real session
+- `examples/us-flows.html`: Combined Energy Sankey + Migration Map in single Swiss container (387 lines)
+- `examples/us-population-migration-2024.html`: Real GeoJSON choropleth with Census 2024 data + migration flow bands
+- `references/webgl-info-arch.md`: WebGL info visualization architecture reference
+- `templates/html/webgl-info-viz.html`: WebGL info visualization template
+- `templates/mermaid/sankey-us-energy-2023.mmd`: LLNL energy Sankey Mermaid template
+- `references/icons-patterns.md`: Icon usage patterns reference
+
+### Changed
+- SKILL.md: Added flow/network routing to pure HTML for attachment-critical cases; added "combined page" exception for deliberate multi-viz demos; added 2 new gotchas entries
+- references/gotchas.md: +6 entries from 2026-06 session (flow attachment math, color iteration loop, convergence pattern, Mermaid incompatibility, combined pages, workspace hygiene)
+- references/validation-checklist.md: Added custom flow validation (edges before nodes, exact perimeter attachment)
+- templates/html/self-contained-html-viz.txt: Added constitution + flow-attach references
+
+### Removed
+- docs/screenshots/3d/ (6 PNG files) — moved to archviz-3d
+- examples/us-migration-2010-2020-map.html — merged into us-flows.html
+- examples/us-energy-2023-sankey.html — merged into us-flows.html
+
 ## Session log (2026-06-13, before sleep)
 
 - Verified full local tree + last-commit messages against the GitHub file list pasted by user (docs/screenshots with git-push PNG + 3d/, examples/ with git-push html/mmd, references/, scripts/, templates/, .gitignore, CHANGELOG, CONTRIBUTING, DESIGN, LICENSE, README, SKILL, preview.html, requirements.txt). All files present and messages align (recent "Update README.md", "docs: add PNG screenshot...", "release: v0.2.5", older v0.0.x on standard files). `git status` clean, no drift.

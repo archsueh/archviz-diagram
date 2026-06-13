@@ -7,7 +7,7 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 > **3D spatial visualization** has been split into [archviz-3d](https://github.com/archsueh/archviz-3d).
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.4.0-blue.svg)
 
 <img width="2298" height="3334" alt="screenshot-archviz-skills — Design System Preview" src="https://github.com/user-attachments/assets/f6369781-f056-41f0-be0f-658d38cadc37" />
 
