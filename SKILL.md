@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
 license: MIT
 metadata:
-  version: 0.0.6
+  version: 0.3.0
   source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh

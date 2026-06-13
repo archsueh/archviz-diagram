@@ -291,3 +291,28 @@ This release formalizes a major optimization pass after reviewing:
 - Warm paper palette + guizang Swiss integration
 - Template system (three-layer, warm-paper, 5d-scoring, 6duan-intro)
 - DESIGN.md plain-text design system
+
+## v0.3.0 (2026-06-13) — Phase 1-4 Upgrade
+
+### Added
+- Theme system: 4 palettes (Warm Paper, Swiss Neutral, Editorial Parchment, IKB Dark) with CSS variables, runtime toggle (T key), prefers-color-scheme auto-detect, localStorage persistence
+- Export system: 4× raster PNG/SVG/WebP, clipboard copy, keyboard shortcuts (E→P/S/W/C), export menu UI
+- Motion module: IntersectionObserver reveal, counterUp, drawSVGPath, staged reveal, reduced-motion support
+- html-effectiveness corpus: 6 high-quality self-contained HTML samples (dashboard, comparison, process flow, KPI ticker, mini report, animated bars)
+- animation-vocabulary.md: 10 semantic motion names, RESTRAINT dial mapping, anti-patterns
+- export-patterns.md: 4× raster pipeline, dual-theme SVG, GitHub sanitizer, cross-platform test matrix
+
+### Changed
+- 16 HTML templates upgraded with theme + export modules integrated
+- All canvas charts react to theme changes (archviz-theme-changed event)
+- SKILL.md: 3D content split to archviz-3d, added skill boundary routing
+- validation-checklist.md: 12 new export/theme check items
+- preview.html: theme toggle integrated
+
+### Removed
+- 3D templates (threejs-archviz, threejs-floorplan, _archviz-deps) → moved to archviz-3d
+- 3D examples (teaching-building-3d, hair-dryer-exploded) → moved to archviz-3d
+
+### Repository
+- Renamed from archviz-skills to archviz
+- GitHub: https://github.com/archsueh/archviz
