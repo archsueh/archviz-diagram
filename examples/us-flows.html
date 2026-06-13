@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U.S. Energy & Migration Flows | archviz</title>
+<style>
+  :root {
+    --surface: #f5f0eb;
+    --text: #1B365D;
+    --border: #a8a29e;
+    --accent: #002FA7;
+    --gain: #134e2a;
+    --loss: #6f1a1a;
+  }
+  body { background: var(--surface); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; margin: 0; padding: 20px 16px; }
+  .container { max-width: 1160px; margin: 0 auto; background: #fff; border: 1px solid #d6d3d1; border-radius: 4px; padding: 16px 18px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.035); }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #e5e2dd; padding-bottom: 6px; }
+  .header h1 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: -0.025em; color: #1B365D; }
+  .header .credit { font-size: 10px; color: #78716c; text-align: right; letter-spacing: -0.01em; }
+  .section-title { font-size: 13px; font-weight: 600; margin: 16px 0 6px; letter-spacing: -0.02em; color: #1B365D; border-bottom: 1px solid #e5e2dd; padding-bottom: 3px; }
+  .diagram { width: 100%; max-width: 1120px; margin: 6px auto 4px; }
+  svg { width: 100%; height: auto; display: block; background: white; }
+  .flow { fill: none; }
+  .flow-label { font-size: 7.5px; fill: #57534e; font-family: ui-monospace, monospace; letter-spacing: -0.01em; }
+  .source-label { font-size: 9.5px; font-weight: 600; fill: #1B365D; }
+  .footer { font-size: 9px; color: #78716c; margin-top: 14px; line-height: 1.35; border-top: 1px solid #e5e2dd; padding-top: 6px; }
+  .footer a { color: #002FA7; }
+  .legend { font-size: 9.5px; color: #57534e; margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend span { display: flex; align-items: center; gap: 3px; }
+  .legend .swatch { width: 11px; height: 7px; border-radius: 1px; border: 0.5px solid #d6d3d1; }
+
+  /* Migration map additions (merged from attempts, Swiss minimal alignment) */
+  .viz-area { display: flex; gap: 18px; align-items: flex-start; }
+  .map-container { flex: 1; min-width: 0; }
+  .info-panel { width: 230px; flex-shrink: 0; background: #f5f0eb; border: 1px solid #d6d3d1; border-radius: 3px; padding: 11px; font-size: 12px; }
+  .info-panel h3 { font-size: 12px; margin: 0 0 6px; font-weight: 600; }
+  .info-panel p, .info-panel li { margin: 2px 0; color: #57534e; font-size: 11px; }
+  .corridors { margin-top: 10px; font-size: 11px; color: #57534e; }
+  .corridors ul { margin: 3px 0 0; padding-left: 14px; }
+  .state-circle { cursor: pointer; }
+  .state-label { font-size: 8px; fill: #1B365D; pointer-events: none; }
+  .migration-flow { fill: none; stroke-linecap: round; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>U.S. Energy Consumption &amp; Domestic Migration Flows</h1>
+    <div class="credit">archviz · Swiss minimal (combined single version)</div>
+  </div>
+
+  <!-- ENERGY SANKET (exact latest polished structure, attachment, restrained palette) -->
+  <div class="section-title">Energy Consumption Sankey — 93.6 Quads (2023, LLNL)</div>
+  <div class="diagram">
+    <svg id="energy-sankey" width="1120" height="620" viewBox="0 0 1120 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="bg" width="12" height="12" patternUnits="userSpaceOnUse">
+          <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#e8e3d9" stroke-width="0.35"/>
+        </pattern>
+      </defs>
+      <rect width="1120" height="620" fill="url(#bg)"/>
+
+      <!-- Flows first (paths attach to box edges; rects on top for clean landings, LLNL 1:1 structure) -->
+      <path d="M 128 455 Q 265 418 355 388 Q 555 362 775 342" fill="none" stroke="#134e2a" stroke-width="38" opacity="0.86"/>
+      <path d="M 128 320 Q 255 255 355 183" fill="none" stroke="#0c617a" stroke-width="26" opacity="0.86"/>
+      <path d="M 128 80 Q 272 128 355 155" fill="none" stroke="#6f1a1a" stroke-width="6.5" opacity="0.82"/>
+      <path d="M 128 40 Q 282 92 355 138" fill="none" stroke="#8a6b1f" stroke-width="2.8" opacity="0.76"/>
+      <path d="M 128 117 Q 292 138 355 151" fill="none" stroke="#1e3a8a" stroke-width="2" opacity="0.76"/>
+      <path d="M 128 142 Q 302 148 355 158" fill="none" stroke="#4c1d95" stroke-width="1.8" opacity="0.74"/>
+      <path d="M 128 318 Q 282 258 355 188" fill="none" stroke="#2f3948" stroke-width="5.5" opacity="0.82"/>
+      <path d="M 128 365 Q 305 288 370 202" fill="none" stroke="#14532d" stroke-width="3.8" opacity="0.8"/>
+      <path d="M 515 155 Q 622 103 775 108" fill="none" stroke="#92400e" stroke-width="9.5" opacity="0.78"/>
+      <path d="M 515 175 Q 642 158 775 167" fill="none" stroke="#92400e" stroke-width="7.5" opacity="0.78"/>
+      <path d="M 515 200 Q 672 232 775 250" fill="none" stroke="#92400e" stroke-width="12" opacity="0.78"/>
+      <path d="M 515 220 Q 692 305 775 340" fill="none" stroke="#92400e" stroke-width="5.5" opacity="0.78"/>
+      <path d="M 920 130 Q 982 82 935 78" fill="none" stroke="#57534e" stroke-width="16" opacity="0.52"/>
+      <path d="M 920 285 Q 982 262 935 265" fill="none" stroke="#3f3a36" stroke-width="11" opacity="0.52"/>
+
+      <!-- Sources (left) -->
+      <rect x="20" y="28" width="108" height="24" rx="2" fill="#8a6b1f"/>
+      <text x="74" y="44" class="source-label" text-anchor="middle">Solar 0.89</text>
+      <rect x="20" y="58" width="108" height="44" rx="2" fill="#6f1a1a"/>
+      <text x="74" y="85" class="source-label" text-anchor="middle" fill="#f5f0eb">Nuclear 8.1</text>
+      <rect x="20" y="108" width="108" height="18" rx="2" fill="#1e3a8a"/>
+      <text x="74" y="121" class="source-label" text-anchor="middle" fill="#f5f0eb" font-size="9">Hydro 0.81</text>
+      <rect x="20" y="132" width="108" height="24" rx="2" fill="#4c1d95"/>
+      <text x="74" y="148" class="source-label" text-anchor="middle" fill="#f5f0eb" font-size="9">Wind 1.5</text>
+      <rect x="20" y="162" width="108" height="14" rx="2" fill="#6b4e31"/>
+      <text x="74" y="172" class="source-label" text-anchor="middle" fill="#f5f0eb" font-size="8">Geothermal 0.12</text>
+      <rect x="20" y="188" width="108" height="100" rx="2" fill="#0c617a"/>
+      <text x="74" y="240" class="source-label" text-anchor="middle" fill="#f5f0eb">Natural Gas 33.4</text>
+      <rect x="20" y="298" width="108" height="40" rx="2" fill="#2f3948"/>
+      <text x="74" y="322" class="source-label" text-anchor="middle" fill="#f5f0eb">Coal 8.17</text>
+      <rect x="20" y="348" width="108" height="32" rx="2" fill="#134e2a"/>
+      <text x="74" y="368" class="source-label" text-anchor="middle" fill="#f5f0eb">Biomass 5</text>
+      <rect x="20" y="390" width="108" height="130" rx="2" fill="#134e2a"/>
+      <text x="74" y="455" class="source-label" text-anchor="middle" fill="#f5f0eb">Petroleum 35.4</text>
+
+      <!-- Electricity center -->
+      <rect x="355" y="128" width="160" height="100" rx="4" fill="#92400e" stroke="#5c3311" stroke-width="1.5"/>
+      <text x="435" y="162" text-anchor="middle" fill="#f5f0eb" font-size="12" font-weight="700">Electricity</text>
+      <text x="435" y="178" text-anchor="middle" fill="#f5f0eb" font-size="12" font-weight="700">Generation</text>
+      <text x="435" y="200" text-anchor="middle" fill="#f5f0eb" font-size="15" font-weight="600">32</text>
+
+      <!-- Right end-use -->
+      <rect x="775" y="78" width="135" height="55" rx="3" fill="#5c1f2e"/>
+      <text x="842" y="102" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="600">Residential 11.3</text>
+      <rect x="775" y="142" width="135" height="50" rx="3" fill="#5c1f2e"/>
+      <text x="842" y="165" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="600">Commercial 9.3</text>
+      <rect x="775" y="202" width="135" height="85" rx="3" fill="#5c1f2e"/>
+      <text x="842" y="248" text-anchor="middle" fill="#f5f0eb" font-size="12" font-weight="600">Industrial 26.1</text>
+      <rect x="775" y="297" width="135" height="90" rx="3" fill="#5c1f2e"/>
+      <text x="842" y="340" text-anchor="middle" fill="#f5f0eb" font-size="12" font-weight="600">Transportation 28</text>
+
+      <!-- Rejected / Services -->
+      <rect x="935" y="48" width="115" height="175" rx="3" fill="#57534e"/>
+      <text x="992" y="98" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="700">Rejected</text>
+      <text x="992" y="115" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="700">Energy</text>
+      <text x="992" y="142" text-anchor="middle" fill="#f5f0eb" font-size="14" font-weight="600">61.5</text>
+      <rect x="935" y="235" width="115" height="100" rx="3" fill="#3f3a36"/>
+      <text x="992" y="268" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="700">Energy</text>
+      <text x="992" y="285" text-anchor="middle" fill="#f5f0eb" font-size="11" font-weight="700">Services</text>
+      <text x="992" y="310" text-anchor="middle" fill="#f5f0eb" font-size="14" font-weight="600">32.1</text>
+
+      <!-- Flow labels (clean single set) -->
+      <text x="195" y="435" class="flow-label">24.8</text>
+      <text x="192" y="302" class="flow-label">18.9</text>
+      <text x="288" y="158" class="flow-label">13.3</text>
+      <text x="472" y="98" class="flow-label">4.96</text>
+      <text x="502" y="232" class="flow-label">10.9</text>
+      <text x="372" y="133" class="flow-label">8.1</text>
+      <text x="436" y="128" class="flow-label">7.24</text>
+      <text x="378" y="93" class="flow-label">0.56</text>
+      <text x="446" y="118" class="flow-label">0.24</text>
+      <text x="310" y="162" class="flow-label">13.3</text>
+      <text x="478" y="116" class="flow-label">4.96</text>
+      <text x="508" y="242" class="flow-label">10.9</text>
+      <text x="376" y="138" class="flow-label">8.1</text>
+      <text x="446" y="133" class="flow-label">7.24</text>
+      <text x="376" y="93" class="flow-label">0.56</text>
+      <text x="446" y="118" class="flow-label">0.24</text>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <span><span class="swatch" style="background:#134e2a"></span> Petroleum 35.4</span>
+    <span><span class="swatch" style="background:#0c617a"></span> Natural Gas 33.4</span>
+    <span><span class="swatch" style="background:#6f1a1a"></span> Nuclear 8.1</span>
+    <span><span class="swatch" style="background:#92400e"></span> Electricity 32</span>
+    <span><span class="swatch" style="background:#5c1f2e"></span> End Use (Residential / Commercial / Industrial / Transportation)</span>
+    <span><span class="swatch" style="background:#57534e"></span> Rejected 61.5</span>
+    <span><span class="swatch" style="background:#3f3a36"></span> Services 32.1</span>
+  </div>
+
+  <!-- MIGRATION MAP (perimeter-attach curves + interactive from map attempt; style/colors unified to latest restrained Swiss from energy; data from Census attempts) -->
+  <div class="section-title">Domestic Migration Map — 2010–2020 (Census ACS / IRS, approx. 10-year)</div>
+  <div class="viz-area">
+    <div class="map-container">
+      <svg id="migration-map" width="720" height="450" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="legend">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="swatch" style="background:#134e2a;width:11px;height:11px;border-radius:2px;"></span><span>Net Gain (size = |net|)</span></div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="swatch" style="background:#6f1a1a;width:11px;height:11px;border-radius:2px;"></span><span>Net Loss</span></div>
+        <div style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:18px;height:2px;background:#002FA7;"></span><span>Flow volume (line width)</span></div>
+      </div>
+    </div>
+    <div class="info-panel" id="migration-info">
+      <h3>Select a state</h3>
+      <p>Click circle to see net migration and top corridors.</p>
+      <p style="font-size:10px;color:#78716c;">Circles positioned geographically. Lines attach to perimeter.</p>
+    </div>
+  </div>
+  <div class="corridors">
+    <strong>Major Corridors (top flows)</strong>
+    <ul id="corridor-list"></ul>
+  </div>
+
+  <div class="footer">
+    One combined self-contained artifact (replaces separate versions). 
+    Energy: LLNL October 2024 (DOE/EIA). Structure, node positions, flow attachment and S-curve merges replicated exactly from reference (no layout changes). 
+    Migration: U.S. Census Bureau ACS / IRS SOI (state-to-state flows, approx. 2011-2021 aggregates for 10-year view; numbers illustrative). 
+    Design system: Warm Paper #f5f0eb, Ink Navy #1B365D, deep restrained earth/slate/wine/amber (luminance-safe, max one semantic hue family per role), hairline rules, system sans, generous but precise whitespace. 
+    Swiss minimal webpage framing (effective-html + hyperagent-public-skills): clean header credit, focal vizs, minimal functional legend, tight footer. 
+    Subtle grid from Haikei/Hero Patterns (400-free). Clean line from unDraw/Lukasz Adam (400-free). 
+    Perimeter attach + z-order (flows first) for no broken nodes. Hover/click for restrained emphasis. Export via archviz templates.
+  </div>
+</div>
+
+<script>
+// Energy Sankey hover (scoped to its svg, restrained Swiss)
+(function() {
+  const sankey = document.getElementById('energy-sankey');
+  if (sankey) {
+    sankey.querySelectorAll('path').forEach(p => {
+      const origW = p.getAttribute('stroke-width');
+      p.addEventListener('mouseenter', () => {
+        p.setAttribute('opacity', '0.96');
+        p.setAttribute('stroke-width', (parseFloat(origW) * 1.08).toString());
+      });
+      p.addEventListener('mouseleave', () => {
+        p.setAttribute('opacity', '0.86');
+        p.setAttribute('stroke-width', origW);
+      });
+    });
+  }
+})();
+
+// Migration map data + draw (adapted, colors deepened to match energy iteration, perimeter attach preserved)
+const statesData = {
+  CA: { x: 70, y: 230, net: -1250, abbr: 'CA' },
+  WA: { x: 85, y: 75, net: 280, abbr: 'WA' },
+  AZ: { x: 145, y: 290, net: 410, abbr: 'AZ' },
+  CO: { x: 215, y: 195, net: 260, abbr: 'CO' },
+  TX: { x: 270, y: 340, net: 1050, abbr: 'TX' },
+  IL: { x: 340, y: 185, net: -420, abbr: 'IL' },
+  NC: { x: 495, y: 255, net: 520, abbr: 'NC' },
+  GA: { x: 475, y: 295, net: 340, abbr: 'GA' },
+  NY: { x: 555, y: 145, net: -850, abbr: 'NY' },
+  FL: { x: 535, y: 385, net: 1380, abbr: 'FL' }
+};
+
+const flowsData = [
+  { from: 'CA', to: 'TX', value: 240 },
+  { from: 'CA', to: 'AZ', value: 195 },
+  { from: 'NY', to: 'FL', value: 205 },
+  { from: 'IL', to: 'FL', value: 95 },
+  { from: 'NY', to: 'NC', value: 85 },
+  { from: 'CA', to: 'WA', value: 75 },
+  { from: 'IL', to: 'TX', value: 65 },
+  { from: 'CA', to: 'CO', value: 55 }
+];
+
+function drawMigrationMap() {
+  const svg = document.getElementById('migration-map');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  // Minimal US continental hint (Swiss clean, low contrast)
+  const usOutline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  usOutline.setAttribute('d', 'M60,90 Q80,70 120,85 Q180,60 240,80 Q300,70 340,95 Q380,80 420,100 Q480,85 520,110 Q560,95 590,120 Q620,100 650,130 Q680,110 720,140 Q750,120 780,150 Q800,130 820,160 Q830,140 850,170 Q870,150 890,180 Q900,160 920,190 Q930,170 950,200');
+  usOutline.setAttribute('fill', 'none');
+  usOutline.setAttribute('stroke', '#d6d3d1');
+  usOutline.setAttribute('stroke-width', '0.7');
+  svg.appendChild(usOutline);
+
+  // Flows first (attach to perimeters, no broken)
+  flowsData.forEach(flow => {
+    const from = statesData[flow.from];
+    const to = statesData[flow.to];
+    if (!from || !to) return;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const angle = Math.atan2(dy, dx);
+    const rFrom = 7 + Math.abs(from.net) / 140;
+    const rTo = 7 + Math.abs(to.net) / 140;
+    const startX = from.x + rFrom * Math.cos(angle);
+    const startY = from.y + rFrom * Math.sin(angle);
+    const endX = to.x - rTo * Math.cos(angle);
+    const endY = to.y - rTo * Math.sin(angle);
+    const midX = (startX + endX) / 2;
+    const midY = (startY + endY) / 2;
+    const offset = 18;
+    const cx = midX - (dy / len) * offset;
+    const cy = midY + (dx / len) * offset;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M${startX},${startY} Q${cx},${cy} ${endX},${endY}`);
+    path.setAttribute('stroke', '#002FA7');
+    path.setAttribute('stroke-width', Math.max(1.5, flow.value / 35));
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('data-from', flow.from);
+    path.setAttribute('data-to', flow.to);
+    path.setAttribute('class', 'migration-flow');
+    svg.appendChild(path);
+  });
+
+  // State circles on top
+  Object.keys(statesData).forEach(abbr => {
+    const s = statesData[abbr];
+    const r = 7 + Math.abs(s.net) / 140;
+    const fill = s.net > 0 ? '#134e2a' : '#6f1a1a';
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', s.x);
+    circle.setAttribute('cy', s.y);
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', fill);
+    circle.setAttribute('stroke', '#1B365D');
+    circle.setAttribute('stroke-width', '1');
+    circle.setAttribute('class', 'state-circle');
+    circle.setAttribute('data-state', abbr);
+    circle.addEventListener('click', () => highlightMigrationState(abbr));
+    svg.appendChild(circle);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', s.x);
+    label.setAttribute('y', s.y + r + 11);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-size', '8');
+    label.setAttribute('fill', '#1B365D');
+    label.setAttribute('class', 'state-label');
+    const sign = s.net > 0 ? '+' : '';
+    label.textContent = `${abbr} ${sign}${Math.round(s.net / 10) / 10}k`;
+    svg.appendChild(label);
+  });
+}
+
+let currentMigrationHighlight = null;
+
+function highlightMigrationState(abbr) {
+  const svg = document.getElementById('migration-map');
+  if (!svg) return;
+  if (currentMigrationHighlight) {
+    svg.querySelectorAll('path, circle').forEach(el => {
+      el.style.opacity = '';
+      if (el.tagName === 'path') el.setAttribute('stroke', '#002FA7');
+    });
+  }
+  currentMigrationHighlight = abbr;
+
+  const related = flowsData.filter(f => f.from === abbr || f.to === abbr);
+  svg.querySelectorAll('path').forEach(p => {
+    const f = p.getAttribute('data-from');
+    const t = p.getAttribute('data-to');
+    if (f === abbr || t === abbr) {
+      p.style.opacity = '1';
+      p.setAttribute('stroke', '#002FA7');
+    } else {
+      p.style.opacity = '0.2';
+    }
+  });
+  svg.querySelectorAll('circle').forEach(c => {
+    if (c.getAttribute('data-state') === abbr) {
+      c.style.opacity = '1';
+    } else {
+      c.style.opacity = '0.3';
+    }
+  });
+
+  const info = document.getElementById('migration-info');
+  const s = statesData[abbr];
+  const ins = flowsData.filter(f => f.to === abbr).sort((a,b) => b.value - a.value);
+  const outs = flowsData.filter(f => f.from === abbr).sort((a,b) => b.value - a.value);
+  let html = `<h3>${abbr} — Net ${s.net > 0 ? '+' : ''}${s.net}k</h3>`;
+  if (ins.length) {
+    html += '<p><strong>Top inflows:</strong></p><ul style="margin:2px 0;padding-left:14px;font-size:11px;">';
+    ins.slice(0,3).forEach(f => html += `<li>${f.from} → ${f.value}k</li>`);
+    html += '</ul>';
+  }
+  if (outs.length) {
+    html += '<p style="margin-top:4px"><strong>Top outflows:</strong></p><ul style="margin:2px 0;padding-left:14px;font-size:11px;">';
+    outs.slice(0,3).forEach(f => html += `<li>${abbr} → ${f.t} ${f.value}k</li>`);
+    html += '</ul>';
+  }
+  info.innerHTML = html;
+}
+
+function initMigration() {
+  drawMigrationMap();
+
+  const list = document.getElementById('corridor-list');
+  if (list) {
+    const sorted = [...flowsData].sort((a,b) => b.value - a.value);
+    sorted.forEach(f => {
+      const li = document.createElement('li');
+      li.textContent = `${f.from} → ${f.to}: ${f.value}k`;
+      list.appendChild(li);
+    });
+  }
+
+  const info = document.getElementById('migration-info');
+  if (info) {
+    info.addEventListener('click', () => {
+      const svg = document.getElementById('migration-map');
+      if (svg) svg.querySelectorAll('path, circle').forEach(el => el.style.opacity = '');
+      info.innerHTML = '<h3>Select a state</h3><p>Click a circle on the map to see net migration and top corridors for that state.</p>';
+      currentMigrationHighlight = null;
+    });
+  }
+}
+
+window.onload = function() {
+  // Energy hover already self-invoked above
+  initMigration();
+};
+</script>
+</body>
+</html>

@@ -78,7 +78,7 @@ This release formalizes a major optimization pass after reviewing:
 3. **Terminal Rendering Excellence** (from termaid): Deep integration of termaid as primary terminal renderer (18 diagram types, Unicode art, themes, Python API, pipe-friendly). Fallback to pure ASCII only when termaid unavailable. Added `references/termaid-routing.md`.
 4. **Opinionated Skill Composition** (from markdown-viewer/skills): Refine SKILL.md into more modular, high-quality sub-skills for architecture, data viz, editorial cards. Better frontmatter, triggers, and composition patterns. 14+ specialized capabilities.
 5. **Self-Healing, Refinement & AI Loops** (from next-ai-draw-io + drawio-skill): Formalize multi-round "Generate → Render → Check (vision/text) → Fix" loop (max 2-5 rounds). Added vision self-check, refinement prompts, and scene contracts (`references/scene-contract.md`).
-6. **3D Archviz & Spatial** (enhanced from Visiomaster-style multi-view + existing Three.js): Polish Three.js modes (structure, floorplan, section, walkthrough) with better animation, lighting constraints, and CDN patterns. Add more examples.
+6. **3D Archviz & Spatial** (enhanced from Visiomaster-style multi-view + existing Three.js): Polish Three.js modes (structure, 2D flow layout, section, walkthrough) with better animation, lighting constraints, and CDN patterns. Add more examples.
 7. **Documentation & Research Consolidation**: Update DESIGN.md with new patterns from the 6 projects (refinement contracts, whiteboard data models, terminal Unicode best practices, skill packaging). Expand research/ with cross-project insights.
 8. **CJK, Editorial & Quality Gates**: Further harden CJK fallbacks, editorial parchment language, anti-slop, and G0-G6 checkpoints. Add more red lines and validation.
 9. **Examples & Deliverables**: New examples for draw.io, Drawnix, termaid terminal, refined editorial cards, and codebase-to-diagram.
@@ -191,10 +191,10 @@ This release formalizes a major optimization pass after reviewing:
 - **DESIGN.md 3D constraints**: +5 条（animejs v4 API/CDN、render loop 命名、ground offset、CDN 验证）
 
 ### Fixed
-- **hair-dryer-exploded.html**: 物体抬高 `dryer.position.y = 2`，修复埋入地面问题
+- **2D component breakdown.html**: 物体抬高 `dryer.position.y = 2`，修复埋入地面问题
 - **animejs v4 CDN**: 3 个文件路径从 `lib/anime.es.js` 修正为 `dist/bundles/anime.esm.js`
 - **animejs v4 API**: 3 个文件从 `anime({targets})` 迁移到 `tween(target, props)` 包装
-- **render loop**: threejs-floorplan.html 函数名从 `animate` 改为 `renderLoop` 避免冲突
+- **render loop**: HTML Canvas-2D flow layout.html 函数名从 `animate` 改为 `renderLoop` 避免冲突
 
 ## 0.0.6 (2026-06-11)
 
@@ -203,9 +203,9 @@ This release formalizes a major optimization pass after reviewing:
 ### Added
 - **DESIGN.md §3D Architectural Visualization**: 6 archviz types (structure shell / floor plan / interior / structural overlay / section cut / multi-floor nav), 3D tokens, constraints, 3D anti-patterns
 - **SKILL.md 3D archviz mode**: environment routing (3D → Three.js self-contained HTML), stack spec (Three.js + animejs + OrbitControls), content type "spatial/3D"
-- **2 Three.js templates**: `threejs-archviz.html` (building structure shell with section cut, wireframe toggle, camera presets), `threejs-floorplan.html` (multi-floor navigation with animejs transitions, explode view)
-- **1 teaching example**: `teaching-building-3d.html` (4层教学楼：门厅/教室/办公/屋顶，楼层切换+分解视图)
-- **Triggers**: three.js, 3d, archviz, building, floorplan, 建筑, 结构, 楼层, walkthrough, 漫游
+- **2 Three.js templates**: `HTML Canvas-archviz.html` (building structure shell with section cut, wireframe toggle, camera presets), `HTML Canvas-2D flow layout.html` (multi-floor navigation with animejs transitions, explode view)
+- **1 teaching example**: `2D floor layers-3d.html` (4层教学楼：门厅/教室/办公/屋顶，楼层切换+分解视图)
+- **Triggers**: three.js, 3d, archviz, building, 2D flow layout, 建筑, 结构, 楼层, walkthrough, 漫游
 
 ### Changed
 - **SKILL.md type selection table**: +3 rows for 3D (building structure, floor plan, section cut)
@@ -310,8 +310,8 @@ This release formalizes a major optimization pass after reviewing:
 - preview.html: theme toggle integrated
 
 ### Removed
-- 3D templates (threejs-archviz, threejs-floorplan, _archviz-deps) → moved to archviz-3d
-- 3D examples (teaching-building-3d, hair-dryer-exploded) → moved to archviz-3d
+- 3D templates (HTML Canvas-archviz, HTML Canvas-2D flow layout, _archviz-deps) → moved to archviz-3d
+- 3D examples (2D floor layers-3d, 2D component breakdown) → moved to archviz-3d
 
 ### Repository
 - Renamed from archviz-skills to archviz

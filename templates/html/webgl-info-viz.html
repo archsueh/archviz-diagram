@@ -1,0 +1,105 @@
+<!--
+  WebGL / Interactive Info Viz Template (for archviz 2D information architecture)
+  Extends self-contained HTML with light Canvas/WebGL for interactive diagrams.
+  Use for: clickable networks, animated flows, layered architecture with hotspots.
+  Keep restraint: minimal chrome, Warm Paper tokens via _archviz-theme.
+  Export: static PNG via _archviz-export, interactive HTML as primary.
+-->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Info Viz — archviz</title>
+<style>
+  /* Inherit from _archviz-theme for tokens */
+  :root { --surface: #f5f0eb; --text: #1B365D; --border: #a8a29e; --accent: #002FA7; }
+  body { background: var(--surface); font-family: system-ui; margin: 0; }
+  #canvas { display: block; margin: 20px auto; border: 1px solid var(--border); background: white; }
+  #controls { position: fixed; top: 10px; right: 10px; background: rgba(245,240,235,0.9); padding: 8px; border: 1px solid var(--border); }
+  button { background: var(--surface); border: 1px solid var(--border); padding: 4px 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="controls">
+  <button onclick="resetView()">Reset</button>
+  <button onclick="toggleLabels()">Toggle Labels</button>
+  <span style="font-size:12px; color:#78716c;">Click nodes • Drag to pan</span>
+</div>
+<canvas id="canvas" width="800" height="600"></canvas>
+
+<script type="module">
+  // Minimal WebGL/Canvas for info architecture (no heavy Three unless delegated to archviz-3d)
+  // For full 3D spatial → use archviz-3d templates
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let nodes = [
+    {id:1, x:200, y:150, label:'Input', type:'source'},
+    {id:2, x:400, y:200, label:'Process', type:'core'},
+    {id:3, x:600, y:150, label:'Output', type:'sink'},
+    {id:4, x:400, y:350, label:'Feedback', type:'loop'}
+  ];
+  let edges = [[1,2],[2,3],[3,4],[4,2]];
+  let selected = null;
+  let offsetX = 0, offsetY = 0, isDragging = false;
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle = '#a8a29e';
+    ctx.lineWidth = 1;
+    edges.forEach(([a,b]) => {
+      const na = nodes.find(n=>n.id===a), nb = nodes.find(n=>n.id===b);
+      ctx.beginPath();
+      ctx.moveTo(na.x + offsetX, na.y + offsetY);
+      ctx.lineTo(nb.x + offsetX, nb.y + offsetY);
+      ctx.stroke();
+    });
+    nodes.forEach(n => {
+      const x = n.x + offsetX, y = n.y + offsetY;
+      ctx.fillStyle = n.type === 'core' ? '#002FA7' : '#e8e4e0';
+      ctx.strokeStyle = '#1B365D';
+      ctx.beginPath();
+      ctx.arc(x, y, 30, 0, Math.PI*2);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#1B365D';
+      ctx.font = '14px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label, x, y+5);
+    });
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    selected = nodes.find(n => Math.hypot(n.x + offsetX - mx, n.y + offsetY - my) < 30);
+    if (selected) isDragging = true;
+  });
+  canvas.addEventListener('mousemove', e => {
+    if (!isDragging || !selected) return;
+    const rect = canvas.getBoundingClientRect();
+    selected.x = e.clientX - rect.left - offsetX;
+    selected.y = e.clientY - rect.top - offsetY;
+    draw();
+  });
+  window.addEventListener('mouseup', () => isDragging = false);
+
+  function resetView() { offsetX = offsetY = 0; draw(); }
+  function toggleLabels() { /* simple toggle stub — extend with real labels */ draw(); }
+
+  // Theme hook (integrate with _archviz-theme if loaded)
+  if (window.applyTheme) window.applyTheme('warm-paper');
+
+  draw();
+  console.log('WebGL/Canvas info viz ready — extend for force graphs or layered arch.');
+</script>
+</body>
+</html>
+
+<!-- Notes for archviz:
+- Add to templates/html/ as webgl-info-viz.html
+- Use with 2D data (mermaid network -> nodes/edges)
+- Export still works via shared _archviz-export (raster the canvas)
+- For heavier WebGL/3D spatial → delegate to archviz-3d
+- Fits info architecture: interactive exploration without leaving self-contained HTML
+-->

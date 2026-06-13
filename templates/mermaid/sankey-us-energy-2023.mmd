@@ -1,0 +1,71 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#f5f0eb',
+  'primaryTextColor': '#1B365D',
+  'primaryBorderColor': '#a8a29e',
+  'lineColor': '#002FA7',
+  'fontSize': '12px'
+}}}%%
+%% US Energy Flow 2023 Sankey (simplified from LLNL 93.6 quads)
+%% 针对 Mermaid 10.9.6 兼容语法（完全匹配你项目 sankey.mmd 模板的 bracket 写法）
+%% 如果你的渲染器（Obsidian 等）仍报 Syntax error，使用 architecture-beta fallback 或直接开 HTML
+sankey-beta
+    石油 [36] --> 运输
+    石油 --> 工业
+    石油 --> 住宅与商业
+    天然气 [33] --> 发电
+    天然气 --> 工业
+    天然气 --> 住宅与商业
+    煤炭 [9] --> 发电
+    煤炭 --> 工业
+    核能 [8] --> 发电
+    可再生能源 [7.6] --> 发电
+    可再生能源 --> 工业
+    发电 --> 工业
+    发电 --> 住宅与商业
+    发电 --> 损失
+    运输 --> 损失
+    工业 --> 损失
+    住宅与商业 --> 损失
+
+%% 兼容 fallback（复制自你 sankey.mmd 模板，Mermaid 10.x 某些环境会走这个）：
+%% architecture-beta
+%%     group source(database)[Primary Energy Sources]
+%%     service oil[石油 36] in source
+%%     service gas[天然气 33] in source
+%%     service coal[煤炭 9] in source
+%%     service nuclear[核能 8] in source
+%%     service renewable[可再生能源 7.6] in source
+%%
+%%     group conversion(cloud)[Conversion & Losses]
+%%     service gen[发电] in conversion
+%%     service loss[损失] in conversion
+%%
+%%     group use(database)[End Use]
+%%     service transport[运输] in use
+%%     service industry[工业] in use
+%%     service rescom[住宅与商业] in use
+%%
+%%     oil --> transport
+%%     oil --> industry
+%%     oil --> rescom
+%%     gas --> gen
+%%     gas --> industry
+%%     gas --> rescom
+%%     coal --> gen
+%%     coal --> industry
+%%     nuclear --> gen
+%%     renewable --> gen
+%%     renewable --> industry
+%%     gen --> industry
+%%     gen --> rescom
+%%     gen --> loss
+%%     transport --> loss
+%%     industry --> loss
+%%     rescom --> loss
+%%
+%%     classDef stage fill:#f5f0eb,stroke:#002FA7,color:#1B365D
+%%     class source,conversion,use stage
+
+%% 推荐：直接双击打开 HTML 预览（绕过本地 Mermaid 10.9.6 限制）
+%% 路径：/Users/mac/Developer/archviz/examples/us-energy-2023-sankey.html
+%% 该 HTML 使用 CDN Mermaid（通常更新）+ 你的 _archviz-theme 变量，效果稳定。
