@@ -502,6 +502,7 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | Card needs PNG export | Built-in: press E→P for 4× raster PNG, E→S for SVG, E→C for clipboard. See §Export System. |
 | Mindmap fails | Use flowchart/subgraph |
 | Architecture-beta lexer error | Use flowchart TD + subgraph (preview-compatible) |
+| Mermaid trailing end error | Never close graph/flowchart TD blocks with end; only subgraph blocks require end |
 | Gantt text overflow | Codes only + table + ASCII fallback |
 | Theme too flashy | Force solarized-light/nord-light |
 | Text unreadable | Check contrast rule (QR) |
@@ -527,6 +528,7 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | **Truncated axis** | Bar chart Y-axis starts at non-zero | Always start at 0. Use inset zoom if range matters |
 | **Legend overload** | >7 legend items, hard to match | Aggregate "Other". Use direct labeling |
 | **Default theme** | Mermaid/Chart.js default purple/blue gradient | Always apply custom init + tokens from DESIGN.md |
+| **Mermaid block end** | Append end keyword to close flowchart/graph block | Never close graph/flowchart TD with end; end is exclusively for subgraphs |
 | **Missing caption** | Diagram embedded without context | Caption = finding, not title. "Sales dropped 30% in Q3" not "Q3 Sales Chart" |
 | **Color as only channel** | Red/green distinction for colorblind users | Add pattern/shape/label. Never rely on color alone |
 | **Spaghetti network** | >20 edges in network/graph | Cluster nodes, hide weak edges, or split into subgraphs |
