@@ -9,64 +9,8 @@ Every visualization starts with a **brief read** and **three dials** — not a d
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)
 
----
-Neutrals
-Warm Paper
-#f5f0eb · default surface
-Paper Beige
-#e8e4e0 · 3D floor / legacy
-Mist White
-#f5f5f4 · Swiss surface
-Stone Gray
-#a8a29e · border / lines
-Pebble
-#d6d3d1 · tertiary fill
-Ink Navy
-#1B365D · primary text
-Warm Ink
-#44403c · secondary text
-Charcoal
-#292524 · Stone Mono text
-Accents — one per diagram set, never both
-International Klein Blue #002FA7
-Lemon #FFD500
-Contrast rule: luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → dark text. Light warm surfaces never take near-white text; Mist White text is legal only on accent or dark fills.
+<img width="2298" height="3334" alt="screenshot-archviz-skills — Design System Preview" src="https://github.com/user-attachments/assets/f6369781-f056-41f0-be0f-658d38cadc37" />
 
-Palette systems
-System	surface	text	border	accent	Use
-Warm Paper	#f5f0eb	#1B365D	#a8a29e	—	Default, academic
-Swiss Neutral	#f5f5f4	#1B365D	#d6d3d1	—	Clean, print
-IKB Accent	#e4e8f0	#0a0a0a	#94a3b8	#002FA7	guizang Swiss
-Lemon Accent	#f0f4e0	#0a0a0a	#a8b898	#FFD500	Tech
-Stone Mono	#e7e5e4	#292524	#a8a29e	—	Austerity
-Type scale — 越大越细，越小越粗
-Role	Sample	Spec
-Diagram title	三层闭环架构	15–16px · weight 200
-Node label / body	陪伴证据 · evidence	13–14px · weight 300 · ≤8 汉字
-Caption / legend	实线=主流程 · 虚线=反馈	11–13px · weight 500–600
-Node vocabulary — shape is semantics
-process
-过程
-[ ] · 1px stone
-core
-数据主权
-(( )) · 2px accent — the one emphasis
-decision
-判定
-{ } · 1px
-artifact
-.md
-[[ ]] · pebble fill
-actor
-(( )) · 1px
-Edge semantics
-─────►  primary (solid)
-- - -►  secondary (dashed)
-═════►  emphasized (2px accent, max one)
-──标注──►  labeled (explicit semantics)
-Legend mandatory if >2 edge types appear. Max 4–5 subgraphs · 50 nodes hard cap · sharp corners · no emoji · no gradients · no pie.
-
-archviz-skills · DESIGN.md visual catalog · Stitch DESIGN.md format · MIT
 ## Screenshot Material
 
 <img width="1280" height="633" alt="hair-dryer-exploded" src="https://github.com/user-attachments/assets/9ed240f9-81bc-4ef5-8823-550f080b974c" />
