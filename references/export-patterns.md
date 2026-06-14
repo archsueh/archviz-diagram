@@ -57,6 +57,33 @@ function svgToRaster(svgEl, scale = 4) {
 }
 ```
 
+### Canvas 上限自动降级
+
+`4 × viewBox` 可能超过浏览器 canvas 最大边长（Safari ~16384px、Chrome ~32767px，且有总面积上限），超了 `drawImage` 静默出空白图。导出前按目标尺寸自动降级，永远出图不出空：
+
+```js
+function pickScale(w, h, want = 4) {
+  const MAX_SIDE = 16384;        // 取最保守值（Safari）
+  for (const s of [want, 3, 2, 1]) {
+    if (w * s <= MAX_SIDE && h * s <= MAX_SIDE) return s;
+  }
+  return 1;
+}
+```
+
+### JPEG / WebP 补背景色
+
+PNG 保留透明；JPEG/WebP 无 alpha，不补背景会变黑底。按当前主题填底，背景先铺、图后绘：
+
+```js
+if (mime === 'image/jpeg' || mime === 'image/webp') {
+  ctx.fillStyle = getComputedStyle(document.documentElement)
+    .getPropertyValue('--surface').trim() || '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+ctx.drawImage(img, 0, 0);
+```
+
 ## 双主题 SVG 策略
 
 三种方案，按场景选择：

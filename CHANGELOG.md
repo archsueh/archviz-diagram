@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.2 (2026-06-14)
+
+### Added
+- `references/semantic-component-colors.md`: 组件类型 → 语义色 taxonomy（frontend/backend/database/cloud/security/msgbus/external 七类，双主题 hex 配对 + CSS 语义类）。消化自 [archify](https://github.com/tt-a1i/archify)，与既有 Max-1-accent / No-AI-purple / editorial-禁冷灰规则做了调和说明。
+- `references/diagram-types-technical.md`: 五类技术沟通图类型词汇（architecture/workflow/sequence/data flow/lifecycle）+ 路径语义（主路径/异步/审批/观测）+ 落到 renderer/scene-contract 的映射表。明确不移植 archify 的 ajv 类型化渲染器（与 text-first/Mermaid-first 哲学冲突）。
+
+### Changed
+- `references/export-patterns.md`: 4× 栅格化补两个鲁棒性细节——canvas 超浏览器上限自动降级（4×→3×→2×→1×）、JPEG/WebP 按主题 `--surface` 补背景色防黑底。
+- SKILL.md §0 加 Type routing、§2 加 Semantic colors 指针、§致谢 记 archify。
+
 ## 0.4.1 (2026-06-14)
 
 ### Changed

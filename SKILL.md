@@ -8,7 +8,7 @@ description: |
   信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
 license: MIT
 metadata:
-  version: 0.4.1
+  version: 0.4.2
   source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh
@@ -236,6 +236,8 @@ Output one line: **"Reading this as: \<type> for \<audience>, \<vibe>, \<palette
 
 **Palette routing:** academic/diagram default → Warm Paper + IKB · editorial/card/cover → Editorial Parchment + Terracotta · host doc with existing tokens → match host (Aver cinnabar, etc.).
 
+**Type routing (技术图):** architecture / workflow / sequence / data flow / lifecycle 五类各有该交代的语义（泳道、主路径/旁路、PII 边界、终态）。选对类型 + 路径语义 → `references/diagram-types-technical.md`. workflow ≠ 通用流程图。
+
 **4-layer analysis** (from anydesign): Identity → System → Components → Layout. Mark confidence: ✅/⚠️/❓.
 
 **DESIGN.md contract** (from awesome-design-md): Atmosphere → Tokens → Components → Layout → Guardrails. If any layer is unknown, state the assumption before generating.
@@ -269,6 +271,8 @@ Defined in DESIGN.md. Summary:
 | **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` |
 
 **Rules:** Max 1 accent. No AI-purple. Same doc = same palette. Contrast check mandatory. Light surface uses dark text. Editorial mode: serif display **500 max**, no `#ffffff` canvas, no cool `#64748b` grays. Full rules → `references/editorial-parchment-language.md`.
+
+**Semantic colors (技术架构/数据流图):** 组件类型 → 固定语义色（frontend 青 / backend 绿 / database 紫 / cloud 琥珀 / security 玫红 / msgbus 橙 / external 石灰），双主题配对。颜色表达"这是什么组件"，和美学调色板分工。与 Max-1-accent / No-AI-purple 的调和见 → `references/semantic-component-colors.md`.
 
 ---
 
@@ -567,6 +571,7 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | [next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) | DayuanJiang | 自愈循环机制 |
 | [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Agents365-ai | 样式预设系统 |
 | [termaid](https://github.com/fasouto/termaid) | fasouto | 终端Mermaid渲染 |
+| [archify](https://github.com/tt-a1i/archify) | tt-a1i | 语义化组件配色 + 五类技术图类型词汇（`references/semantic-component-colors.md` · `diagram-types-technical.md`）|
 
 ---
 
