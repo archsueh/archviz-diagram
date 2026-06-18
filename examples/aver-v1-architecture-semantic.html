@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aver V1 架构 · 语义配色</title>
+<style>
+  /* archviz semantic-component-colors.md — 七类语义色，此图用到 6 类（无 message bus，不硬凑）*/
+  :root {
+    --surface: #f5f0eb; --surface-alt: #fbf8f2; --text: #1B365D; --muted: #56504A;
+    --border: #a8a29e; --accent: #002FA7;
+    --c-frontend: #0891b2; --c-backend: #059669; --c-database: #7c3aed;
+    --c-cloud: #d97706; --c-security: #e11d48; --c-external: #78716c;
+  }
+  [data-theme="dark"] {
+    --surface: #1a1814; --surface-alt: #2a2520; --text: #e8e4e0; --muted: #a8a29e;
+    --border: #44403c; --accent: #58a6ff;
+    --c-frontend: #22d3ee; --c-backend: #34d399; --c-database: #a78bfa;
+    --c-cloud: #fbbf24; --c-security: #fb7185; --c-external: #a8a29e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface); color: var(--text);
+    font-family: system-ui, 'Noto Sans SC', sans-serif; font-weight: 300;
+    line-height: 1.5; -webkit-font-smoothing: antialiased;
+    transition: background .25s, color .25s; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px 40px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  h1 { font-size: 19px; font-weight: 500; margin: 0; letter-spacing: .01em; }
+  .kicker { font-size: 11px; font-weight: 600; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .toggle { font: inherit; font-size: 12px; color: var(--muted); background: var(--surface-alt);
+    border: .5px solid var(--border); border-radius: 8px; padding: 5px 11px; cursor: pointer; }
+  .toggle:hover { color: var(--text); }
+
+  /* 隐私边界：security 虚线框包住本地栈，表达"无服务器/零 PII" */
+  .boundary { position: relative; margin-top: 18px; padding: 30px 18px 18px;
+    border: 1px dashed var(--c-security); border-radius: 16px; }
+  .boundary-tag { position: absolute; top: -11px; left: 18px; background: var(--surface);
+    padding: 0 9px; font-size: 11px; font-weight: 600; letter-spacing: .04em;
+    color: var(--c-security); }
+
+  .layer { display: flex; align-items: stretch; gap: 0; background: var(--surface-alt);
+    border: .5px solid var(--border); border-left: 4px solid var(--role);
+    border-radius: 12px; padding: 13px 15px; }
+  .layer + .arrow { height: 22px; }
+  .arrow { display: flex; justify-content: center; align-items: center; color: var(--muted); }
+  .arrow.main { color: var(--accent); }
+  .layer .meta { flex: 0 0 116px; }
+  .layer .role { font-size: 10px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--role); }
+  .layer .name { font-size: 14.5px; font-weight: 500; margin-top: 2px; }
+  .layer .nodes { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; align-content: center; }
+  .chip { font-size: 12px; padding: 3px 9px; border-radius: 7px; color: var(--role);
+    background: color-mix(in srgb, var(--role) 13%, transparent);
+    border: .5px solid color-mix(in srgb, var(--role) 40%, transparent); }
+
+  /* Markdown 导出：external，从 Core 旁路出去，虚线在框外 */
+  .branch { display: flex; align-items: center; gap: 10px; margin: 10px 0 0 130px; }
+  .branch .dash { flex: 0 0 26px; border-top: 1.5px dashed var(--c-external); }
+  .branch .out { font-size: 12px; padding: 5px 11px; border-radius: 8px; color: var(--c-external);
+    background: color-mix(in srgb, var(--c-external) 12%, transparent);
+    border: .5px solid color-mix(in srgb, var(--c-external) 38%, transparent); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px 18px; margin-top: 22px;
+    padding-top: 16px; border-top: .5px solid var(--border); }
+  .legend .item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); }
+  .legend .dot { width: 10px; height: 10px; border-radius: 3px; background: var(--role); }
+  .foot { font-size: 11px; color: var(--muted); margin-top: 16px; }
+  .foot code { font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">archviz · semantic-component-colors · Aver V1</p>
+  <div class="head">
+    <h1>Aver V1 技术架构 — 物件陪伴证据 App</h1>
+    <button class="toggle" onclick="tt()">◐ 主题 (T)</button>
+  </div>
+
+  <div class="boundary">
+    <span class="boundary-tag">⬡ 隐私边界 · Local-first · 无账号 · 零 PII · 零服务器</span>
+
+    <div class="layer" style="--role:var(--c-frontend)">
+      <div class="meta"><div class="role">Frontend</div><div class="name">UI 层</div></div>
+      <div class="nodes">
+        <span class="chip">SwiftUI</span><span class="chip">物件列表</span><span class="chip">物件详情</span>
+        <span class="chip">新增</span><span class="chip">证据记录</span><span class="chip">告别归档</span>
+      </div>
+    </div>
+    <div class="arrow main">↓</div>
+
+    <div class="layer" style="--role:var(--c-backend)">
+      <div class="meta"><div class="role">Backend</div><div class="name">核心逻辑</div></div>
+      <div class="nodes">
+        <span class="chip">AverCore</span><span class="chip">日值计算</span><span class="chip">告别归档</span>
+        <span class="chip">输入校验</span><span class="chip">Markdown 导出</span>
+      </div>
+    </div>
+
+    <div class="branch">
+      <span class="dash"></span>
+      <span class="out">⤳ .md 归档文件 · External</span>
+    </div>
+    <div class="arrow main">↓</div>
+
+    <div class="layer" style="--role:var(--c-database)">
+      <div class="meta"><div class="role">Database</div><div class="name">数据层</div></div>
+      <div class="nodes">
+        <span class="chip">SwiftData</span><span class="chip">Asset</span><span class="chip">Evidence</span>
+        <span class="chip">Farewell</span>
+      </div>
+    </div>
+    <div class="arrow main">↓</div>
+
+    <div class="layer" style="--role:var(--c-cloud)">
+      <div class="meta"><div class="role">Cloud</div><div class="name">同步层</div></div>
+      <div class="nodes">
+        <span class="chip">CloudKit 私有库</span><span class="chip">iCloud 容器</span>
+        <span class="chip">iPhone · iPad · Mac · Watch</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="item"><span class="dot" style="--role:var(--c-frontend)"></span>Frontend 客户端/UI</span>
+    <span class="item"><span class="dot" style="--role:var(--c-backend)"></span>Backend 服务/逻辑</span>
+    <span class="item"><span class="dot" style="--role:var(--c-database)"></span>Database 存储</span>
+    <span class="item"><span class="dot" style="--role:var(--c-cloud)"></span>Cloud 基础设施</span>
+    <span class="item"><span class="dot" style="--role:var(--c-security)"></span>Security 边界</span>
+    <span class="item"><span class="dot" style="--role:var(--c-external)"></span>External 第三方/产物</span>
+  </div>
+  <p class="foot">主路径 accent 实线（UI→核心→数据→同步），导出走 external 虚线旁路。配色 = <code>references/semantic-component-colors.md</code> 七类语义色，此图用 6 类（无消息总线不硬凑）。按 <code>T</code> 切深浅色。</p>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const saved = localStorage.getItem('archviz-theme');
+  if (saved) root.dataset.theme = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) root.dataset.theme = 'dark';
+  function tt() {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('archviz-theme', root.dataset.theme);
+  }
+  addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 't' && !/input|textarea/i.test(e.target.tagName)) tt();
+  });
+</script>
+</body>
+</html>

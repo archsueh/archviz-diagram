@@ -1,20 +1,12 @@
-<!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->
+<!-- archviz-skills upgrade Phase 2 | 2026-06-18 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>ArchViz: Heatmap — archviz-skills</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body { font-family: system-ui, -apple-system, sans-serif; background: var(--av-surface); color: var(--av-text-primary); margin: 0; padding: 20px; }
-  .chart-container { max-width: 600px; margin: 0 auto; }
-  canvas { background: var(--av-surface-raised); border: 1px solid var(--av-border); border-radius: 4px; }
-  .chart-meta { font-size: 12px; color: var(--av-text-tertiary); margin-top: 8px; }
-</style>
-
-<!-- archviz-theme: full theme module -->
-<!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->
-<style id="archviz-theme-vars">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swiss Modernist Grid — archviz-skills</title>
+  <!-- === Theme System Module === -->
+  <style id="archviz-theme-vars">
 /* === Palette: Warm Paper (default light) === */
 :root, [data-palette="warm-paper"] {
   --av-surface: #f5f0eb;
@@ -307,133 +299,23 @@
   }
 })();
 </script>
-</head>
-<body>
-  <div class="chart-container">
-    <h3 style="color:var(--av-text-primary)">Matrix: Types vs Restraint (heatmap)</h3>
-    <canvas id="heatChart" width="600" height="400" class="archviz-export-target"></canvas>
-    <div class="chart-meta">Env: archviz-skills | Type: from report | Icons: minimal</div>
-  </div>
 
+  <!-- === Export System Script === -->
   <script>
-  function getCSSVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
-  let chartInstance = null;
-
-  function drawChart() {
-    const ctx = document.getElementById('heatChart');
-
-    // Destroy previous instance if exists
-    if (chartInstance) chartInstance.destroy();
-
-    chartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Bar', 'Line', 'Scatter', 'Heatmap'],
-        datasets: [{
-          label: 'Restraint Score',
-          data: [9, 8, 7, 9],
-          backgroundColor: [
-            getCSSVar('--av-chart-1'),
-            getCSSVar('--av-chart-2'),
-            getCSSVar('--av-chart-3'),
-            getCSSVar('--av-chart-1')
-          ]
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        scales: {
-          y: {
-            grid: { color: getCSSVar('--av-border') },
-            ticks: { color: getCSSVar('--av-text-secondary') }
-          },
-          x: {
-            grid: { color: getCSSVar('--av-border') },
-            ticks: { color: getCSSVar('--av-text-secondary') }
-          }
-        },
-        plugins: {
-          legend: {
-            labels: { color: getCSSVar('--av-text-primary') }
-          }
-        }
-      }
-    });
-  }
-
-  // Initial draw
-  drawChart();
-
-  // Re-draw on theme change
-  document.addEventListener('archviz-theme-changed', drawChart);
-  </script>
-
-  <!-- archviz-export: full export module -->
-  <!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->
-  <style id="archviz-export-styles">
-  #archviz-export-btn {
-    position: fixed; top: 12px; right: 140px; z-index: 9999;
-    background: var(--av-surface-raised, #faf9f5);
-    border: 1px solid var(--av-border, #d6d3d1);
-    border-radius: 8px; padding: 6px 12px;
-    font: 12px/1 system-ui, -apple-system, sans-serif;
-    color: var(--av-text-secondary, #5e5d59);
-    cursor: pointer; transition: background 0.2s;
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  }
-  #archviz-export-btn:hover { background: var(--av-surface-alt, #e8e4e0); }
-  #archviz-export-menu {
-    display: none; position: fixed; top: 44px; right: 140px; z-index: 10000;
-    background: var(--av-surface-raised, #faf9f5);
-    border: 1px solid var(--av-border, #d6d3d1);
-    border-radius: 10px; padding: 6px 0; min-width: 180px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  }
-  #archviz-export-menu.open { display: block; }
-  #archviz-export-menu button {
-    display: block; width: 100%; text-align: left; padding: 8px 16px;
-    border: none; background: none;
-    font: 13px/1.4 system-ui, -apple-system, sans-serif;
-    color: var(--av-text-primary, #1B365D); cursor: pointer;
-  }
-  #archviz-export-menu button:hover { background: var(--av-accent-soft, rgba(0,47,167,0.08)); }
-  #archviz-export-menu .sep { height: 1px; background: var(--av-border, #d6d3d1); margin: 4px 0; }
-  #archviz-export-menu .shortcut { float: right; color: var(--av-text-tertiary, #87867f); font-size: 11px; }
-  #archviz-export-toast {
-    display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 10001; background: var(--av-surface-raised, #faf9f5);
-    border: 1px solid var(--av-border, #d6d3d1);
-    border-radius: 8px; padding: 10px 20px;
-    font: 13px/1 system-ui, -apple-system, sans-serif;
-    color: var(--av-text-primary, #1B365D);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    animation: archviz-toast-in 0.3s ease;
-  }
-  @keyframes archviz-toast-in {
-    from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-  </style>
-
-  <script>
-  /* archviz-skills Export System */
   (function() {
     'use strict';
     const SCALE_DEFAULT = 4;
     function toast(msg) {
       let el = document.getElementById('archviz-export-toast');
       if (!el) { el = document.createElement('div'); el.id = 'archviz-export-toast'; document.body.appendChild(el); }
-      el.textContent = msg; el.style.display = 'block';
-      clearTimeout(el._t); el._t = setTimeout(() => el.style.display = 'none', 2200);
+      el.textContent = msg; el.style.display = 'block'; clearTimeout(el._t);
+      el._t = setTimeout(() => el.style.display = 'none', 2200);
     }
     function findTarget(selector) {
       if (selector) return document.querySelector(selector);
-      return document.querySelector('.archviz-export-target') || document.querySelector('svg') || document.querySelector('canvas');
+      return document.querySelector('.archviz-export-target')
+        || document.querySelector('svg') || document.querySelector('canvas')
+        || document.querySelector('article, .card, .canvas');
     }
     function svgToBlob(svgEl, scale, format) {
       return new Promise((resolve, reject) => {
@@ -443,24 +325,26 @@
         const clone = svgEl.cloneNode(true);
         const computed = getComputedStyle(document.documentElement);
         const vars = ['--av-surface','--av-surface-alt','--av-text-primary','--av-text-secondary','--av-text-tertiary','--av-border','--av-accent','--av-chart-1','--av-chart-2','--av-chart-3','--av-chart-4','--av-chart-5','--av-chart-6'];
-        let varCSS = ':root{'; vars.forEach(v => { varCSS += v + ':' + computed.getPropertyValue(v).trim() + ';'; }); varCSS += '}';
+        let varCSS = ':root{';
+        vars.forEach(v => { varCSS += v + ':' + computed.getPropertyValue(v).trim() + ';'; });
+        varCSS += '}';
         let styleEl = clone.querySelector('style');
         if (!styleEl) { styleEl = document.createElementNS('http://www.w3.org/2000/svg','style'); clone.insertBefore(styleEl, clone.firstChild); }
         styleEl.textContent = varCSS + styleEl.textContent;
         clone.setAttribute('width', w * scale); clone.setAttribute('height', h * scale);
-        if (!clone.getAttribute('viewBox')) clone.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        if (!clone.getAttribute('viewBox')) clone.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
         const svgStr = new XMLSerializer().serializeToString(clone);
-        const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
+        const svgBlob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
         const url = URL.createObjectURL(svgBlob);
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
           canvas.width = w * scale; canvas.height = h * scale;
           const ctx = canvas.getContext('2d');
-          ctx.fillStyle = computed.getPropertyValue('--av-surface').trim() || '#f5f0eb';
+          ctx.fillStyle = computed.getPropertyValue('--av-surface').trim() || '#f8f8f6';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0); URL.revokeObjectURL(url);
-          canvas.toBlob(blob => { if (blob) resolve(blob); else reject(new Error('toBlob failed')); }, format || 'image/png');
+          canvas.toBlob(blob => { if(blob)resolve(blob); else reject(new Error('toBlob failed')); }, format||'image/png');
         };
         img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('SVG load failed')); };
         img.src = url;
@@ -468,35 +352,43 @@
     }
     function canvasToBlob(canvasEl, scale, format) {
       return new Promise((resolve, reject) => {
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = canvasEl.width * scale; tmpCanvas.height = canvasEl.height * scale;
-        const ctx = tmpCanvas.getContext('2d');
-        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(canvasEl, 0, 0, tmpCanvas.width, tmpCanvas.height);
-        tmpCanvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('toBlob failed')), format || 'image/png');
+        if (canvasEl.renderAtScale) {
+          const tmpCanvas = document.createElement('canvas');
+          tmpCanvas.width = canvasEl.width * scale; tmpCanvas.height = canvasEl.height * scale;
+          const ctx = tmpCanvas.getContext('2d'); ctx.scale(scale, scale);
+          canvasEl.renderAtScale(ctx, scale);
+          tmpCanvas.toBlob(blob => blob?resolve(blob):reject(new Error('toBlob failed')), format||'image/png');
+        } else {
+          const tmpCanvas = document.createElement('canvas');
+          tmpCanvas.width = canvasEl.width * scale; tmpCanvas.height = canvasEl.height * scale;
+          const ctx = tmpCanvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(canvasEl, 0, 0, tmpCanvas.width, tmpCanvas.height);
+          tmpCanvas.toBlob(blob => blob?resolve(blob):reject(new Error('toBlob failed')), format||'image/png');
+        }
       });
     }
     async function exportBlob(target, scale, format) {
       scale = scale || SCALE_DEFAULT;
       if (target.tagName === 'SVG') return svgToBlob(target, scale, format);
-      else if (target.tagName === 'CANVAS') return canvasToBlob(target, scale, format);
-      else {
-        const w = target.scrollWidth || 800, h = target.scrollHeight || 600;
-        const canvas = document.createElement('canvas');
-        canvas.width = w * scale; canvas.height = h * scale;
-        const ctx = canvas.getContext('2d'); ctx.scale(scale, scale);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--av-surface').trim() || '#f5f0eb';
-        ctx.fillRect(0, 0, w, h);
-        const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${target.outerHTML}</div></foreignObject></svg>`;
-        const blob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
-        const url = URL.createObjectURL(blob);
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => { ctx.drawImage(img, 0, 0); URL.revokeObjectURL(url); canvas.toBlob(b => b ? resolve(b) : reject(new Error('toBlob failed')), format || 'image/png'); };
-          img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('HTML export failed')); };
-          img.src = url;
-        });
-      }
+      if (target.tagName === 'CANVAS') return canvasToBlob(target, scale, format);
+      // HTML fallback
+      const w = target.scrollWidth || target.clientWidth || 800;
+      const h = target.scrollHeight || target.clientHeight || 600;
+      const canvas = document.createElement('canvas');
+      canvas.width = w * scale; canvas.height = h * scale;
+      const ctx = canvas.getContext('2d'); ctx.scale(scale, scale);
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--av-surface').trim() || '#f8f8f6';
+      ctx.fillRect(0, 0, w, h);
+      const svgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">'+target.outerHTML+'</div></foreignObject></svg>';
+      const blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => { ctx.drawImage(img, 0, 0); URL.revokeObjectURL(url); canvas.toBlob(b=>b?resolve(b):reject(new Error('toBlob failed')), format||'image/png'); };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('HTML export failed')); };
+        img.src = url;
+      });
     }
     function download(blob, filename) {
       const url = URL.createObjectURL(blob);
@@ -505,91 +397,118 @@
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
     async function exportPNG(selector, scale) {
-      const target = findTarget(selector);
-      if (!target) { toast('No export target found'); return; }
-      try { const blob = await exportBlob(target, scale || SCALE_DEFAULT, 'image/png'); download(blob, 'archviz-' + Date.now() + '.png'); toast('PNG exported (4× raster)'); }
-      catch(e) { toast('Export failed: ' + e.message); console.error(e); }
+      const target = findTarget(selector); if(!target){toast('No export target');return;}
+      try { const blob = await exportBlob(target, scale||SCALE_DEFAULT, 'image/png'); download(blob,'archviz-'+Date.now()+'.png'); toast('PNG exported (4× raster)'); }
+      catch(e) { toast('Export failed: '+e.message); console.error(e); }
     }
     async function exportWebP(selector, scale) {
-      const target = findTarget(selector);
-      if (!target) { toast('No export target found'); return; }
-      try { const blob = await exportBlob(target, scale || SCALE_DEFAULT, 'image/webp'); download(blob, 'archviz-' + Date.now() + '.webp'); toast('WebP exported (4× raster)'); }
-      catch(e) { toast('Export failed: ' + e.message); console.error(e); }
+      const target = findTarget(selector); if(!target){toast('No export target');return;}
+      try { const blob = await exportBlob(target, scale||SCALE_DEFAULT, 'image/webp'); download(blob,'archviz-'+Date.now()+'.webp'); toast('WebP exported (4× raster)'); }
+      catch(e) { toast('Export failed: '+e.message); console.error(e); }
     }
     async function exportSVG(selector) {
-      const target = findTarget(selector);
-      if (!target || target.tagName !== 'SVG') { toast('SVG export requires an SVG target'); return; }
+      const target = findTarget(selector); if(!target||target.tagName!=='SVG'){toast('SVG export requires SVG target');return;}
       try {
         const clone = target.cloneNode(true);
         const computed = getComputedStyle(document.documentElement);
         const vars = ['--av-surface','--av-surface-alt','--av-text-primary','--av-text-secondary','--av-text-tertiary','--av-border','--av-accent','--av-chart-1','--av-chart-2','--av-chart-3','--av-chart-4','--av-chart-5','--av-chart-6'];
-        let varCSS = ':root{'; vars.forEach(v => { varCSS += v + ':' + computed.getPropertyValue(v).trim() + ';'; }); varCSS += '}';
+        let varCSS = ':root{'; vars.forEach(v=>{varCSS+=v+':'+computed.getPropertyValue(v).trim()+';';}); varCSS+='}';
         let styleEl = clone.querySelector('style');
-        if (!styleEl) { styleEl = document.createElementNS('http://www.w3.org/2000/svg','style'); clone.insertBefore(styleEl, clone.firstChild); }
+        if(!styleEl){styleEl=document.createElementNS('http://www.w3.org/2000/svg','style');clone.insertBefore(styleEl,clone.firstChild);}
         styleEl.textContent = varCSS + styleEl.textContent;
         const svgStr = new XMLSerializer().serializeToString(clone);
-        download(new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'}), 'archviz-' + Date.now() + '.svg');
+        download(new Blob([svgStr],{type:'image/svg+xml;charset=utf-8'}), 'archviz-'+Date.now()+'.svg');
         toast('SVG exported (with theme vars)');
-      } catch(e) { toast('SVG export failed: ' + e.message); console.error(e); }
+      } catch(e) { toast('SVG export failed: '+e.message); console.error(e); }
     }
     async function copyToClipboard(selector) {
-      const target = findTarget(selector);
-      if (!target) { toast('No export target found'); return; }
+      const target = findTarget(selector); if(!target){toast('No export target');return;}
       try {
         const blob = await exportBlob(target, SCALE_DEFAULT, 'image/png');
         if (navigator.clipboard && window.ClipboardItem) {
-          await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+          await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
           toast('Copied to clipboard (4× PNG)');
         } else {
           const reader = new FileReader();
           reader.onload = () => { console.log('Clipboard fallback — data URL:', reader.result); };
-          reader.readAsDataURL(blob);
-          toast('Clipboard unavailable — data URL logged to console');
+          reader.readAsDataURL(blob); toast('Clipboard unavailable — data URL logged');
         }
-      } catch(e) { toast('Clipboard failed: ' + e.message); console.error(e); }
+      } catch(e) { toast('Clipboard failed: '+e.message); console.error(e); }
     }
     function createMenu() {
       const btn = document.createElement('button'); btn.id = 'archviz-export-btn'; btn.textContent = 'Export';
       btn.addEventListener('click', toggleMenu);
       const menu = document.createElement('div'); menu.id = 'archviz-export-menu';
-      menu.innerHTML = `<button data-action="png">Export PNG <span class="shortcut">E→P</span></button><button data-action="svg">Export SVG <span class="shortcut">E→S</span></button><button data-action="webp">Export WebP <span class="shortcut">E→W</span></button><div class="sep"></div><button data-action="clipboard">Copy to Clipboard <span class="shortcut">E→C</span></button>`;
+      menu.innerHTML = '<button data-action="png">Export PNG <span class="shortcut">E→P</span></button><button data-action="svg">Export SVG <span class="shortcut">E→S</span></button><button data-action="webp">Export WebP <span class="shortcut">E→W</span></button><div class="sep"></div><button data-action="clipboard">Copy to Clipboard <span class="shortcut">E→C</span></button>';
       menu.addEventListener('click', (e) => {
-        const action = e.target.closest('button')?.dataset?.action;
-        if (!action) return; closeMenu();
-        if (action === 'png') exportPNG(); else if (action === 'svg') exportSVG();
-        else if (action === 'webp') exportWebP(); else if (action === 'clipboard') copyToClipboard();
+        const action = e.target.closest('button')?.dataset?.action; if(!action) return;
+        closeMenu();
+        if(action==='png')exportPNG(); else if(action==='svg')exportSVG(); else if(action==='webp')exportWebP(); else if(action==='clipboard')copyToClipboard();
       });
       document.body.appendChild(btn); document.body.appendChild(menu);
     }
-    function toggleMenu() { const m = document.getElementById('archviz-export-menu'); if (m) m.classList.toggle('open'); }
-    function closeMenu() { const m = document.getElementById('archviz-export-menu'); if (m) m.classList.remove('open'); }
-    let pendingE = false, pendingETimer = null;
+    function toggleMenu() { const m=document.getElementById('archviz-export-menu'); if(m)m.classList.toggle('open'); }
+    function closeMenu() { const m=document.getElementById('archviz-export-menu'); if(m)m.classList.remove('open'); }
+    window.archvizExport = { exportPNG, exportSVG, exportWebP, copyToClipboard };
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',createMenu); else createMenu();
+  })();
+  </script>
+
+  <!-- === Swiss Grid Controller === -->
+  <script>
+  (function() {
+    'use strict';
+    // Populate column overlay
+    const overlayCols = document.getElementById('overlay-cols');
+    const cols = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cols').trim() || '12', 10);
+    for (let i = 1; i <= cols; i++) {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'col';
+      colDiv.setAttribute('data-col', i);
+      overlayCols.appendChild(colDiv);
+    }
+
+    // Toggle grid function
+    function setGrid(on) {
+      document.body.classList.toggle('grid-on', on);
+    }
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
-      if (e.target.tagName === 'CANVAS' && document.querySelector('canvas[data-orbit]')) return;
       const key = e.key.toLowerCase();
-      if (key === 't' && !e.metaKey && !e.ctrlKey && !e.altKey) { e.preventDefault(); window.archvizTheme?.toggleTheme(); return; }
-      if (key === 'e' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (key === 'g' && !e.metaKey && !e.ctrlKey && !e.altKey) {
         e.preventDefault();
-        if (pendingE) { clearTimeout(pendingETimer); pendingE = false; return; }
-        pendingE = true; toggleMenu();
-        pendingETimer = setTimeout(() => { pendingE = false; }, 800);
-        return;
+        setGrid(!document.body.classList.contains('grid-on'));
       }
-      if (pendingE) {
-        clearTimeout(pendingETimer); pendingE = false; closeMenu();
-        if (key === 'p') exportPNG(); else if (key === 's') exportSVG();
-        else if (key === 'w') exportWebP(); else if (key === 'c') copyToClipboard();
-        return;
-      }
-      if (key === 'escape') closeMenu();
     });
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('#archviz-export-menu') && !e.target.closest('#archviz-export-btn')) closeMenu();
-    });
-    window.archvizExport = { exportPNG, exportSVG, exportWebP, copyToClipboard };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', createMenu);
-    else createMenu();
+  })();
+  </script>
+
+  <!-- === Optical Alignment Script === -->
+  <script>
+  (function() {
+    'use strict';
+    const cvs = document.createElement('canvas'), ctx = cvs.getContext('2d');
+    const sel = '.v-display-title, .numeral, .v-kicker';
+    function align() {
+      document.querySelectorAll(sel).forEach(el => {
+        el.style.marginLeft = '0px';
+        const cs = getComputedStyle(el);
+        let ch = (el.textContent || '').trim().charAt(0);
+        if (!ch) return;
+        if (cs.textTransform === 'uppercase') ch = ch.toUpperCase();
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        ctx.textAlign = 'left';
+        const abl = ctx.measureText(ch).actualBoundingBoxLeft;
+        if (isFinite(abl)) {
+          el.style.marginLeft = `${(-abl).toFixed(2)}px`;
+        }
+      });
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(align);
+    }
+    align();
+    window.addEventListener('resize', align);
   })();
   </script>
 </body>

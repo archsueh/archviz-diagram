@@ -263,6 +263,12 @@ PALETTES = {
         "border": "rgba(255,255,255,0.15)", "accent": "#6B8AFF",
         "chart": ["#6B8AFF", "#5DCAA5", "#AFA9EC", "#F0997B", "#EF9F27", "#b4b2a9"],
     },
+    "auto-time": {
+        "surface": "auto", "surface-alt": "auto", "surface-raised": "auto",
+        "text-primary": "auto", "text-secondary": "auto", "text-tertiary": "auto",
+        "border": "auto", "accent": "auto",
+        "chart": ["auto"],
+    },
 }
 
 

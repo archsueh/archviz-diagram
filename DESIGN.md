@@ -70,6 +70,8 @@ Every generated diagram should be understandable as a compact design system, not
 | **Lemon Accent** | `#f0f4e0` | `#0a0a0a` | `#a8b898` | `#FFD500` | Tech |
 | **Stone Mono** | `#e7e5e4` | `#292524` | `#a8a29e` | — | Austerity |
 | **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` Terracotta | Cards, covers, publishable HTML ([claude-design-card](https://github.com/geekjourneyx/claude-design-card) lineage) |
+| **Swiss Modernist** | `#ffffff` | `#111111` | `#111111` | `#e4002b` Swiss Red | Müller-Brockmann modular grids, baseline structure |
+| **Vignelli Canon** | `#f4f1ea` | `#0a0a0a` | `#0a0a0a` | `#f04e23` Vermilion | Vignelli systems, wayfinding signage, typography |
 
 **Editorial Parchment notes** (full rules → `references/editorial-parchment-language.md`):
 - Terracotta replaces IKB as the single accent when the brief is editorial / card / cover — never both in one set.
@@ -111,6 +113,8 @@ All HTML templates use CSS custom properties for theming. Variables are defined 
 | Swiss Neutral | light | Blue `#185FA5` | Clean, print |
 | Editorial Parchment | light | Terracotta `#c96442` | Editorial cards |
 | IKB Dark | dark | Periwinkle `#6B8AFF` | Dark mode, terminal |
+| Swiss Modernist | light | Swiss Red `#e4002b` | Müller-Brockmann modular grids |
+| Vignelli Canon | light | Vermilion `#f04e23` | Vignelli Canon layouts |
 
 ### Runtime Behavior
 

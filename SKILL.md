@@ -139,6 +139,8 @@ Gantt:      codes only inside block + table beside / min 3w / termaid for termin
 Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pie
 Dark mode:  surface=#1a1814 text=#e8e4e0 accent=#58a6ff (see §11c)
 Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 500 not 700
+Swiss Grid: surface=#ffffff text=#111111 border=#111111 accent=#e4002b (Swiss Red) modular baseline-locked (12-col+8px)
+Vignelli:   surface=#f4f1ea text=#0a0a0a border=#0a0a0a accent=#f04e23 (Vermilion) max two sizes (heading ≈ 2x body)
 ```
 
 **Type selection (fast):**
@@ -163,6 +165,7 @@ Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 50
 | **Knowledge card (saveable)** | Editorial Family B HTML | `html/editorial-card.html` |
 | **Social square (quote/data)** | Editorial Family C HTML | `html/editorial-card.html` |
 | **Long-form article layout** | Editorial Family D HTML | `html/editorial-card.html` |
+| **Swiss modular layout / poster** | Modular Grid HTML | `html/swiss-modernist-grid.html` |
 
 **Mixed types** (when data spans categories):
 - Process + timeline → flowchart with gantt sub-section (split into 2 diagrams)
@@ -269,6 +272,8 @@ Defined in DESIGN.md. Summary:
 | border | #a8a29e | #d6d3d1 | #94a3b8 |
 | accent | — | — | #002FA7 |
 | **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` |
+| **Swiss Modernist** | `#ffffff` | `#111111` | `#111111` | `#e4002b` |
+| **Vignelli Canon** | `#f4f1ea` | `#0a0a0a` | `#0a0a0a` | `#f04e23` |
 
 **Rules:** Max 1 accent. No AI-purple. Same doc = same palette. Contrast check mandatory. Light surface uses dark text. Editorial mode: serif display **500 max**, no `#ffffff` canvas, no cool `#64748b` grays. Full rules → `references/editorial-parchment-language.md`.
 
@@ -487,7 +492,7 @@ templates/
 ├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
 │               flowchart + mindmap: inline Mermaid (no standalone .mmd)
 ├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
-├── html/       15 files (+ editorial-card; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, threejs-archviz, threejs-floorplan)
+├── html/       16 files (+ editorial-card, swiss-modernist-grid; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, threejs-archviz, threejs-floorplan)
 ├── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
 ├── obsidian-canvas/ 3 files (mindmap, system-architecture, knowledge-graph — .canvas JSON)
 └── excalidraw/  1 file (mindmap.excalidraw.md)
@@ -516,6 +521,9 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | Render loop stops | Don't name loop function `animate` (conflicts with animejs import) |
 | Custom flow nodes "断掉" / bad attach | Paths drawn after nodes or wrong endpoint math | Draw all flow <path> first, then <rect>/<circle> on top. Compute attach = center ± (half-size or r) * unit vector from angle. See examples/us-flows.html + gotchas. |
 | Multiple viz files for same data | User eventually demands "combine into one + clean the rest" | Converge early to single canonical Swiss HTML (shared tokens, one container). Pure attachment + restrained color from energy iteration. |
+| Grid overlay drifts (viewport shift) | Content-box alignment mismatch | Place `.guides` overlay in the SAME container box as the centered content, sharing margins and templates (see `references/swiss-modernist-grid.md`) |
+| CJK text side-bearing offset | Display letters look slightly indented | Implement browser optical alignment to nudge display elements using canvas measurements |
+| Headless Helvetica rendering fallback | System lacks real font, fallback to Arial/Noto | Prioritize `Liberation Sans` in the CSS font stack to preserve metric-compatible grotesque spacing, or embed the webfont directly |
 
 ---
 
