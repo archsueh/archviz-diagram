@@ -158,6 +158,11 @@
   }
 }
 
+/* Transition theme changes smoothly */
+body, .root {
+  transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
+}
+
 /* === Toggle button === */
 #archviz-theme-toggle {
   position: fixed;
@@ -171,14 +176,19 @@
   font: 12px/1 system-ui, -apple-system, sans-serif;
   color: var(--av-text-secondary, #5e5d59);
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 150ms ease-out, border-color 150ms ease-out, transform 100ms ease-out;
   user-select: none;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-#archviz-theme-toggle:hover {
-  background: var(--av-surface-alt, #e8e4e0);
-  border-color: var(--av-text-tertiary, #87867f);
+#archviz-theme-toggle:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  #archviz-theme-toggle:hover {
+    background: var(--av-surface-alt, #e8e4e0);
+    border-color: var(--av-text-tertiary, #87867f);
+  }
 }
 </style>
 
@@ -295,6 +305,7 @@
 })();
 </script>
 
+<!-- archviz-skills Export Utility Module -->
 <style id="archviz-export-styles">
 #archviz-export-btn {
   position: fixed;
@@ -308,15 +319,20 @@
   font: 12px/1 system-ui, -apple-system, sans-serif;
   color: var(--av-text-secondary, #5e5d59);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 150ms ease-out, border-color 150ms ease-out, transform 100ms ease-out;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-#archviz-export-btn:hover {
-  background: var(--av-surface-alt, #e8e4e0);
+#archviz-export-btn:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  #archviz-export-btn:hover {
+    background: var(--av-surface-alt, #e8e4e0);
+    border-color: var(--av-text-tertiary, #87867f);
+  }
 }
 #archviz-export-menu {
-  display: none;
   position: fixed;
   top: 44px;
   right: 140px;
@@ -329,8 +345,19 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  
+  /* Motion parameters: start closed and scale from trigger button */
+  opacity: 0;
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
-#archviz-export-menu.open { display: block; }
+#archviz-export-menu.open {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
 #archviz-export-menu button {
   display: block;
   width: 100%;
@@ -341,9 +368,15 @@
   font: 13px/1.4 system-ui, -apple-system, sans-serif;
   color: var(--av-text-primary, #1B365D);
   cursor: pointer;
+  transition: background 150ms ease-out, transform 100ms ease-out;
 }
-#archviz-export-menu button:hover {
-  background: var(--av-accent-soft, rgba(0,47,167,0.08));
+#archviz-export-menu button:active {
+  transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  #archviz-export-menu button:hover {
+    background: var(--av-accent-soft, rgba(0,47,167,0.08));
+  }
 }
 #archviz-export-menu .sep {
   height: 1px;
@@ -356,11 +389,10 @@
   font-size: 11px;
 }
 #archviz-export-toast {
-  display: none;
   position: fixed;
   bottom: 24px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(8px);
   z-index: 10001;
   background: var(--av-surface-raised, #faf9f5);
   border: 1px solid var(--av-border, #d6d3d1);
@@ -369,86 +401,17 @@
   font: 13px/1 system-ui, -apple-system, sans-serif;
   color: var(--av-text-primary, #1B365D);
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  animation: archviz-toast-in 0.3s ease;
+  
+  opacity: 0;
+  transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1), transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
-@keyframes archviz-toast-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+#archviz-export-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 </style>
-</head>
-<body style="margin:0;background:var(--av-surface);font-family:system-ui">
-<!-- Radar/Spider Chart — archviz-skills -->
-<!-- Use for: multi-dimensional comparison, skill assessment, KPI overview -->
-<!-- Env: Obsidian (iframe) or browser -->
-<canvas id="c" class="archviz-export-target" width="500" height="500"></canvas>
-<script>
-function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-
-function drawChart() {
-const labels = ["Speed", "Quality", "Cost", "Usability", "Scalability", "Design"];
-const data = [85, 72, 90, 68, 78, 92];
-const cx=250, cy=250, r=180, n=labels.length;
-const canvas = document.getElementById("c");
-const ctx = canvas.getContext("2d");
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-const borderColor = getCSSVar('--av-border') || '#d6d3d1';
-const tertiaryColor = getCSSVar('--av-text-tertiary') || '#a8a29e';
-const secondaryColor = getCSSVar('--av-text-secondary') || '#44403c';
-const accentColor = getCSSVar('--av-accent') || '#002FA7';
-const accentSoft = getCSSVar('--av-accent-soft') || 'rgba(0,47,167,0.15)';
-
-// Grid
-for(let level=1;level<=5;level++){
-  ctx.beginPath();
-  const lr=r*level/5;
-  for(let i=0;i<=n;i++){
-    const a=Math.PI*2*i/n-Math.PI/2;
-    const x=cx+lr*Math.cos(a), y=cy+lr*Math.sin(a);
-    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-  }
-  ctx.strokeStyle=borderColor; ctx.lineWidth=1; ctx.stroke();
-}
-
-// Axes
-for(let i=0;i<n;i++){
-  const a=Math.PI*2*i/n-Math.PI/2;
-  ctx.beginPath(); ctx.moveTo(cx,cy);
-  ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
-  ctx.strokeStyle=tertiaryColor; ctx.lineWidth=1; ctx.stroke();
-  // Labels
-  const lx=cx+(r+20)*Math.cos(a), ly=cy+(r+20)*Math.sin(a);
-  ctx.fillStyle=secondaryColor; ctx.font="13px system-ui"; ctx.textAlign="center";
-  ctx.fillText(labels[i],lx,ly+4);
-}
-
-// Data polygon
-ctx.beginPath();
-for(let i=0;i<=n;i++){
-  const a=Math.PI*2*(i%n)/n-Math.PI/2;
-  const d=r*data[i%n]/100;
-  const x=cx+d*Math.cos(a), y=cy+d*Math.sin(a);
-  i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-}
-ctx.fillStyle=accentSoft; ctx.fill();
-ctx.strokeStyle=accentColor; ctx.lineWidth=2; ctx.stroke();
-
-// Data points
-for(let i=0;i<n;i++){
-  const a=Math.PI*2*i/n-Math.PI/2;
-  const d=r*data[i]/100;
-  ctx.beginPath();
-  ctx.arc(cx+d*Math.cos(a),cy+d*Math.sin(a),4,0,Math.PI*2);
-  ctx.fillStyle=accentColor; ctx.fill();
-}
-}
-
-drawChart();
-window.addEventListener('archviz-theme-changed', drawChart);
-</script>
 
 <script>
 /* archviz-skills Export System
@@ -473,9 +436,11 @@ window.addEventListener('archviz-theme-changed', drawChart);
       document.body.appendChild(el);
     }
     el.textContent = msg;
-    el.style.display = 'block';
+    // Force a layout reflow to ensure the transition triggers
+    el.getBoundingClientRect();
+    el.classList.add('visible');
     clearTimeout(el._t);
-    el._t = setTimeout(() => el.style.display = 'none', 2200);
+    el._t = setTimeout(() => el.classList.remove('visible'), 2200);
   }
 
   // --- Find export target (first SVG, or first canvas, or .archviz-export-target) ---
@@ -577,7 +542,7 @@ window.addEventListener('archviz-theme-changed', drawChart);
     } else if (target.tagName === 'CANVAS') {
       return canvasToBlob(target, scale, format);
     } else {
-      // HTML fallback
+      // HTML fallback — screenshot via html2canvas if available, else canvas draw
       const w = target.scrollWidth || target.clientWidth || 800;
       const h = target.scrollHeight || target.clientHeight || 600;
       const canvas = document.createElement('canvas');
@@ -587,6 +552,7 @@ window.addEventListener('archviz-theme-changed', drawChart);
       ctx.scale(scale, scale);
       ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--av-surface').trim() || '#f5f0eb';
       ctx.fillRect(0, 0, w, h);
+      // Use foreignObject approach
       const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
         <foreignObject width="100%" height="100%">
           <div xmlns="http://www.w3.org/1999/xhtml">${target.outerHTML}</div>
@@ -678,6 +644,7 @@ window.addEventListener('archviz-theme-changed', drawChart);
         await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
         toast('Copied to clipboard (4× PNG)');
       } else {
+        // Fallback: data URL to console
         const reader = new FileReader();
         reader.onload = () => { console.log('Clipboard fallback — data URL:', reader.result); };
         reader.readAsDataURL(blob);
@@ -730,7 +697,9 @@ window.addEventListener('archviz-theme-changed', drawChart);
   let pendingETimer = null;
 
   document.addEventListener('keydown', (e) => {
+    // Skip if typing in input
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+    // Skip if OrbitControls is active (3D pages)
     if (e.target.tagName === 'CANVAS' && document.querySelector('canvas[data-orbit]')) return;
 
     const key = e.key.toLowerCase();
@@ -742,7 +711,7 @@ window.addEventListener('archviz-theme-changed', drawChart);
       return;
     }
 
-    // E = export menu toggle
+    // E = export menu toggle (or E→P/S/W/C two-key combo)
     if (key === 'e' && !e.metaKey && !e.ctrlKey && !e.altKey) {
       e.preventDefault();
       if (pendingE) {
@@ -770,6 +739,7 @@ window.addEventListener('archviz-theme-changed', drawChart);
       return;
     }
 
+    // Escape = close menu
     if (key === 'escape') closeMenu();
   });
 

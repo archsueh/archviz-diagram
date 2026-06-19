@@ -2,13 +2,14 @@
 name: archviz
 description: |
   Restrained 2D information visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
+  Token-aware: prefers Mermaid/ASCII/compact HTML, defers heavy self-contained HTML to when interaction is required.
   Supports Mermaid, ASCII, self-contained HTML, Python (Plotly). Text-first, preview-compatible, anti-slop.
   For 3D spatial visualization (building, floorplan, exploded view) → use archviz-3d.
   Use when the user asks for diagram, visualization, chart, gantt, sankey, mindmap, flowchart, xychart, 可视化, 架构图, 流程图,
   信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
 license: MIT
 metadata:
-  version: 0.4.2
+  version: 0.4.3
   source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh
@@ -294,9 +295,10 @@ Labels: ≤6 words · ≤8 Chinese chars · no ALL CAPS · same language per dia
 All self-contained HTML templates include two core modules:
 
 ### Theme System (`_archviz-theme.html`)
-- **4 palettes**: Warm Paper (default), Swiss Neutral, Editorial Parchment, IKB Dark
+- **6 palettes**: Warm Paper, Swiss Neutral, Editorial Parchment, Swiss Modernist, Vignelli Canon, IKB Dark
+- **Auto-time theme**: By default (no saved preference), pages display Editorial Parchment during the day (6:00 AM – 6:00 PM) and switch to IKB Dark at night (6:00 PM – 6:00 AM). The `auto-time` palette selection is also cycleable.
 - **CSS variables**: `--av-surface`, `--av-text-primary`, `--av-accent`, `--av-chart-1..6` etc.
-- **Auto-detect**: `prefers-color-scheme: dark` → IKB Dark
+- **Auto-detect**: `prefers-color-scheme: dark` → IKB Dark (when `auto-time` is not used)
 - **Runtime toggle**: click button (top-right) or press **T** to cycle palettes
 - **Persistence**: `localStorage('archviz-palette')`
 
@@ -580,6 +582,57 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Agents365-ai | 样式预设系统 |
 | [termaid](https://github.com/fasouto/termaid) | fasouto | 终端Mermaid渲染 |
 | [archify](https://github.com/tt-a1i/archify) | tt-a1i | 语义化组件配色 + 五类技术图类型词汇（`references/semantic-component-colors.md` · `diagram-types-technical.md`）|
+| [headroom](https://github.com/chopratejas/headroom) | chopratejas (Netflix) | Compression mindset: input normalization, terse output shaping, reversible caching for iterative refinement |
+
+---
+
+## 15. COMPRESSION & TOKEN BUDGET (Headroom inspired)
+
+Archviz output competes for context window with prompt, tool results, and system memory.
+Render this section as operational rules, not aspirational goals.
+
+### 15.1 Input side (before generation)
+
+| Rule | Why |
+|------|-----|
+| Flatten JSON arrays to `[{label,value}]` before passing to chart | Whitespace and nesting are the token killers headroom targets |
+| Strip decorative prose from data payloads; keep only numeric/label fields | Tool output cost dominates when agent re-reads the same data |
+| One source of truth per diagram; deduplicate cross-references with `key` fields | Duplicate labels break max-1-accent and waste tokens |
+| ASCII fallback prepared in parallel, not after render failure | Avoid the expensive "generate big HTML → fail → retry" loop |
+
+### 15.2 Output side (after generation)
+
+| Rule | Target |
+|------|--------|
+| Embed self-contained HTML only when interactivity/animation is required | Static saves tokens; Mermaid + image export replaces heavy HTML for static deliverables |
+| Export system (E→P/S/W/C) de-prioritizes re-render; use SVG for single-shape, PNG only when client demands raster | PNG at 4× is expensive in output tokens and base64 |
+| Embed dedup: if same diagram appears in 2 notes, link to one canonical HTML; second brief becomes a `[view]` reference | Avoids shipping duplicate 30KB assets |
+| Self-healing loop ≤2 rounds; third failure ships ASCII fallback + documented warning | Prevents the model from "fixing" forever and bloating the conversation |
+
+### 15.3 Output shaping for model-written text
+
+- **Terse by default**: Every archviz output block should use finding-first captions, not description restatements.
+- **Max 15 words for caption**: `"V1 closed loop; 3 feedback paths, 1 integration gap"`, not `"This diagram illustrates the closed loop of V1 with three feedback paths and one integration gap"`.
+- **Skip decorative transitions**: No "Great, let me now show you…", no "I've generated the diagram above for your reference".
+- **Evidence-first body**: Chart itself is the evidence; caption is the claim. Model text explains nothing the chart doesn't already show.
+
+### 15.4 Reversible caching analog (CCR)
+
+Archviz does not have a full CCR reversibility layer, but inherit the principle:
+
+1. **Golden copy**: First successful render of a template is cached at `templates/html/` or `exports/`.
+2. **Rollback contract**: If the self-healing loop or a later edit breaks a diagram, revert to last known good. Do not ship a broken diagram with a "fix in progress" note.
+3. **Audit log**: `CHANGELOG.md` records the before/after state for every major diagram change.
+
+### 15.5 Practical budget tiers
+
+| Context | Allowed format budget |
+|---------|----------------------|
+| Terminal / CLI chat | Mermaid ≤ 30 nodes, ASCII fallback |
+| Obsidian note | Self-contained HTML ≤ 200KB, Mermaid inline |
+| Deliverable PNG | SVG → PNG (4×), no base64 embeds in chat |
+| Batch export | Use `headroom-wrap` for Mermaid/HTML before model re-reads; expect 40–90% token reduction on tool outputs |
+
 
 ---
 

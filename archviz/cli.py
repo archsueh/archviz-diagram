@@ -60,10 +60,17 @@ def cmd_render(args):
         options["theme"] = args.theme
     if args.title:
         options["title"] = args.title
+    if args.compress:
+        options["compress"] = True
 
     # Render
     try:
         html = render(args.type, data, options)
+        reason = ""
+        if args.compress and "HEADROOM" in html:
+            reason = " (compressed)"
+        elif args.compress:
+            reason = " (raw fallback)"
     except (ValueError, FileNotFoundError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
@@ -103,6 +110,7 @@ def main():
     p_render.add_argument("--theme", help="Palette name (warm-paper, swiss-neutral, editorial-parchment, ikb-dark)")
     p_render.add_argument("--title", help="Page title override")
     p_render.add_argument("--output", "-o", help="Output file (default: stdout)")
+    p_render.add_argument("--compress", action="store_true", help="Send payload through headroom compression (opt-in, falls back to raw)")
 
     # serve
     sub.add_parser("serve", help="Start MCP server (stdio transport)")

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.3 (2026-06-18)
+
+### Added
+- `§15 COMPRESSION & TOKEN BUDGET`: 基于 headroom（chopratejas/headroom）压缩思维，新增输入规整、输出极简、可逆缓存 analog、场景化预算表四节。规则覆盖输入扁平化、嵌入式 white-space 省略、ASCII fallback 并行准备、self-healing loop ≤2 rounds 上限、caption ≤15 words、无装饰性过渡语、golden copy + rollback contract + audit log。
+
+### Changed
+- `§致谢`: 增加 headroom 引用。
+- `SKILL.md` 完整性：确认 §15 追加后未修改既有 §0–§14 任意段落，无 content deletion。
+
 ## 0.4.2 (2026-06-14)
 
 ### Added

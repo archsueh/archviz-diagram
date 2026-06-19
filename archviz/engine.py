@@ -1,15 +1,11 @@
 """
 archviz rendering core — zero-dependency, template-driven visualization engine.
-
-Usage:
-    from archviz.engine import render, list_types, export_html
-
-    html = render("stacked-bar", data={"labels": [...], "datasets": [...]}, options={"theme": "warm-paper"})
-    types = list_types()
+Optional post-render compression via headroom CLI (separate venv).
 """
 
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +13,9 @@ from typing import Any
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "html"
 THEME_MODULE = TEMPLATES_DIR / "_archviz-theme.html"
 EXPORT_MODULE = TEMPLATES_DIR / "_archviz-export.html"
+
+# Headroom binary path (separate venv, keep engine zero-dep)
+HEADROOM_CLI = Path.home() / "Developer" / "_envs" / "headroom" / "bin" / "headroom"
 
 # === Type Registry ===
 # Each type maps to a template file + data schema description
@@ -289,8 +288,11 @@ def render(viz_type: str, data: dict, options: dict | None = None) -> str:
         data: Chart data (schema varies by type)
         options: Optional overrides — theme, width, height, restraint, title, interactive
 
-    Returns:
-        Self-contained HTML string
+          compress: bool — If True, send payload through headroom compression and
+                  replace the HTML with the compressed result.
+                  Defaults to False; the engine remains zero-cost by default.
+        Returns:
+            Self-contained HTML string, optionally compressed.
     """
     if viz_type not in TYPE_REGISTRY:
         available = ", ".join(TYPE_REGISTRY.keys())
@@ -315,6 +317,9 @@ def render(viz_type: str, data: dict, options: dict | None = None) -> str:
     # Apply title override
     if "title" in options:
         html = re.sub(r"<title>.*?</title>", f"<title>{options['title']}</title>", html, count=1)
+
+    if options.get("compress"):
+        html = _compress_text_via_headroom(_strip_html_for_compression(html), size_ratio=0.5)
 
     return html
 
@@ -411,3 +416,56 @@ def get_palette(name: str) -> dict | None:
 def list_palettes() -> list[str]:
     """Return available palette names."""
     return list(PALETTES.keys())
+
+
+# === Headroom compression integration (optional, zero default cost) ===
+def _strip_html_for_compression(html: str) -> str:
+    """Heuristic payload shrinker: extract data payload only, drop chrome/theme/script scaffolds.
+
+    Headroom targets structured text (JSON, logs, tool outputs). This function attempts
+    to surface the structured payload, not the chrome, before compression.
+    """
+    try:
+        markers = [m.start() for m in re.finditer(r"const\s+(data|series|labels|steps|axes|datasets)\s*=\s*[\[{]", html)]
+        if markers:
+            start = markers[0]
+            end = html.find("</script>", start)
+            if end != -1:
+                return "// Payload from archviz template\n" + html[start:end].strip()
+    except Exception:
+        pass
+    return html
+
+
+def _compress_text_via_headroom(text: str, size_ratio: float = 0.5) -> str:
+    """Invoke headroom CLI via memory compression path.
+
+    Falls back to raw text if headroom is not installed or returns non-zero.
+    """
+    if not HEADROOM_CLI.exists():
+        return text
+    try:
+        env_dotenv = (Path.home() / ".headroom" / ".env")
+        env = {}
+        if env_dotenv.exists():
+            for line in env_dotenv.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" in line:
+                    key, _, value = line.partition("=")
+                    env[key.strip()] = value.strip()
+        cmd = [str(HEADROOM_CLI), "compress", "--stdin", f"--target-ratio={size_ratio}"]
+        proc = subprocess.run(
+            cmd,
+            input=text,
+            capture_output=True,
+            check=False,
+            env={**__import__("os").environ, **env},
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            return proc.stdout.decode("utf-8", errors="replace")
+    except Exception:
+        pass
+    return text
+
