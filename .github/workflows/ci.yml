@@ -36,3 +36,12 @@ jobs:
     - name: Check for Uncommitted Sync Changes
       run: |
         git diff --exit-code || (echo "ERROR: Templates are out of sync with components. Please run sync scripts locally and commit changes!" && exit 1)
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Verify Code Formatting with Prettier
+      run: npx prettier --check "templates/html/*.html"
+
