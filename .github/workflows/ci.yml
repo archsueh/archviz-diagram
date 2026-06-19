@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Verify Sync and Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Verify Dependencies Compatibility
+      run: pip check
+
+    - name: Run Sync Scripts
+      run: |
+        python scripts/sync_theme.py
+        python scripts/sync_export.py
+
+    - name: Check for Uncommitted Sync Changes
+      run: |
+        git diff --exit-code || (echo "ERROR: Templates are out of sync with components. Please run sync scripts locally and commit changes!" && exit 1)
