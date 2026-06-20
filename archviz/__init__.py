@@ -1,1 +1,1 @@
-"""archviz — restrained information visualization engine."""
+"""archviz — restrained flowchart and framework diagram engine."""

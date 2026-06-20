@@ -1,5 +1,5 @@
 """
-archviz rendering core — zero-dependency, template-driven visualization engine.
+archviz rendering core — zero-dependency, template-driven flowchart and framework diagram engine.
 Optional post-render compression via headroom CLI (separate venv).
 """
 

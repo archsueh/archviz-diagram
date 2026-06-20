@@ -33,7 +33,7 @@ Every generated diagram should be understandable as a compact design system, not
 | Layout behavior | direction, max nodes, split rule, fallback | Overflow and unreadable graphs |
 | Validation | render target, contrast, overlap, fallback | Pretty source that fails in the user's viewer |
 
-`awesome-design-md` works because each `DESIGN.md` captures a real visual language: overview, tokens, typography, components, layout, guardrails, responsive behavior, and agent guide. `archviz-skills` applies the same idea to information visualization: every chart family has tokens, semantics, constraints, and validation gates.
+`awesome-design-md` works because each `DESIGN.md` captures a real visual language: overview, tokens, typography, components, layout, guardrails, responsive behavior, and agent guide. `archviz-skills` applies the same idea to flowcharts and framework diagrams: every diagram family has tokens, semantics, constraints, and validation gates.
 
 ---
 

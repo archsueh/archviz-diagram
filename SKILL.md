@@ -1,19 +1,18 @@
 ---
 name: archviz
 description: |
-  Restrained 2D information visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
+  Restrained flowcharts and framework diagrams (流程图与框架图/系统架构图/概念模型) visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
   Token-aware: prefers Mermaid/ASCII/compact HTML, defers heavy self-contained HTML to when interaction is required.
   Supports Mermaid, ASCII, self-contained HTML, Python (Plotly). Text-first, preview-compatible, anti-slop.
   For 3D spatial visualization (building, floorplan, exploded view) → use archviz-3d.
-  Use when the user asks for diagram, visualization, chart, gantt, sankey, mindmap, flowchart, xychart, 可视化, 架构图, 流程图,
-  信息图, 甘特图, funnel, state diagram, decision matrix, 封面, 卡片, 信息卡, 分享图, 排版.
+  Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
 license: MIT
 metadata:
-  version: 0.4.3
+  version: 0.5.0
   source: https://github.com/archsueh/archviz
   risk: safe
   author: archsueh
-  triggers: diagram, visualization, chart, gantt, sankey, mindmap, xychart, 可视化, 架构图, 流程图, 信息图, 甘特图, funnel, state diagram, decision matrix, 漏斗图, 状态机, 决策矩阵, 依赖图, dependency graph
+  triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map
 ---
 
 # archviz-skills
@@ -42,7 +41,7 @@ metadata:
 
 | Need | Use |
 |---|---|
-| 2D infoviz (charts, flow, cards) | **archviz** (this skill) |
+| Flowcharts & Framework Diagrams (process flows, architecture, concepts) | **archviz** (this skill) |
 | 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) |
 | Dark tech infrastructure diagrams | [architecture-diagram](~/.claude/skills/creative/architecture-diagram) |
 | Educational flat diagrams (physics, chemistry, engineering) | [concept-diagrams](~/.claude/skills/creative/concept-diagrams) |

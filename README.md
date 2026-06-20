@@ -1,9 +1,9 @@
 
 # archviz
 
-Restrained 2D information visualization skill pack for AI agents.
+Restrained flowcharts and framework diagrams (流程图与框架图) visualization skill pack for AI agents.
 
-Every visualization starts with a **brief read** and **three dials** — not a default template.
+Every diagram starts with a **brief read** and **three dials** — not a default template.
 
 > **3D spatial visualization** has been split into [archviz-3d](https://github.com/archsueh/archviz-3d).
 
@@ -30,7 +30,7 @@ Mermaid source:
 
 ## What this is
 
-A skill for AI agents (Claude Code, Hermes, Codex, etc.) that generates **rational, minimalist, restrained visualizations**. Not just Mermaid — supports ASCII/termaid terminal rendering, self-contained HTML, Python (Plotly), Obsidian Canvas, draw.io handoff guidance, and Three.js 3D archviz.
+A skill for AI agents (Claude Code, Hermes, Codex, etc.) that generates **rational, minimalist, restrained flowcharts and framework diagrams (流程图与框架图)**. Not just Mermaid — supports ASCII/termaid terminal rendering, self-contained HTML, Python (Plotly), Obsidian Canvas, draw.io handoff guidance, and Three.js 3D archviz.
 
 ## Design philosophy
 
@@ -57,7 +57,7 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 - Design-contract first: no template ships without tokens, intent, constraints, and validation notes
 
 **Mode routing:**
-- **Default (2D infoviz)** — charts, flowcharts, gantt, sankey, tables, teaching diagrams
+- **Default (Flowcharts & Framework Diagrams)** — process flows, system architectures, conceptual models, state machines, relationship matrices, organizational diagrams
 - **3D archviz** — only when the brief mentions building, floorplan, structure, section cut, or walkthrough (`templates/html/threejs-*.html`)
 - **Editable handoff** — use draw.io mode when the user needs a diagram that can be edited by architects, teachers, or engineering teams after generation
 
