@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "archviz"
+name = "archviz-diagram"
 version = "0.5.0"
 description = "Restrained flowchart and framework diagram engine for AI agents"
 readme = "README.md"
@@ -16,7 +16,7 @@ mcp = ["mcp>=1.20"]
 all = ["mcp>=1.20"]
 
 [project.scripts]
-archviz = "archviz.cli:main"
+archviz-diagram = "archviz_diagram.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["archviz"]
+packages = ["archviz_diagram"]

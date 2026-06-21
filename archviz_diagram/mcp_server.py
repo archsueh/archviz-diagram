@@ -1,13 +1,13 @@
 """
-archviz MCP server — exposes visualization tools for AI agents.
+archviz-diagram MCP server — exposes flowchart and framework diagram tools for AI agents.
 
-Run: .venv/bin/python -m archviz.mcp_server
-Or: archviz serve (via CLI)
+Run: .venv/bin/python -m archviz_diagram.mcp_server
+Or: archviz-diagram serve (via CLI)
 
 Tools:
-  - archviz_generate: Generate a self-contained HTML visualization
-  - archviz_list_types: List all supported visualization types
-  - archviz_list_palettes: List available color palettes
+  - archviz_diagram_generate: Generate a self-contained HTML flowchart or diagram
+  - archviz_diagram_list_types: List all supported diagram types
+  - archviz_diagram_list_palettes: List available color palettes
 """
 
 import json
@@ -18,12 +18,12 @@ from mcp.server.fastmcp import FastMCP
 
 from .engine import render, list_types, list_palettes, get_palette
 
-mcp = FastMCP("archviz")
+mcp = FastMCP("archviz-diagram")
 
 
 @mcp.tool()
-def archviz_generate(type: str, data: dict, options: dict | None = None) -> str:
-    """Generate a self-contained HTML visualization.
+def archviz_diagram_generate(type: str, data: dict, options: dict | None = None) -> str:
+    """Generate a self-contained HTML flowchart or diagram.
 
     Scope: this tool renders the self-contained HTML chart types only (the subset in
     the engine type registry). The wider archviz skill also covers Mermaid, ASCII, and
@@ -47,8 +47,8 @@ def archviz_generate(type: str, data: dict, options: dict | None = None) -> str:
 
 
 @mcp.tool()
-def archviz_list_types() -> str:
-    """List all supported visualization types with data schemas and examples.
+def archviz_diagram_list_types() -> str:
+    """List all supported diagram types with data schemas and examples.
 
     Returns detailed information about each chart type including:
     - Type name and description
@@ -63,7 +63,7 @@ def archviz_list_types() -> str:
 
 
 @mcp.tool()
-def archviz_list_palettes() -> str:
+def archviz_diagram_list_palettes() -> str:
     """List available color palettes with their hex values.
 
     Returns palette definitions for: warm-paper, swiss-neutral, editorial-parchment, ikb-dark

@@ -1,5 +1,5 @@
 
-# archviz
+# archviz-diagram
 
 Restrained flowcharts and framework diagrams (流程图与框架图) visualization skill pack for AI agents.
 
@@ -34,7 +34,7 @@ A skill for AI agents (Claude Code, Hermes, Codex, etc.) that generates **ration
 
 ## Design philosophy
 
-`archviz-skills` treats every diagram as a small **DESIGN.md artifact**: a plain-text design contract that an agent can read, execute, and audit. The goal is not to make diagrams prettier by default; the goal is to make their visual language explicit enough that another agent can reproduce the same taste without guessing.
+`archviz-diagram-skills` treats every diagram as a small **DESIGN.md artifact**: a plain-text design contract that an agent can read, execute, and audit. The goal is not to make diagrams prettier by default; the goal is to make their visual language explicit enough that another agent can reproduce the same taste without guessing.
 
 Every output should expose five things:
 
@@ -66,11 +66,11 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 ## Quick start
 
 ```bash
-git clone https://github.com/archsueh/archviz-skills.git
+git clone https://github.com/archsueh/archviz-diagram.git
 # Claude Code / Codex
-cp -r archviz-skills ~/.claude/skills/
+cp -r archviz-diagram ~/.claude/skills/archviz-diagram
 # Hermes Agent
-cp -r archviz-skills ~/.hermes/skills/creative/archviz-skills
+cp -r archviz-diagram ~/.hermes/skills/creative/archviz-diagram
 ```
 
 ---
@@ -78,7 +78,7 @@ cp -r archviz-skills ~/.hermes/skills/creative/archviz-skills
 ## Structure
 
 ```
-archviz-skills/
+archviz-diagram/
 ├── SKILL.md              # Execution workflow + anti-patterns
 ├── DESIGN.md             # Design system, Stitch 9-section format (+ Extended: taxonomy, Aver, 3D)
 ├── preview.html          # Visual catalog: palettes, type scale, node/edge styles

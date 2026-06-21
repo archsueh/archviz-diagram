@@ -1,12 +1,12 @@
 """
-archviz CLI — command-line interface for the visualization engine.
+archviz-diagram CLI — command-line interface for the flowchart and diagram engine.
 
 Usage:
-    archviz list                          # List all visualization types
-    archviz list-palettes                 # List color palettes
-    archviz render --type stacked-bar --data data.json --output chart.html
-    archviz render --type stacked-bar --data data.json --theme ikb-dark --output chart.html
-    archviz serve                         # Start MCP server
+    archviz-diagram list                          # List all diagram types
+    archviz-diagram list-palettes                 # List color palettes
+    archviz-diagram render --type stacked-bar --data data.json --output chart.html
+    archviz-diagram render --type stacked-bar --data data.json --theme ikb-dark --output chart.html
+    archviz-diagram serve                         # Start MCP server
 """
 
 import argparse
@@ -92,8 +92,8 @@ def cmd_serve(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="archviz",
-        description="Restrained information visualization engine",
+        prog="archviz-diagram",
+        description="Restrained flowchart and framework diagram engine",
     )
     sub = parser.add_subparsers(dest="command")
 

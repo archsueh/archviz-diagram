@@ -1,5 +1,5 @@
 ---
-name: archviz
+name: archviz-diagram
 description: |
   Restrained flowcharts and framework diagrams (流程图与框架图/系统架构图/概念模型) visualization skill pack for AI agents. Every visualization starts with a brief read and three dials.
   Token-aware: prefers Mermaid/ASCII/compact HTML, defers heavy self-contained HTML to when interaction is required.
@@ -9,13 +9,13 @@ description: |
 license: MIT
 metadata:
   version: 0.5.0
-  source: https://github.com/archsueh/archviz
+  source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
   triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map
 ---
 
-# archviz-skills
+# archviz-diagram-skills
 
 > Every rule is **contextual**. Read the brief first, then pull only what fits.
 
@@ -26,9 +26,9 @@ metadata:
 - Editorial HTML cards/covers when the deliverable stays **text-first or self-contained HTML** (not Playwright PNG pipeline).
 - Host-document palette matching (Warm Paper, Aver cinnabar, Editorial Parchment).
 
-**Good:** "用 archviz 给这份产品全案 §2 画 V1 闭环图" · "Gantt + 任务表 + ASCII fallback" · "内嵌 Warm Paper SVG 到 Obsidian 笔记"
+**Good:** "用 archviz-diagram 给这份产品全案 §2 画 V1 闭环图" · "Gantt + 任务表 + ASCII fallback" · "内嵌 Warm Paper SVG 到 Obsidian 笔记"
 
-**Good:** "帮我生成小红书 PNG 并截图上传" → archviz HTML 模板内置导出（E→P 4× PNG），无需外部工具。若需复杂排版，可搭配 `claude-design-card` 使用 archviz 输出的 HTML 骨架。
+**Good:** "帮我生成小红书 PNG 并截图上传" → archviz-diagram HTML 模板内置导出（E→P 4× PNG），无需外部工具。若需复杂排版，可搭配 `claude-design-card` 使用 archviz-diagram 输出的 HTML 骨架。
 
 ## When NOT to Use
 
@@ -41,7 +41,7 @@ metadata:
 
 | Need | Use |
 |---|---|
-| Flowcharts & Framework Diagrams (process flows, architecture, concepts) | **archviz** (this skill) |
+| Flowcharts & Framework Diagrams (process flows, architecture, concepts) | **archviz-diagram** (this skill) |
 | 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) |
 | Dark tech infrastructure diagrams | [architecture-diagram](~/.claude/skills/creative/architecture-diagram) |
 | Educational flat diagrams (physics, chemistry, engineering) | [concept-diagrams](~/.claude/skills/creative/concept-diagrams) |
@@ -50,32 +50,32 @@ metadata:
 
 ## MCP Server (programmatic access)
 
-archviz exposes a Python MCP server for AI agents. Any LLM can call it directly.
+archviz-diagram exposes a Python MCP server for AI agents. Any LLM can call it directly.
 
 ```bash
 # Install
-cd ~/Developer/archviz && pip install -e ".[mcp]"
+cd ~/Developer/archviz-diagram && pip install -e ".[mcp]"
 
 # CLI usage
-archviz list                           # list 14 types
-archviz render -t stacked-bar -o chart.html
-archviz render -t sunburst -d data.json --theme ikb-dark -o chart.html
+archviz-diagram list                           # list 14 types
+archviz-diagram render -t stacked-bar -o chart.html
+archviz-diagram render -t sunburst -d data.json --theme ikb-dark -o chart.html
 
 # MCP server (stdio transport)
-archviz serve
+archviz-diagram serve
 ```
 
 ### Tools
 | Tool | Description |
 |---|---|
-| `archviz_generate(type, data, options)` | Generate self-contained HTML visualization |
-| `archviz_list_types()` | List all types with schemas and examples |
-| `archviz_list_palettes()` | List available color palettes |
+| `archviz_diagram_generate(type, data, options)` | Generate self-contained HTML flowchart or diagram |
+| `archviz_diagram_list_types()` | List all types with schemas and examples |
+| `archviz_diagram_list_palettes()` | List available color palettes |
 
 ### Family MCP Servers
 | Server | Tools | Location |
 |---|---|---|
-| `archviz` | 14 types (2D charts) | `~/Developer/archviz` |
+| `archviz-diagram` | 14 types (2D charts) | `~/Developer/archviz-diagram` |
 | `archviz-3d` | 2 types (building, floorplan) | `~/Developer/archviz-3d` |
 | `archviz-sketch` | 4 styles (prompt generation) | `~/Developer/archviz-sketch` |
 
