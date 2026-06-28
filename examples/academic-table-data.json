@@ -1,0 +1,45 @@
+{
+  "title": "Table 1: Main speculative decoding results",
+  "subtitle": "Accepted length τ (higher is better) across benchmarks. Bold indicates best per column.",
+  "columnGroups": [
+    { "label": "Math Domain", "span": 3 },
+    { "label": "Code Domain", "span": 3 },
+    { "label": "Chat Domain", "span": 3 }
+  ],
+  "columns": ["GSM8K", "MATH", "AIME25", "MBPP", "HumanEval", "LCB", "MT-Bench", "Alpaca", "Arena-Hard"],
+  "rowGroups": [
+    {
+      "label": "Qwen3-4B",
+      "rows": [
+        { "method": "Eagle3", "values": [3.21, 2.87, 2.15, 3.45, 3.12, 2.78, 3.67, 3.89, 3.34] },
+        { "method": "DFlash", "values": [3.56, 3.12, 2.45, 3.78, 3.45, 3.12, 4.01, 4.23, 3.67] },
+        { "method": "DSpark", "values": [4.12, 3.78, 3.01, 4.34, 4.12, 3.67, 4.56, 4.78, 4.23], "best": true }
+      ]
+    },
+    {
+      "label": "Qwen3-8B",
+      "rows": [
+        { "method": "Eagle3", "values": [3.89, 3.45, 2.78, 4.12, 3.78, 3.34, 4.23, 4.45, 3.89] },
+        { "method": "DFlash", "values": [4.23, 3.78, 3.12, 4.45, 4.12, 3.67, 4.56, 4.78, 4.23] },
+        { "method": "DSpark", "values": [4.89, 4.45, 3.67, 5.12, 4.78, 4.34, 5.23, 5.45, 4.89], "best": true }
+      ]
+    },
+    {
+      "label": "Qwen3-14B",
+      "rows": [
+        { "method": "Eagle3", "values": [4.45, 4.01, 3.34, 4.67, 4.34, 3.89, 4.78, 5.01, 4.45] },
+        { "method": "DFlash", "values": [4.78, 4.34, 3.67, 5.01, 4.67, 4.23, 5.12, 5.34, 4.78] },
+        { "method": "DSpark", "values": [5.56, 5.12, 4.34, 5.78, 5.45, 5.01, 5.89, 6.12, 5.56], "best": true }
+      ]
+    },
+    {
+      "label": "Gemma4-12B",
+      "rows": [
+        { "method": "Eagle3", "values": [3.67, 3.23, 2.56, 3.89, 3.56, 3.12, 4.01, 4.23, 3.67] },
+        { "method": "DFlash", "values": [4.01, 3.56, 2.89, 4.23, 3.89, 3.45, 4.34, 4.56, 4.01] },
+        { "method": "DSpark", "values": [4.67, 4.23, 3.45, 4.89, 4.56, 4.12, 5.01, 5.23, 4.67], "best": true }
+      ]
+    }
+  ],
+  "footer": "τ = average accepted tokens per decoding round. Results across 9 benchmarks spanning Math, Code, and Chat domains."
+}

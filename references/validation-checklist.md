@@ -24,6 +24,12 @@
       Catches orphan `end`, unbalanced subgraph/end, tokens glued to `end`
       (`]end`), and broken/unterminated ```mermaid fences. These are the
       recurring "Syntax error in text" failures a render-only check misses.
+- [ ] **Subgraph ID 纯 ASCII（MANDATORY）**：所有 subgraph 标题若含中文或空格，
+      必须用 `subgraph id["标签文字"]` 格式。直接写 `subgraph 中文名` 或
+      `subgraph name with spaces` 在 Mermaid 11.x 报 `got 'UNICODE_TEXT'`。
+      搜索文件中所有 `subgraph `，确认 id 段无空格无汉字。
+- [ ] **节点文字不溢出**：单行 ≤12 汉字 / ≤20 英文字符；超长用 `\n` 分行，
+      每行 ≤10 汉字；Gantt bar 内只用代码（V1.1 等），全名放旁表。
 - [ ] Renders cleanly in target (Obsidian, GitHub, Mermaid live editor).
 - [ ] No syntax errors.
 
@@ -38,7 +44,25 @@
 - [ ] Arrow labels have background rects (opacity 0.95).
 - [ ] Legend present if >2 arrow types.
 - [ ] Visual self-review (if images readable): clean routing, sufficient spacing, readable text (>=11px, good contrast).
-- [ ] Matches DESIGN.md tokens + user's document style.
+## 3D post-gen}: CDN imports resolve? Console clean? Resize works? Camera limits set? Touch/mobile tested?
+
+## Educational Flat (Demo Section)
+
+- [ ] Brief follows Educational Flat contract (reference/educational-flat-system.md)
+- [ ] Background: `#ffffff`, text: `#000000`, border: `#000000`
+- [ ] Only ONE ramp hue used; hierarchy via lightness within that ramp
+- [ ] Font system: system-ui / PingFang SC / Noto Sans SC
+- [ ] No gradients, no shadows, no glassmorphism, no decorations
+- [ ] Legend included when >1 edge type is used
+- [ ] No diagrams are academic
+
+---
+
+
+
+
+
+
 
 ## Error Recovery
 - Syntax fail: Simplify or switch type/mode.

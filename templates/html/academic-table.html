@@ -1,0 +1,891 @@
+<!-- archviz-skills academic-table | 2026-06-28 -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Academic Table</title>
+
+    <!-- archviz-skills Theme System Module -->
+    <style id="archviz-theme-vars">
+      /* === Palette: Warm Paper (default light) === */
+      :root,
+      [data-palette="warm-paper"] {
+        --av-surface: #f5f0eb;
+        --av-surface-alt: #e8e4e0;
+        --av-surface-raised: #faf9f5;
+        --av-text-primary: #1b365d;
+        --av-text-secondary: #5e5d59;
+        --av-text-tertiary: #87867f;
+        --av-border: #d6d3d1;
+        --av-accent: #002fa7;
+        --av-accent-soft: rgba(0, 47, 167, 0.12);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #002fa7;
+        --av-chart-2: #94a3b8;
+        --av-chart-3: #a8a29e;
+        --av-chart-4: #d6d3d1;
+        --av-chart-5: #c96442;
+        --av-chart-6: #5e5d59;
+      }
+
+      /* === Palette: Swiss Neutral === */
+      [data-palette="swiss-neutral"] {
+        --av-surface: #f8f8f6;
+        --av-surface-alt: #efeeec;
+        --av-surface-raised: #ffffff;
+        --av-text-primary: #1a1a18;
+        --av-text-secondary: #5f5e5a;
+        --av-text-tertiary: #88877f;
+        --av-border: #d9d8d4;
+        --av-accent: #185fa5;
+        --av-accent-soft: rgba(24, 95, 165, 0.1);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #185fa5;
+        --av-chart-2: #0f6e56;
+        --av-chart-3: #534ab7;
+        --av-chart-4: #993c1d;
+        --av-chart-5: #854f0b;
+        --av-chart-6: #5f5e5a;
+      }
+
+      /* === Palette: Editorial Parchment === */
+      [data-palette="editorial-parchment"] {
+        --av-surface: #f5f4ed;
+        --av-surface-alt: #e8e6dc;
+        --av-surface-raised: #faf9f5;
+        --av-text-primary: #141413;
+        --av-text-secondary: #5e5d59;
+        --av-text-tertiary: #87867f;
+        --av-border: #c9c7bc;
+        --av-accent: #c96442;
+        --av-accent-soft: rgba(201, 100, 66, 0.12);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #c96442;
+        --av-chart-2: #5e5d59;
+        --av-chart-3: #87867f;
+        --av-chart-4: #b0aea5;
+        --av-chart-5: #141413;
+        --av-chart-6: #d6d3d1;
+      }
+
+      /* === Palette: Swiss Modernist === */
+      [data-palette="swiss-modernist"] {
+        --av-surface: #ffffff;
+        --av-surface-alt: #f0f0f0;
+        --av-surface-raised: #ffffff;
+        --av-text-primary: #111111;
+        --av-text-secondary: #5e5d59;
+        --av-text-tertiary: #87867f;
+        --av-border: #111111;
+        --av-accent: #e4002b;
+        --av-accent-soft: rgba(228, 0, 43, 0.08);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #e4002b;
+        --av-chart-2: #111111;
+        --av-chart-3: #5e5d59;
+        --av-chart-4: #87867f;
+        --av-chart-5: #d6d3d1;
+        --av-chart-6: #f5f4ed;
+      }
+
+      /* === Palette: Vignelli Canon === */
+      [data-palette="vignelli-canon"] {
+        --av-surface: #f4f1ea;
+        --av-surface-alt: #eae6db;
+        --av-surface-raised: #ffffff;
+        --av-text-primary: #0a0a0a;
+        --av-text-secondary: #5e5d59;
+        --av-text-tertiary: #87867f;
+        --av-border: #0a0a0a;
+        --av-accent: #f04e23;
+        --av-accent-soft: rgba(240, 78, 35, 0.08);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #f04e23;
+        --av-chart-2: #0a0a0a;
+        --av-chart-3: #5e5d59;
+        --av-chart-4: #87867f;
+        --av-chart-5: #d6d3d1;
+        --av-chart-6: #f5f4ed;
+      }
+
+      /* === Palette: Still Paper === */
+      [data-palette="still-paper"] {
+        --av-surface: #f5f4ed;
+        --av-surface-alt: #e8e6dc;
+        --av-surface-raised: #faf9f5;
+        --av-text-primary: #141413;
+        --av-text-secondary: #5e5d59;
+        --av-text-tertiary: #87867f;
+        --av-border: #c9c7bc;
+        --av-accent: #c96442;
+        --av-accent-soft: rgba(201, 100, 66, 0.12);
+        --av-success: #3b6d11;
+        --av-warning: #854f0b;
+        --av-danger: #a32d2d;
+        --av-chart-1: #c96442;
+        --av-chart-2: #5e5d59;
+        --av-chart-3: #87867f;
+        --av-chart-4: #b0aea5;
+        --av-chart-5: #141413;
+        --av-chart-6: #d6d3d1;
+      }
+
+      /* === Palette: Signal Proof === */
+      [data-palette="signal-proof"] {
+        --av-surface: #f5f5f4;
+        --av-surface-alt: #e4e8f0;
+        --av-surface-raised: #ffffff;
+        --av-text-primary: #0a0a0a;
+        --av-text-secondary: #475569;
+        --av-text-tertiary: #64748b;
+        --av-border: #94a3b8;
+        --av-accent: #0039a6;
+        --av-accent-soft: rgba(0, 57, 166, 0.12);
+        --av-success: #1e3a8a;
+        --av-warning: #b45309;
+        --av-danger: #b91c1c;
+        --av-chart-1: #0039a6;
+        --av-chart-2: #475569;
+        --av-chart-3: #64748b;
+        --av-chart-4: #94a3b8;
+        --av-chart-5: #0a0a0a;
+        --av-chart-6: #e2e8f0;
+      }
+
+      /* === Palette: Bridge Canvas === */
+      [data-palette="bridge-canvas"] {
+        --av-surface: #141413;
+        --av-surface-alt: #292524;
+        --av-surface-raised: #1c1917;
+        --av-text-primary: #e8e4e0;
+        --av-text-secondary: #a8a29e;
+        --av-text-tertiary: #78716c;
+        --av-border: #44403c;
+        --av-accent: #ffd500;
+        --av-accent-soft: rgba(255, 213, 0, 0.12);
+        --av-success: #84cc16;
+        --av-warning: #eab308;
+        --av-danger: #ef4444;
+        --av-chart-1: #0d9488;
+        --av-chart-2: #d97706;
+        --av-chart-3: #e8e4e0;
+        --av-chart-4: #78716c;
+        --av-chart-5: #44403c;
+        --av-chart-6: #292524;
+      }
+
+      /* === Dark: IKB Dark === */
+      [data-palette="ikb-dark"],
+      [data-theme="dark"]:not([data-palette]) {
+        --av-surface: #1a1a2e;
+        --av-surface-alt: #252540;
+        --av-surface-raised: #2a2a45;
+        --av-text-primary: #e8e6de;
+        --av-text-secondary: #b4b2a9;
+        --av-text-tertiary: #888780;
+        --av-border: rgba(255, 255, 255, 0.15);
+        --av-accent: #6b8aff;
+        --av-accent-soft: rgba(107, 138, 255, 0.15);
+        --av-success: #97c459;
+        --av-warning: #ef9f27;
+        --av-danger: #f09595;
+        --av-chart-1: #6b8aff;
+        --av-chart-2: #5dcaa5;
+        --av-chart-3: #afa9ec;
+        --av-chart-4: #f0997b;
+        --av-chart-5: #ef9f27;
+        --av-chart-6: #b4b2a9;
+      }
+
+      /* === System dark auto-detect (when no data-palette set) === */
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-palette]):not([data-theme]) {
+          --av-surface: #1a1a2e;
+          --av-surface-alt: #252540;
+          --av-surface-raised: #2a2a45;
+          --av-text-primary: #e8e6de;
+          --av-text-secondary: #b4b2a9;
+          --av-text-tertiary: #888780;
+          --av-border: rgba(255, 255, 255, 0.15);
+          --av-accent: #6b8aff;
+          --av-accent-soft: rgba(107, 138, 255, 0.15);
+          --av-success: #97c459;
+          --av-warning: #ef9f27;
+          --av-danger: #f09595;
+          --av-chart-1: #6b8aff;
+          --av-chart-2: #5dcaa5;
+          --av-chart-3: #afa9ec;
+          --av-chart-4: #f0997b;
+          --av-chart-5: #ef9f27;
+          --av-chart-6: #b4b2a9;
+        }
+      }
+
+      /* Transition theme changes smoothly */
+      body,
+      .root {
+        transition:
+          background-color 150ms ease-out,
+          color 150ms ease-out,
+          border-color 150ms ease-out;
+      }
+
+      /* === Toggle button === */
+      #archviz-theme-toggle {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 9999;
+        background: var(--av-surface-raised, #faf9f5);
+        border: 1px solid var(--av-border, #d6d3d1);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font:
+          12px/1 system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--av-text-secondary, #5e5d59);
+        cursor: pointer;
+        transition:
+          background 150ms ease-out,
+          border-color 150ms ease-out,
+          transform 100ms ease-out;
+        user-select: none;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      #archviz-theme-toggle:active {
+        transform: scale(0.97);
+      }
+      @media (hover: hover) and (pointer: fine) {
+        #archviz-theme-toggle:hover {
+          background: var(--av-surface-alt, #e8e4e0);
+          border-color: var(--av-text-tertiary, #87867f);
+        }
+      }
+    </style>
+
+    <script>
+      /* archviz-skills Theme System */
+      (function () {
+        "use strict";
+
+        const PALETTES = {
+          "warm-paper": { label: "Warm Paper", mode: "light" },
+          "swiss-neutral": { label: "Swiss Neutral", mode: "light" },
+          "editorial-parchment": { label: "Editorial", mode: "light" },
+          "swiss-modernist": { label: "Swiss Modernist", mode: "light" },
+          "vignelli-canon": { label: "Vignelli Canon", mode: "light" },
+          "still-paper": { label: "Still Paper", mode: "light" },
+          "signal-proof": { label: "Signal Proof", mode: "light" },
+          "bridge-canvas": { label: "Bridge Canvas", mode: "dark" },
+          "ikb-dark": { label: "IKB Dark", mode: "dark" },
+          "auto-time": { label: "Auto (Time)", mode: "auto" },
+        };
+
+        window.ARCHVIZ_PALETTES = PALETTES;
+
+        let currentPalette = "warm-paper";
+
+        function applyPalette(name) {
+          if (!PALETTES[name]) return;
+          currentPalette = name;
+          const root = document.documentElement;
+          let resolvedPalette = name;
+          let activeMode = PALETTES[name].mode;
+
+          if (name === "auto-time") {
+            const hours = new Date().getHours();
+            const isDaytime = hours >= 6 && hours < 18;
+            resolvedPalette = isDaytime ? "still-paper" : "ikb-dark";
+            activeMode = isDaytime ? "light" : "dark";
+            root.setAttribute("data-palette-selection", "auto-time");
+          } else {
+            root.removeAttribute("data-palette-selection");
+          }
+
+          root.setAttribute("data-palette", resolvedPalette);
+          root.setAttribute("data-theme", activeMode);
+          localStorage.setItem("archviz-palette", name);
+          updateToggleLabel();
+          window.dispatchEvent(new Event("archviz-theme-changed"));
+        }
+
+        function toggleTheme() {
+          const order = [
+            "warm-paper",
+            "swiss-neutral",
+            "editorial-parchment",
+            "swiss-modernist",
+            "vignelli-canon",
+            "still-paper",
+            "signal-proof",
+            "bridge-canvas",
+            "ikb-dark",
+            "auto-time",
+          ];
+          const idx = order.indexOf(currentPalette);
+          applyPalette(order[(idx + 1) % order.length]);
+        }
+
+        function getCurrentPalette() {
+          return currentPalette;
+        }
+        function isDark() {
+          if (currentPalette === "auto-time") {
+            const hours = new Date().getHours();
+            return !(hours >= 6 && hours < 18);
+          }
+          return PALETTES[currentPalette]?.mode === "dark";
+        }
+
+        function updateToggleLabel() {
+          const btn = document.getElementById("archviz-theme-toggle");
+          if (btn)
+            btn.textContent = PALETTES[currentPalette]?.label || currentPalette;
+        }
+
+        function init() {
+          const saved = localStorage.getItem("archviz-palette");
+          if (saved && PALETTES[saved]) {
+            applyPalette(saved);
+          } else {
+            applyPalette("auto-time");
+          }
+
+          const btn = document.createElement("button");
+          btn.id = "archviz-theme-toggle";
+          btn.textContent = PALETTES[currentPalette]?.label || "Theme";
+          btn.addEventListener("click", toggleTheme);
+          document.body.appendChild(btn);
+
+          setInterval(function () {
+            if (currentPalette === "auto-time") {
+              const hours = new Date().getHours();
+              const isDaytime = hours >= 6 && hours < 18;
+              const resolvedPalette = isDaytime ? "still-paper" : "ikb-dark";
+              const root = document.documentElement;
+              if (root.getAttribute("data-palette") !== resolvedPalette) {
+                applyPalette("auto-time");
+              }
+            }
+          }, 60000);
+        }
+
+        window.archvizTheme = {
+          applyPalette,
+          toggleTheme,
+          getCurrentPalette,
+          isDark,
+          init,
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+
+    <style>
+      /* === Academic Table Styles === */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          "Noto Sans SC",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--av-surface);
+        color: var(--av-text-primary);
+        padding: 32px 24px;
+        min-height: 100vh;
+      }
+
+      .table-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--av-surface-raised);
+        border: 1px solid var(--av-border);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+
+      /* Table title */
+      .table-title {
+        padding: 20px 24px 12px;
+        font-size: 15px;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        color: var(--av-text-primary);
+      }
+
+      .table-subtitle {
+        padding: 0 24px 16px;
+        font-size: 12px;
+        color: var(--av-text-tertiary);
+      }
+
+      /* Table structure */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      /* Multi-level header */
+      thead tr:first-child th {
+        background: var(--av-surface-alt);
+        padding: 10px 12px;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--av-text-secondary);
+        border-bottom: 2px solid var(--av-border);
+        text-align: center;
+      }
+
+      thead tr:first-child th:first-child {
+        text-align: left;
+        min-width: 120px;
+      }
+
+      thead tr:last-child th {
+        background: var(--av-surface-alt);
+        padding: 8px 12px;
+        font-weight: 600;
+        font-size: 11px;
+        color: var(--av-text-secondary);
+        border-bottom: 1px solid var(--av-border);
+        text-align: center;
+      }
+
+      thead tr:last-child th:first-child {
+        text-align: left;
+      }
+
+      /* Row groups */
+      tbody tr.group-header td {
+        background: var(--av-surface);
+        padding: 10px 12px;
+        font-weight: 600;
+        font-size: 12px;
+        color: var(--av-text-primary);
+        border-bottom: 1px solid var(--av-border);
+        border-top: 1px solid var(--av-border);
+      }
+
+      tbody tr.data-row td {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--av-border);
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+
+      tbody tr.data-row td:first-child {
+        text-align: left;
+        padding-left: 24px;
+        color: var(--av-text-secondary);
+      }
+
+      /* Best value highlighting */
+      tbody tr.data-row td.best {
+        font-weight: 600;
+        color: var(--av-accent);
+      }
+
+      /* Hover effect */
+      tbody tr.data-row:hover {
+        background: var(--av-accent-soft);
+      }
+
+      /* Footer */
+      .table-footer {
+        padding: 12px 24px;
+        font-size: 11px;
+        color: var(--av-text-tertiary);
+        border-top: 1px solid var(--av-border);
+      }
+
+      /* Export styles */
+      #archviz-export-btn {
+        position: fixed;
+        top: 12px;
+        right: 140px;
+        z-index: 9999;
+        background: var(--av-surface-raised, #faf9f5);
+        border: 1px solid var(--av-border, #d6d3d1);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font:
+          12px/1 system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--av-text-secondary, #5e5d59);
+        cursor: pointer;
+        transition:
+          background 150ms ease-out,
+          border-color 150ms ease-out,
+          transform 100ms ease-out;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      #archviz-export-btn:active {
+        transform: scale(0.97);
+      }
+      @media (hover: hover) and (pointer: fine) {
+        #archviz-export-btn:hover {
+          background: var(--av-surface-alt, #e8e4e0);
+          border-color: var(--av-text-tertiary, #87867f);
+        }
+      }
+      #archviz-export-menu {
+        position: fixed;
+        top: 44px;
+        right: 140px;
+        z-index: 10000;
+        background: var(--av-surface-raised, #faf9f5);
+        border: 1px solid var(--av-border, #d6d3d1);
+        border-radius: 10px;
+        padding: 6px 0;
+        min-width: 180px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        opacity: 0;
+        transform: scale(0.95);
+        transform-origin: top right;
+        transition:
+          opacity 150ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+      }
+      #archviz-export-menu.open {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+      }
+      #archviz-export-menu button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 8px 16px;
+        border: none;
+        background: none;
+        font:
+          13px/1.4 system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--av-text-primary, #1b365d);
+        cursor: pointer;
+        transition:
+          background 150ms ease-out,
+          transform 100ms ease-out;
+      }
+      #archviz-export-menu button:active {
+        transform: scale(0.98);
+      }
+      @media (hover: hover) and (pointer: fine) {
+        #archviz-export-menu button:hover {
+          background: var(--av-accent-soft, rgba(0, 47, 167, 0.08));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Export button -->
+    <button id="archviz-export-btn">Export</button>
+    <div id="archviz-export-menu">
+      <button onclick="exportPNG()">PNG (4×)</button>
+      <button onclick="exportSVG()">SVG</button>
+      <button onclick="exportWebP()">WebP</button>
+      <button onclick="copyClipboard()">Clipboard</button>
+    </div>
+
+    <!-- Table container -->
+    <div class="table-container archviz-export-target">
+      <!-- Example: DSpark speculative decoding results -->
+      <div class="table-title">Table 1: Main speculative decoding results</div>
+      <div class="table-subtitle">
+        Accepted length τ (higher is better) across benchmarks. Bold indicates best per column.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Target Model</th>
+            <th colspan="3">Math Domain</th>
+            <th colspan="3">Code Domain</th>
+            <th colspan="3">Chat Domain</th>
+          </tr>
+          <tr>
+            <th>GSM8K</th>
+            <th>MATH</th>
+            <th>AIME25</th>
+            <th>MBPP</th>
+            <th>HumanEval</th>
+            <th>LCB</th>
+            <th>MT-Bench</th>
+            <th>Alpaca</th>
+            <th>Arena-Hard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Group: Qwen3-4B -->
+          <tr class="group-header">
+            <td colspan="10">Qwen3-4B</td>
+          </tr>
+          <tr class="data-row">
+            <td>Eagle3</td>
+            <td>3.21</td>
+            <td>2.87</td>
+            <td>2.15</td>
+            <td>3.45</td>
+            <td>3.12</td>
+            <td>2.78</td>
+            <td>3.67</td>
+            <td>3.89</td>
+            <td>3.34</td>
+          </tr>
+          <tr class="data-row">
+            <td>DFlash</td>
+            <td>3.56</td>
+            <td>3.12</td>
+            <td>2.45</td>
+            <td>3.78</td>
+            <td>3.45</td>
+            <td>3.12</td>
+            <td>4.01</td>
+            <td>4.23</td>
+            <td>3.67</td>
+          </tr>
+          <tr class="data-row">
+            <td>DSpark</td>
+            <td class="best">4.12</td>
+            <td class="best">3.78</td>
+            <td class="best">3.01</td>
+            <td class="best">4.34</td>
+            <td class="best">4.12</td>
+            <td class="best">3.67</td>
+            <td class="best">4.56</td>
+            <td class="best">4.78</td>
+            <td class="best">4.23</td>
+          </tr>
+
+          <!-- Group: Qwen3-8B -->
+          <tr class="group-header">
+            <td colspan="10">Qwen3-8B</td>
+          </tr>
+          <tr class="data-row">
+            <td>Eagle3</td>
+            <td>3.89</td>
+            <td>3.45</td>
+            <td>2.78</td>
+            <td>4.12</td>
+            <td>3.78</td>
+            <td>3.34</td>
+            <td>4.23</td>
+            <td>4.45</td>
+            <td>3.89</td>
+          </tr>
+          <tr class="data-row">
+            <td>DFlash</td>
+            <td>4.23</td>
+            <td>3.78</td>
+            <td>3.12</td>
+            <td>4.45</td>
+            <td>4.12</td>
+            <td>3.67</td>
+            <td>4.56</td>
+            <td>4.78</td>
+            <td>4.23</td>
+          </tr>
+          <tr class="data-row">
+            <td>DSpark</td>
+            <td class="best">4.89</td>
+            <td class="best">4.45</td>
+            <td class="best">3.67</td>
+            <td class="best">5.12</td>
+            <td class="best">4.78</td>
+            <td class="best">4.34</td>
+            <td class="best">5.23</td>
+            <td class="best">5.45</td>
+            <td class="best">4.89</td>
+          </tr>
+
+          <!-- Group: Qwen3-14B -->
+          <tr class="group-header">
+            <td colspan="10">Qwen3-14B</td>
+          </tr>
+          <tr class="data-row">
+            <td>Eagle3</td>
+            <td>4.45</td>
+            <td>4.01</td>
+            <td>3.34</td>
+            <td>4.67</td>
+            <td>4.34</td>
+            <td>3.89</td>
+            <td>4.78</td>
+            <td>5.01</td>
+            <td>4.45</td>
+          </tr>
+          <tr class="data-row">
+            <td>DFlash</td>
+            <td>4.78</td>
+            <td>4.34</td>
+            <td>3.67</td>
+            <td>5.01</td>
+            <td>4.67</td>
+            <td>4.23</td>
+            <td>5.12</td>
+            <td>5.34</td>
+            <td>4.78</td>
+          </tr>
+          <tr class="data-row">
+            <td>DSpark</td>
+            <td class="best">5.56</td>
+            <td class="best">5.12</td>
+            <td class="best">4.34</td>
+            <td class="best">5.78</td>
+            <td class="best">5.45</td>
+            <td class="best">5.01</td>
+            <td class="best">5.89</td>
+            <td class="best">6.12</td>
+            <td class="best">5.56</td>
+          </tr>
+
+          <!-- Group: Gemma4-12B -->
+          <tr class="group-header">
+            <td colspan="10">Gemma4-12B</td>
+          </tr>
+          <tr class="data-row">
+            <td>Eagle3</td>
+            <td>3.67</td>
+            <td>3.23</td>
+            <td>2.56</td>
+            <td>3.89</td>
+            <td>3.56</td>
+            <td>3.12</td>
+            <td>4.01</td>
+            <td>4.23</td>
+            <td>3.67</td>
+          </tr>
+          <tr class="data-row">
+            <td>DFlash</td>
+            <td>4.01</td>
+            <td>3.56</td>
+            <td>2.89</td>
+            <td>4.23</td>
+            <td>3.89</td>
+            <td>3.45</td>
+            <td>4.34</td>
+            <td>4.56</td>
+            <td>4.01</td>
+          </tr>
+          <tr class="data-row">
+            <td>DSpark</td>
+            <td class="best">4.67</td>
+            <td class="best">4.23</td>
+            <td class="best">3.45</td>
+            <td class="best">4.89</td>
+            <td class="best">4.56</td>
+            <td class="best">4.12</td>
+            <td class="best">5.01</td>
+            <td class="best">5.23</td>
+            <td class="best">4.67</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="table-footer">
+        τ = average accepted tokens per decoding round. Results across 9 benchmarks spanning Math, Code, and Chat domains.
+      </div>
+    </div>
+
+    <script>
+      // Export menu toggle
+      const exportBtn = document.getElementById("archviz-export-btn");
+      const exportMenu = document.getElementById("archviz-export-menu");
+
+      exportBtn.addEventListener("click", () => {
+        exportMenu.classList.toggle("open");
+      });
+
+      // Close menu on outside click
+      document.addEventListener("click", (e) => {
+        if (!exportBtn.contains(e.target) && !exportMenu.contains(e.target)) {
+          exportMenu.classList.remove("open");
+        }
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "e" || e.key === "E") {
+          exportMenu.classList.toggle("open");
+        }
+        if (e.key === "t" || e.key === "T") {
+          window.archvizTheme?.toggleTheme();
+        }
+      });
+
+      // Export functions
+      async function exportPNG() {
+        const target = document.querySelector(".archviz-export-target");
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const scale = 4;
+
+        // Use html2canvas or dom-to-image for real implementation
+        // This is a placeholder
+        alert("PNG export: Use browser screenshot (Cmd+Shift+4) or integrate html2canvas");
+      }
+
+      function exportSVG() {
+        const target = document.querySelector(".archviz-export-target");
+        const svgData = new XMLSerializer().serializeToString(target);
+        const blob = new Blob([svgData], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "academic-table.svg";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function exportWebP() {
+        alert("WebP export: Use browser screenshot with WebP format");
+      }
+
+      function copyClipboard() {
+        const target = document.querySelector(".archviz-export-target");
+        const range = document.createRange();
+        range.selectNode(target);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+        alert("Copied to clipboard");
+      }
+    </script>
+  </body>
+</html>

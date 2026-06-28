@@ -72,6 +72,37 @@ Every generated diagram should be understandable as a compact design system, not
 | **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` Terracotta | Cards, covers, publishable HTML ([claude-design-card](https://github.com/geekjourneyx/claude-design-card) lineage) |
 | **Swiss Modernist** | `#ffffff` | `#111111` | `#111111` | `#e4002b` Swiss Red | Müller-Brockmann modular grids, baseline structure |
 | **Vignelli Canon** | `#f4f1ea` | `#0a0a0a` | `#0a0a0a` | `#f04e23` Vermilion | Vignelli systems, wayfinding signage, typography |
+| **Educational Flat** | `#ffffff` | `#000000` | `#000000` | max ONE ramp hue | Teaching diagrams; physics/chemistry/engineering (see §2.1) |
+
+### §2.1 Educational Flat Mode — 9-Ramp Semantic Colors
+
+**Trigger:** brief says 教学图 / physics / chemistry / engineering / concept diagram.
+
+**Rules:**
+- Background: `#ffffff`, text: `#000000`, border: `#000000` (1px, never omitted)
+- Color role: pick **exactly ONE** ramp hue per diagram; vary lightness/shade for hierarchy
+- Shapes: flat fill only — no gradients, no shadows, no glassmorphism
+- Labels: sans-serif (system-ui / Inter), weight 400–600, max 8 Chinese chars
+
+**9-Ramp Palette (flat, high-contrast):**
+
+| Ramp key | Base hex | Lightness scale | Use |
+|---|---|---|---|
+| `c-purple` | `#7C3AED` | `#EDE9FE` / `#DDD6FE` / `#7C3AED` | Mathematics / abstract |
+| `c-teal` | `#14B8A6` | `#CCFBF1` / `#99F6E4` / `#14B8A6` | Physics / waves / energy |
+| `c-coral` | `#F97316` | `#FFEDD5` / `#FED7AA` / `#F97316` | Chemistry / reactions |
+| `c-blue` | `#3B82F6` | `#DBEAFE` / `#BFDBFE` / `#3B82F6` | Engineering / structures |
+| `c-green` | `#22C55E` | `#DCFCE7` / `#BBF7D0` / `#22C55E` | Biology / life cycles |
+| `c-amber` | `#F59E0B` | `#FEF3C7` / `#FDE68A` / `#F59E0B` | Warning / attention |
+| `c-red` | `#EF4444` | `#FEE2E2` / `#FECACA` / `#EF4444` | Error / danger / stop |
+| `c-pink` | `#EC4899` | `#FDF2F8` / `#FBCFE8` / `#EC4899` | Highlight / emphasis |
+| `c-gray` | `#6B7280` | `#F3F4F6` / `#E5E7EB` / `#6B7280` | Neutral / background grouping |
+
+**Inference:** if brief says "像教科书 / textbook / textbook-style", default to `c-teal` or `c-blue`. If no domain clue, ask one clarifying question.
+
+**CJK typography:** use system-ui / PingFang SC / Noto Sans SC at 14px body / 12px label. Never mix English display font with Chinese body font in the same diagram unless explicitly briefed.
+
+**Node shapes:** rect for process/concept, circle for emphasis, no rounded corners (flat doctrine). Dashed border for secondary nodes. Legend required if >2 edge types.
 
 **Editorial Parchment notes** (full rules → `references/editorial-parchment-language.md`):
 - Terracotta replaces IKB as the single accent when the brief is editorial / card / cover — never both in one set.
@@ -115,6 +146,7 @@ All HTML templates use CSS custom properties for theming. Variables are defined 
 | IKB Dark | dark | Periwinkle `#6B8AFF` | Dark mode, terminal |
 | Swiss Modernist | light | Swiss Red `#e4002b` | Müller-Brockmann modular grids |
 | Vignelli Canon | light | Vermilion `#f04e23` | Vignelli Canon layouts |
+| Educational Flat | light | ONE ramp only (e.g. `c-teal`) | Teaching / textbook diagrams; opt-in via brief, does NOT auto-cycle |
 
 ### Runtime Behavior
 
@@ -330,6 +362,92 @@ Based on Few's 7 relationships + Shneiderman's 6 data types + teaching/academic 
 - "What depends on what?" → dependency graph
 - "What are the states?" → state diagram
 - "How to decide?" → decision matrix + radar
+
+---
+
+## Extended: Academic Tables
+
+When the brief asks for **论文表格、性能对比表、实验结果表、benchmark table** (not simple Markdown table), use the academic table template.
+
+**Template:** `templates/html/academic-table.html`
+
+### Structure
+
+| Element | CSS Class | Styling |
+|---------|-----------|---------|
+| Table container | `.table-container` | `max-width: 1200px`, `border-radius: 8px`, `box-shadow` |
+| Title | `.table-title` | 15px, weight 300, `--av-text-primary` |
+| Subtitle | `.table-subtitle` | 12px, `--av-text-tertiary` |
+| Multi-level header | `thead tr:first-child th` | `--av-surface-alt`, uppercase, 12px, center |
+| Column headers | `thead tr:last-child th` | `--av-surface-alt`, 11px, weight 600 |
+| Row group header | `.group-header td` | `--av-surface`, weight 600, 12px |
+| Data row | `.data-row td` | 13px, center, `tabular-nums` |
+| Best value | `.data-row td.best` | weight 600, `--av-accent` |
+| Hover | `.data-row:hover` | `--av-accent-soft` background |
+| Footer | `.table-footer` | 11px, `--av-text-tertiary` |
+
+### Data Structure
+
+```json
+{
+  "title": "Table 1: Main results",
+  "subtitle": "Metric description (higher is better).",
+  "columnGroups": [
+    { "label": "Domain A", "span": 3 },
+    { "label": "Domain B", "span": 3 }
+  ],
+  "columns": ["Col1", "Col2", "Col3", "Col4", "Col5", "Col6"],
+  "rowGroups": [
+    {
+      "label": "Model A",
+      "rows": [
+        { "method": "Method1", "values": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0] },
+        { "method": "Method2", "values": [1.1, 2.1, 3.1, 4.1, 5.1, 6.1], "best": true }
+      ]
+    }
+  ],
+  "footer": "Additional notes."
+}
+```
+
+### Typography
+
+- Title: 15px, weight 300 (ExtraLight)
+- Subtitle: 12px, `--av-text-tertiary`
+- Column headers: 11px, weight 600 (SemiBold), uppercase
+- Row group labels: 12px, weight 600
+- Data cells: 13px, weight 400
+- Footer: 11px, `--av-text-tertiary`
+
+### Layout Rules
+
+- Max width: 1200px (centered)
+- Padding: 24px container, 12px cells
+- Border: 1px `--av-border` for rows, 2px for header bottom
+- Row group separator: 1px `--av-border` top and bottom
+- Hover: `--av-accent-soft` background (12% opacity)
+
+### Best Value Highlighting
+
+- Font weight: 600 (SemiBold)
+- Color: `--av-accent` (varies by palette)
+- Only mark best per column within each row group (or globally, depending on context)
+
+### Export
+
+- PNG: 4× scale via html2canvas integration
+- SVG: Clone table → inject CSS vars → serialize
+- Clipboard: Select table → `document.execCommand('copy')`
+
+### Quality Checklist
+
+- [ ] All column headers visible, no truncation
+- [ ] Row group labels clear and distinct
+- [ ] Best values highlighted with accent color
+- [ ] Numbers right-aligned, text left-aligned
+- [ ] Print-friendly (test with Cmd+P)
+- [ ] Theme toggle works (T key)
+- [ ] No horizontal scroll at 1200px width
 
 ---
 

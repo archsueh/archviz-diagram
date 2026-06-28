@@ -23,6 +23,11 @@
 - Combined multi-viz page pattern: Sankey + interactive geo-flow map (or similar) in single restrained Swiss container (shared Warm Paper tokens, one header/legend/footer, section titles, generous whitespace) produces high-signal deliverable. See examples/us-flows.html. Prefer this over separate files when user wants "both".
 - Workspace temp hygiene: .hermes/workspace/* files are transient. On explicit "清理掉" of listed artifacts, rm -f them immediately (they are not part of permanent examples/). Do not leave orphans.
 
+## 2026-06-24 session (Mermaid subgraph ID + node text overflow)
+- **Subgraph ID 不能含中文或空格**：`subgraph Obsidian 知识库 cognitive-kernel` → parser 报 `got 'UNICODE_TEXT'`（Mermaid 11.x）。**强制写法**：`subgraph kb["Obsidian 知识库 · cognitive-kernel"]`——id 纯 ASCII，显示文字放 `["..."]` 引号里。所有含中文或空格的 subgraph 标题必须用此格式，无例外。
+- **Mermaid 节点文字溢出**：`[长中文\n长中文]` 在 Obsidian 渲染时节点宽度固定，文字不换行只截断。对策：单行 ≤12 汉字；超长描述用 `\n` 分行且每行 ≤10 汉字；或改用旁注表格代替节点内嵌文字。Gantt bar 内文字同理（bar 太窄时 label 完全消失），已有规则见上方 Gantt 条目。
+- **validate-mermaid.py 不捕获此类错误**：脚本只查结构（subgraph/end 平衡、fence 完整性），不做词法校验。中文 subgraph ID 的报错只有渲染时才出现。目前无自动检测方案，依赖 Pre-Generation 人工 checklist 规则（见 validation-checklist.md）。
+
 ## 2026-06-14 session (Mermaid structural pre-flight)
 - Recurring "Syntax error in text" in shipped Mermaid (e.g. `... --> F3[label]end` / `got 'end'`) is almost always a STRUCTURE defect, not a grammar one: an orphan `end` (no open subgraph), an unbalanced subgraph/end count, a token glued to `end` (`]end` with no newline), or a broken/unterminated ```mermaid fence. A "renders cleanly" eyeball check misses these until the doc renders.
 - Fix: run `python3 scripts/validate-mermaid.py <file.md|file.mmd>` (exit 0 required) BEFORE claiming a Mermaid diagram done. It is a grammar-agnostic structure check — does not replace rendering, stops the cheap mistakes early. Now MANDATORY in validation-checklist.md → Post-Generation → Mermaid.
