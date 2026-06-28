@@ -169,6 +169,7 @@ Vignelli:   surface=#f4f1ea text=#0a0a0a border=#0a0a0a accent=#f04e23 (Vermilio
 | **Social square (quote/data)** | Editorial Family C HTML | `html/editorial-card.html` |
 | **Long-form article layout** | Editorial Family D HTML | `html/editorial-card.html` |
 | **Swiss modular layout / poster** | Modular Grid HTML | `html/swiss-modernist-grid.html` |
+| **Network topology** | SSH / tunnel / protocol diagram | `html/network-topology.html` |
 
 **Mixed types** (when data spans categories):
 - Process + timeline → flowchart with gantt sub-section (split into 2 diagrams)
@@ -577,7 +578,7 @@ templates/
 ├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
 │               flowchart + mindmap: inline Mermaid (no standalone .mmd)
 ├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
-├── html/       16 files (+ editorial-card, swiss-modernist-grid; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, threejs-archviz, threejs-floorplan)
+├── html/       17 files (+ editorial-card, swiss-modernist-grid; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, network-topology, threejs-archviz, threejs-floorplan)
 ├── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
 ├── obsidian-canvas/ 3 files (mindmap, system-architecture, knowledge-graph — .canvas JSON)
 └── excalidraw/  1 file (mindmap.excalidraw.md)

@@ -1,0 +1,290 @@
+<!-- archviz-diagram · network-topology · 2026-06 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network Topology Diagram</title>
+<!-- _archviz-theme.html inline -->
+<link rel="stylesheet" href="_archviz-theme.html">
+<style>
+  :root {
+    --nt-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --nt-sans: system-ui, -apple-system, sans-serif;
+  }
+  body { margin: 0; background: var(--av-surface); }
+  .nt-wrap {
+    max-width: 1150px; margin: 0 auto; padding: 48px 36px;
+    font-family: var(--nt-sans); color: var(--av-text-primary);
+  }
+  .nt-title { font-size: 26px; font-weight: 800; color: var(--av-accent); margin: 0 0 4px; }
+  .nt-sub   { font-size: 13px; color: var(--av-text-tertiary); margin-bottom: 36px; }
+
+  /* ── 3-col grid ── */
+  .nt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .nt-card {
+    background: var(--av-surface-raised);
+    border: 1px solid var(--av-border);
+    border-radius: 10px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .nt-card-badge {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--av-text-tertiary); margin-bottom: 6px;
+  }
+  .nt-card-title {
+    font-size: 15px; font-weight: 700; color: var(--av-accent);
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--av-accent);
+  }
+
+  /* ── command line ── */
+  .nt-cmd {
+    background: var(--av-surface-alt);
+    border-radius: 5px; padding: 10px 14px;
+    font-family: var(--nt-mono); font-size: 12px; line-height: 1.6;
+    color: var(--av-text-secondary);
+    margin-bottom: 16px; overflow-x: auto; white-space: nowrap;
+  }
+  .nt-cmd .f  { color: var(--av-accent); font-weight: 700; }  /* flag */
+  .nt-cmd .p  { color: var(--av-success); }                    /* port */
+  .nt-cmd .h  { color: var(--av-text-secondary); }             /* host */
+  .nt-cmd .u  { color: var(--av-warning); }                    /* user@ */
+
+  /* ── node graph ── */
+  .nt-nodes {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin: 8px 0 16px; flex-wrap: wrap;
+  }
+  .nt-node {
+    text-align: center; flex-shrink: 0;
+  }
+  .nt-node-box {
+    width: 76px; height: 44px;
+    border: 2px solid var(--av-border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    background: var(--av-surface-raised); color: var(--av-text-primary);
+  }
+  .nt-node-box.bastion {
+    border-color: var(--av-accent); border-style: dashed;
+    background: var(--av-accent-soft);
+  }
+  .nt-node-box.server {
+    border-color: var(--av-success);
+    background: rgba(59,109,17,.06);
+  }
+  .nt-node-sub {
+    font-size: 9px; color: var(--av-text-tertiary); margin-top: 3px;
+  }
+
+  .nt-link {
+    width: 36px; height: 2px; background: var(--av-border);
+    position: relative; flex-shrink: 0;
+  }
+  .nt-link::after {
+    content: ''; position: absolute; right: -4px; top: -3px;
+    width: 0; height: 0;
+    border-left: 7px solid var(--av-border);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+  }
+  .nt-link.secure {
+    background: repeating-linear-gradient(90deg, var(--av-accent) 0 4px, transparent 4px 8px);
+  }
+  .nt-link.secure::after { border-left-color: var(--av-accent); }
+
+  .nt-link.reverse::after {
+    right: auto; left: -4px;
+    border: none;
+    border-right: 7px solid var(--av-border);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+  }
+
+  /* ── tunnel info ── */
+  .nt-tunnel {
+    padding: 12px; background: var(--av-accent-soft);
+    border-radius: 6px; border-left: 3px solid var(--av-accent);
+    display: flex; gap: 10px; align-items: flex-start;
+    margin: 8px 0;
+  }
+  .nt-tunnel-tag {
+    font-size: 10px; font-weight: 800; color: var(--av-accent);
+    writing-mode: vertical-rl; letter-spacing: 1px;
+  }
+  .nt-tunnel-row {
+    display: flex; gap: 8px; font-size: 11px; margin: 3px 0;
+  }
+  .nt-tunnel-row .k { color: var(--av-text-tertiary); min-width: 55px; }
+  .nt-tunnel-row .v { font-family: var(--nt-mono); }
+  .nt-hl {
+    background: var(--av-accent-soft); padding: 1px 6px;
+    border-radius: 3px; font-weight: 700; color: var(--av-accent);
+  }
+
+  /* ── annotations ── */
+  .nt-note {
+    font-size: 11px; color: var(--av-text-tertiary);
+    margin-top: 8px; font-style: italic;
+  }
+
+  /* ── private block ── */
+  .nt-private {
+    border: 1px dashed var(--av-border); border-radius: 8px;
+    padding: 16px 12px 12px; margin: 12px 0; position: relative; text-align: center;
+  }
+  .nt-private-label {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    background: var(--av-surface-raised); padding: 0 10px;
+    font-size: 10px; color: var(--av-text-tertiary); text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── config block ── */
+  .nt-config {
+    background: var(--av-surface-alt); border-radius: 5px;
+    padding: 8px 12px; font-family: var(--nt-mono); font-size: 11px;
+    color: var(--av-text-secondary); margin-top: 8px;
+  }
+  .nt-config .k { color: var(--av-accent); font-weight: 700; }
+
+  @media (max-width: 860px) {
+    .nt-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="nt-wrap">
+
+  <h2 class="nt-title">SSH Port Forwarding</h2>
+  <p class="nt-sub">Local · Remote · Dynamic — port forwarding topology explained</p>
+
+  <div class="nt-grid">
+
+    <!-- ═══════ Column 1: Local ═══════ -->
+    <div class="nt-card">
+      <div class="nt-card-badge">Mode 1</div>
+      <div class="nt-card-title">Local Port Forwarding</div>
+
+      <div class="nt-cmd" title="Short form">
+        ssh <span class="f">-L</span> <span class="p">8080</span>:<span class="h">server</span>:<span class="p">80</span> <span class="u">user@bastion</span>
+      </div>
+      <div class="nt-cmd" title="Long form" style="margin-top:-8px">
+        ssh <span class="f">-L</span> <span class="h">localhost</span>:<span class="p">8080</span>:<span class="h">server</span>:<span class="p">80</span> <span class="u">user@bastion</span>
+      </div>
+
+      <div class="nt-nodes">
+        <div class="nt-node">
+          <div class="nt-node-box">Client</div>
+          <div class="nt-node-sub">localhost:8080</div>
+        </div>
+        <div class="nt-link secure"></div>
+        <div class="nt-node">
+          <div class="nt-node-box bastion">Bastion</div>
+          <div class="nt-node-sub">SSH Tunnel</div>
+        </div>
+        <div class="nt-link"></div>
+        <div class="nt-node">
+          <div class="nt-node-box server">Server</div>
+          <div class="nt-node-sub">port 80</div>
+        </div>
+      </div>
+
+      <div class="nt-tunnel">
+        <div class="nt-tunnel-tag">TUNNEL</div>
+        <div style="flex:1">
+          <div class="nt-tunnel-row"><span class="k">listens</span><span class="v nt-hl">localhost:8080</span></div>
+          <div class="nt-tunnel-row"><span class="k">forwards</span><span class="v">→ bastion → server:80</span></div>
+        </div>
+      </div>
+      <div class="nt-note">ssh client listens locally, forwards via bastion to remote server.</div>
+    </div>
+
+    <!-- ═══════ Column 2: Remote ═══════ -->
+    <div class="nt-card">
+      <div class="nt-card-badge">Mode 2</div>
+      <div class="nt-card-title">Remote Port Forwarding</div>
+
+      <div class="nt-cmd">
+        ssh <span class="f">-R</span> <span class="p">8080</span>:<span class="h">server</span>:<span class="p">80</span> <span class="u">user@gateway</span>
+      </div>
+
+      <div class="nt-nodes">
+        <div class="nt-node">
+          <div class="nt-node-box">Client</div>
+        </div>
+        <div class="nt-link reverse"></div>
+        <div class="nt-node">
+          <div class="nt-node-box bastion">Gateway</div>
+          <div class="nt-node-sub">gateway:8080</div>
+        </div>
+      </div>
+
+      <div class="nt-private">
+        <div class="nt-private-label">Private Network</div>
+        <div class="nt-node-box server" style="margin:0 auto">Server</div>
+        <div class="nt-node-sub" style="margin-top:3px">port 80</div>
+      </div>
+
+      <div class="nt-tunnel">
+        <div class="nt-tunnel-tag">TUNNEL</div>
+        <div style="flex:1">
+          <div class="nt-tunnel-row"><span class="k">listens</span><span class="v nt-hl">gateway:8080</span></div>
+          <div class="nt-tunnel-row"><span class="k">forwards</span><span class="v">→ server:80</span></div>
+        </div>
+      </div>
+
+      <div class="nt-config">
+        <span class="k">GatewayPorts</span> yes &rarr; sshd_config
+      </div>
+      <div class="nt-note">ssh client tells sshd server to listen on gateway, forwarding to private server.</div>
+    </div>
+
+    <!-- ═══════ Column 3: Dynamic ═══════ -->
+    <div class="nt-card">
+      <div class="nt-card-badge">Mode 3</div>
+      <div class="nt-card-title">Dynamic Port Forwarding</div>
+
+      <div class="nt-cmd">
+        ssh <span class="f">-D</span> <span class="p">1080</span> <span class="u">user@bastion</span>
+      </div>
+
+      <div class="nt-tunnel" style="margin-top:8px">
+        <div class="nt-tunnel-tag">SOCKS5</div>
+        <div style="flex:1">
+          <div class="nt-tunnel-row"><span class="k">proxy</span><span class="v nt-hl">localhost:1080</span></div>
+          <div class="nt-tunnel-row"><span class="k">target A</span><span class="v">&lt;remote-1&gt;:443</span></div>
+          <div class="nt-tunnel-row"><span class="k">target B</span><span class="v">&lt;remote-2&gt;:80</span></div>
+        </div>
+      </div>
+
+      <div class="nt-nodes" style="margin-top:12px">
+        <div class="nt-node">
+          <div class="nt-node-box">Client</div>
+          <div class="nt-node-sub">:1080 SOCKS</div>
+        </div>
+        <div class="nt-link secure"></div>
+        <div class="nt-node">
+          <div class="nt-node-box bastion">Bastion</div>
+          <div class="nt-node-sub">SSH Tunnel</div>
+        </div>
+      </div>
+
+      <div class="nt-note">SOCKS proxy — no fixed remote address. Dynamic resolution through bastion.</div>
+      <div class="nt-note" style="margin-top:4px">
+        <code style="font-family:var(--nt-mono);font-size:11px">curl --socks5-hostname localhost:1080 &lt;url&gt;</code>
+      </div>
+    </div>
+
+  </div><!-- /nt-grid -->
+
+</div>
+</body>
+</html>
