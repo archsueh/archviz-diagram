@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.5.2 (2026-07-21)
+
+### Added
+- **G0 draw-or-not** + **G0b brand gate**: paragraph/table test; host DESIGN.md / `.archviz-preset.yaml` before silent Warm Paper (`references/brand-gate.md`).
+- Structural density rules in `structural-diagram-types.md`: soft-cap 9 nodes, hard split >12/15 edges, focal 1–2, connector discipline, when-not-to-draw table.
+- `templates/excalidraw/`: Warm Paper `mindmap.excalidraw` + `architecture.excalidraw` + README (promote path → Mermaid).
+
+### Changed
+- Gates table G0/G0b/G1/G2 tightened; QR Focal + Brand lines; workflow steps reordered; anti-patterns for accent-as-flags / silent brand / diagram-when-prose-wins.
+- Degradation strategy: soft-cap 9 before absolute 50.
+- §12 template inventory includes excalidraw/.
+
+## 0.5.1 (2026-07-21)
+
+### Added
+- `references/ecosystem-routing.md`: Mermaid / diagram-design / draw.io / Excalidraw / Lucidchart-alts decision matrix — when to stay in archviz vs hand off; anti-bloat rules.
+- `references/structural-diagram-types.md`: 27-type selector map absorbed from [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) (routing only; no gallery vendor).
+- Mermaid templates: `sequence.mmd`, `swimlane.mmd`, `quadrant.mmd` (Warm Paper init + ASCII/table fallback).
+
+### Changed
+- `references/external-tools.md`: expanded with Mermaid, diagram-design, Excalidraw, Lucidchart-alts; points to ecosystem-routing as SSOT.
+- `SKILL.md` (v0.5.1): QR type table + engine routing; §0 type routing pointers; honest §12 template inventory (removed false excalidraw/obsidian-canvas/3d claims); resources + 致谢 cite diagram-design.
+- Triggers: +sequence, swimlane, quadrant, 序列图, 泳道图.
+
+### Policy
+- Optimize ≠ delete (iron rule preserved). diagram-design is **type vocabulary only** — do not dump 27 HTML assets or their default jet-black + atomic-tangerine skin into archviz.
+
 ## 0.4.3 (2026-06-18)
 
 ### Added

@@ -8,7 +8,7 @@ Every diagram starts with a **brief read** and **three dials** — not a default
 > **3D spatial visualization** has been split into [archviz-3d](https://github.com/archsueh/archviz-3d).
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Version](https://img.shields.io/badge/version-0.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)
 
 <img width="2298" height="3334" alt="screenshot-archviz-skills — Design System Preview" src="https://github.com/user-attachments/assets/f6369781-f056-41f0-be0f-658d38cadc37" />
 <img width="2298" height="2838" alt="screenshot-Independent Music Revenue Flow — Müller-Brockmann Grid" src="https://github.com/user-attachments/assets/ed4c5306-fc7d-45b2-b493-55efe255d0db" />
@@ -58,8 +58,12 @@ This is adapted from the `awesome-design-md` pattern: `DESIGN.md` is the visual 
 
 **Mode routing:**
 - **Default (Flowcharts & Framework Diagrams)** — process flows, system architectures, conceptual models, state machines, relationship matrices, organizational diagrams
-- **3D archviz** — only when the brief mentions building, floorplan, structure, section cut, or walkthrough (`templates/html/threejs-*.html`)
-- **Editable handoff** — use draw.io mode when the user needs a diagram that can be edited by architects, teachers, or engineering teams after generation
+- **3D archviz** — only when the brief mentions building, floorplan, structure, section cut, or walkthrough → [archviz-3d](https://github.com/archsueh/archviz-3d)
+- **Editable handoff** — draw.io when the diagram must keep being edited by humans (`references/drawio-output-mode.md`)
+- **Sketch / workshop** — Excalidraw; promote to Mermaid once structure stabilizes
+- **Engine + 27-type map** — `references/ecosystem-routing.md` · `references/structural-diagram-types.md`
+- **Brand gate** — host DESIGN.md / preset before default skin (`references/brand-gate.md`)
+- **Excalidraw sketch** — `templates/excalidraw/` then promote to Mermaid
 
 ---
 

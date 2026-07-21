@@ -8,11 +8,11 @@ description: |
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
 license: MIT
 metadata:
-  version: 0.5.0
+  version: 0.5.2
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
-  triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map
+  triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, sequence, swimlane, quadrant, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, 序列图, 泳道图, dependency graph, workflow, concept map
 ---
 
 # archviz-diagram-skills
@@ -89,15 +89,16 @@ See `sketch-image-pipeline` skill for full workflow.
 
 | Gate | Pass criteria | On fail |
 |---|---|---|
-| G0 Brief | One-line "Reading this as…" + dials set | STOP — infer from host doc |
-| G1 Type | QR table match; ≤2 types per deliverable | STOP — split diagram |
-| G2 Tokens | Palette locked; contrast computed; max 1 accent | STOP — fix init/CSS |
+| G0 Brief | One-line "Reading this as…" + dials set; **would a paragraph/table teach more? if yes → don't draw** | STOP — prose/table, or infer brief from host doc |
+| G0b Brand | Tokens source locked (host DESIGN.md / `.archviz-preset.yaml` / explicit default) — see `references/brand-gate.md` | STOP — ask once; never silent default into branded repo |
+| G1 Type | QR / structural map match; ≤2 types per deliverable; structural soft-cap **9 nodes** | STOP — split diagram |
+| G2 Tokens | Palette locked; contrast computed; accent on **1–2 focal nodes max** | STOP — fix init/CSS |
 | G3 Editorial ask | If card/cover ambiguous: 1 primary + 2 alt OR user said "your call" | STOP — do not guess platform |
 | G4 Generate | Template read if path exists | Fallback: flowchart TD + subgraph |
 | G5 Validate | `references/validation-checklist.md` pre+post | STOP — ASCII fallback + document ⚠️ |
 | G6 Embed | Caption = finding first | Revise caption before ship |
 
-**Iron rule:** No ship without G2 contrast check. No Family A cover with >3 text layers.
+**Iron rule:** No ship without G2 contrast check. No Family A cover with >3 text layers. No silent default skin when host brand files exist (G0b).
 
 ### ⚠️ ClawHub 发布流程
 **Trigger:** 用户要求发布 skill 到技能商城
@@ -139,29 +140,38 @@ Contrast:   luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → da
 Labels:     ≤6 words / ≤8 Chinese chars / no ALL CAPS
 Gantt:      codes only inside block + table beside / min 3w / termaid for terminal
 Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pie
+Focal:      accent on 1–2 nodes max · structural soft-cap 9 nodes · delete before add
+Brand gate: host DESIGN.md / .archviz-preset.yaml first — `references/brand-gate.md`
 Dark mode:  surface=#1a1814 text=#e8e4e0 accent=#58a6ff (see §11c)
 Editorial:  Parchment=#f5f4ed  ink=#141413  terracotta=#c96442 (max 1)  serif 500 not 700
 Swiss Grid: surface=#ffffff text=#111111 border=#111111 accent=#e4002b (Swiss Red) modular baseline-locked (12-col+8px)
 Vignelli:   surface=#f4f1ea text=#0a0a0a border=#0a0a0a accent=#f04e23 (Vermilion) max two sizes (heading ≈ 2x body)
 ```
 
-**Type selection (fast):**
+**Engine routing (fast):** Mermaid default · draw.io if editable handoff · Excalidraw if sketch/workshop · HTML/Python if data/export. Full matrix → `references/ecosystem-routing.md`.
+
+**Type selection (fast):** full 27-type map → `references/structural-diagram-types.md`
 | Data | Type | Template |
 |---|---|---|
 | Hierarchical | mindmap | — |
-| Sequential | flowchart LR/TD | — |
+| Sequential process | flowchart LR/TD | — |
+| **Messages over time** | sequenceDiagram | `mermaid/sequence.mmd` |
+| **Cross-functional / roles** | swimlane (subgraph lanes) | `mermaid/swimlane.mmd` |
+| **2×2 / impact×effort** | quadrantChart | `mermaid/quadrant.mmd` |
 | System/layered | flowchart TD + subgraph | — |
 | Comparison/ranking | xychart-beta (bar) | — |
 | Proportional | treemap or stacked bar | — |
 | Timeline | gantt | `mermaid/gantt.mmd` |
 | Distribution | histogram/box | `mermaid/distribution.mmd` |
 | Correlation | scatter/heatmap | `python/scatter-plot.py` |
-| Flow/network | sankey (or pure SVG/JS) | `mermaid/sankey.mmd` or examples/us-flows.html | Custom Sankey + geo flow with exact edge/perimeter attach (paths/circles first, bezier + offset). Use pure HTML for attachment-critical or Mermaid-incompatible cases. See gotchas for LLNL replication + map lessons. |
+| Flow/network | sankey (or pure SVG/JS) | `mermaid/sankey.mmd` or examples/us-flows.html |
 | Funnel/conversion | funnel chart | `html/funnel.html` |
 | Decision/evaluation | decision matrix (table) | `mermaid/decision-matrix.mmd` |
 | State transitions | stateDiagram-v2 | `mermaid/state-machine.mmd` |
 | Dependencies | dependency graph | `mermaid/dependency-network.mmd` |
 | Multi-criteria scoring | radar or diverging bar | `html/radar.html` / `mermaid/diverging-bar.mmd` |
+| Entities + fields | erDiagram | inline (short fields) |
+| Permissions / access grid | **TABLE** | `html/academic-table.html` |
 | Simple (≤5 items) | **TABLE, not chart** | — |
 | **Academic table** | Multi-header table with row groups | `html/academic-table.html` |
 | **Cover / hero (click promise)** | Editorial Family A HTML | `html/editorial-card.html` |
@@ -170,6 +180,8 @@ Vignelli:   surface=#f4f1ea text=#0a0a0a border=#0a0a0a accent=#f04e23 (Vermilio
 | **Long-form article layout** | Editorial Family D HTML | `html/editorial-card.html` |
 | **Swiss modular layout / poster** | Modular Grid HTML | `html/swiss-modernist-grid.html` |
 | **Network topology** | SSH / tunnel / protocol diagram | `html/network-topology.html` |
+| **Editable engineering handoff** | draw.io XML | `references/drawio-output-mode.md` |
+| **Sketch / workshop board** | Excalidraw | `templates/excalidraw/` + promote to Mermaid |
 
 **Mixed types** (when data spans categories):
 - Process + timeline → flowchart with gantt sub-section (split into 2 diagrams)
@@ -180,11 +192,13 @@ Vignelli:   surface=#f4f1ea text=#0a0a0a border=#0a0a0a accent=#f04e23 (Vermilio
 - Exception for demonstration: deliberate "combined page" (one Swiss container HTML with 2 related high-fidelity vizs, e.g. Sankey + geo-flow map, shared tokens/credits) is allowed and valuable when user wants breadth in single artifact (see examples/us-flows.html and gotchas "consolidation"). Still apply restraint: shared palette, minimal prose, clear section titles.
 
 **Degradation strategy** (when data is too complex):
-1. >50 nodes → split into 2-3 linked diagrams with shared legend
-2. >7 categories → aggregate into "Other" + detail diagram
-3. Mixed data types → identify primary relationship, table the rest
-4. Preview environment fails → ASCII fallback (always prepared)
-5. Mermaid syntax error → flowchart TD + subgraph (most compatible)
+1. **Structural soft-cap 9 nodes** → prefer overview + detail (see `structural-diagram-types.md`)
+2. >12 nodes / >15 edges → must split; >50 nodes still absolute fail for Mermaid layout
+3. >7 categories → aggregate into "Other" + detail diagram
+4. Mixed data types → identify primary relationship, table the rest
+5. Preview environment fails → ASCII fallback (always prepared)
+6. Mermaid syntax error → flowchart TD + subgraph (most compatible)
+7. Reader learns more from paragraph/table → **don't draw** (G0)
 
 **Environment routing:**
 | Env | Output |
@@ -241,9 +255,15 @@ Before generating, read these signals:
 
 Output one line: **"Reading this as: \<type> for \<audience>, \<vibe>, \<palette>."**
 
-**Palette routing:** academic/diagram default → Warm Paper + IKB · editorial/card/cover → Editorial Parchment + Terracotta · host doc with existing tokens → match host (Aver cinnabar, etc.).
+**G0 — draw or not:** *Would the reader learn more from this than a paragraph or 3-column table?* If no → ship prose/table, skip generation.
+
+**Palette routing + G0b:** academic default → Warm Paper + IKB · editorial/card → Editorial Parchment + Terracotta · **host DESIGN.md / `.archviz-preset.yaml` always wins when present**. First diagram in branded project → `references/brand-gate.md` (ask once; never silent default).
 
 **Type routing (技术图):** architecture / workflow / sequence / data flow / lifecycle 五类各有该交代的语义（泳道、主路径/旁路、PII 边界、终态）。选对类型 + 路径语义 → `references/diagram-types-technical.md`. workflow ≠ 通用流程图。
+
+**Type routing (结构图 27 类):** quadrant / venn / pyramid / org / swimlane / loop 等 → `references/structural-diagram-types.md`（密度 4/10、焦点 1–2、soft-cap 9 nodes）。
+
+**Engine routing:** Mermaid ↔ draw.io ↔ Excalidraw ↔ HTML → `references/ecosystem-routing.md`。
 
 **4-layer analysis** (from anydesign): Identity → System → Components → Layout. Mark confidence: ✅/⚠️/❓.
 
@@ -331,7 +351,9 @@ All self-contained HTML templates include two core modules:
 - Flowchart: LR for processes, TD for hierarchies
 - Max 4-5 subgraphs, short noun labels
 - Non-symmetric unless content demands it
-- Hard cap: 50 nodes → split
+- Structural soft-cap: **9 nodes** → prefer split; hard split **>12 nodes / >15 edges**
+- Absolute Mermaid layout cap: 50 nodes → must split
+- Focal accent: **1–2 nodes** only
 
 ---
 
@@ -383,20 +405,21 @@ confidence: {palette: "✅", layout: "✅", nodes: "⚠️"}
 
 ## 9. WORKFLOW
 
-1. Brief + 4-layer analysis (§0)
-2. Set dials (§1)
-3. Choose type + environment (§2 + QR table)
-4. **If ambiguous card/cover/platform** → state 1 primary format + 2 alternatives, ask ≤3 questions (§Editorial Mode); skip for clear Mermaid/ASCII requests
-5. Apply tokens (DESIGN.md)
-6. Apply typography (§3)
-7. Apply layout (§4)
-8. Check density (§5)
-9. Quality audit (§7)
-10. Generate code
-11. Validate (render test or alignment check)
-12. Embed (caption first = finding)
+1. Brief + 4-layer analysis (§0) + **G0 draw-or-not**
+2. **G0b brand gate** if first diagram / host brand files (`brand-gate.md`)
+3. Set dials (§1)
+4. Choose type + environment (§2 + QR / structural map)
+5. **If ambiguous card/cover/platform** → state 1 primary format + 2 alternatives, ask ≤3 questions (§Editorial Mode); skip for clear Mermaid/ASCII requests
+6. Apply tokens (locked palette)
+7. Apply typography (§3)
+8. Apply layout (§4) — soft-cap 9 structural nodes
+9. Check density (§5)
+10. Quality audit (§7)
+11. Generate code
+12. Validate (render test or alignment check)
+13. Embed (caption first = finding)
 
-**Pre-gen checklist:** Brief done? DESIGN.md contract complete? Dials set? Tokens locked? Labels short? Gantt: codes+table+ASCII? Card/cover: compressed to judgment+promise+one evidence?
+**Pre-gen checklist:** G0 draw-or-not? G0b brand locked? Brief done? Dials set? Tokens locked? Labels short? ≤9 structural nodes or split plan? Gantt: codes+table+ASCII? Card/cover: judgment+promise+one evidence?
 
 ---
 
@@ -529,7 +552,7 @@ Plain text only. Max 80 columns. **No box-drawing characters** (┌─┐╔═�
 
 **Fallback tools** (when termaid not installed): `pyfiglet` (headers), `boxes` (borders), `cowsay` (annotations)
 
-**External tool integration**: See `references/external-tools.md` for termaid, drawio-skill (self-healing loop), next-ai-draw-io (MCP), and markdown-viewer/skills (Vega-Lite).
+**External tool integration**: See `references/external-tools.md` + `ecosystem-routing.md` for Mermaid, diagram-design (type map only), draw.io, Excalidraw, termaid, next-ai-draw-io MCP, Vega-Lite.
 
 ---
 
@@ -571,21 +594,22 @@ Mirror every light palette with a dark counterpart. Same accent, inverted surfac
 
 ## 12. TEMPLATES
 
-Actual files live in `templates/`. Current inventory (do not hardcode counts in prompts):
+Actual files live in `templates/`. Prefer reading the specific file at use time (do not hardcode counts).
 
 ```
 templates/
-├── mermaid/    15 files (gantt, sankey, distribution, diverging-bar, network, scoring, intro, architecture, closed-loop variants, funnel, decision-matrix, state-machine, dependency-network)
-│               flowchart + mindmap: inline Mermaid (no standalone .mmd)
-├── ascii/       4 files (flowchart, architecture, gantt, icon-system)
-├── html/       17 files (+ editorial-card, swiss-modernist-grid; bubble, bullet-graph, funnel, gauge, heatmap, line, radar, sunburst, treemap, waffle, waterfall, network-topology, threejs-archviz, threejs-floorplan)
-├── python/      5 files (scatter-plot, box-plot, candlestick, parallel-coordinates, viz template)
-├── obsidian-canvas/ 3 files (mindmap, system-architecture, knowledge-graph — .canvas JSON)
-└── excalidraw/  1 file (mindmap.excalidraw.md)
+├── mermaid/     gantt, sequence, swimlane, quadrant, sankey, state-machine, …
+│                flowchart + mindmap + erDiagram: generate inline with DESIGN.md tokens
+├── ascii/       flowchart, architecture, gantt, icon-system
+├── html/        charts + editorial-card + swiss-modernist-grid + network-topology + theme/export
+├── python/      scatter-plot, box-plot, candlestick, parallel-coordinates
+└── excalidraw/  mindmap.excalidraw, architecture.excalidraw (Warm Paper sketch; promote → Mermaid)
 ```
 
-Prefer reading the specific template file under `templates/<mode>/` at use time instead of relying on this list.
-Flowchart and mindmap have no template files — generate inline using tokens from DESIGN.md.
+**Route out (no empty dirs):**
+- Obsidian Canvas → generate `.canvas` JSON only if user asks
+- 3D Three.js → **archviz-3d** skill
+- draw.io → `drawio-output-mode.md`
 ---
 
 ## 13. TROUBLESHOOTING
@@ -619,6 +643,9 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 |---|---|---|
 | **Pie for everything** | Pie chart with >5 slices or similar values | ≤3 slices → table; >3 → treemap or stacked bar |
 | **Rainbow nodes** | Every node a different color | Same hue, vary lightness. Max 1 accent |
+| **Accent as flag system** | 4+ nodes all in accent | Focal 1–2 only; rest ink/muted |
+| **Diagram when prose wins** | One-shape or ≤5 items forced into chart | G0: table or sentence |
+| **Silent default brand** | Warm Paper into Aver/client repo without ask | G0b brand gate |
 | **Flowchart-for-everything** | Non-sequential data forced into flowchart | Match data relationship to type table (§QR) |
 | **Label soup** | Labels >10 words, full sentences | ≤6 words / ≤8 Chinese chars. Detail in caption |
 | **3D decoration** | 3D bar/pie for "visual interest" | Flat only. Depth = data dimension, never decoration |
@@ -666,6 +693,7 @@ Flowchart and mindmap have no template files — generate inline using tokens fr
 | [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Agents365-ai | 样式预设系统 |
 | [termaid](https://github.com/fasouto/termaid) | fasouto | 终端Mermaid渲染 |
 | [archify](https://github.com/tt-a1i/archify) | tt-a1i | 语义化组件配色 + 五类技术图类型词汇（`references/semantic-component-colors.md` · `diagram-types-technical.md`）|
+| [diagram-design](https://github.com/cathrynlavery/diagram-design) | cathrynlavery | 27 类类型词汇 + 删除偏好 + 密度 4/10 + 首跑 brand gate 模式（`structural-diagram-types.md` · `brand-gate.md`）|
 | [headroom](https://github.com/chopratejas/headroom) | chopratejas (Netflix) | Compression mindset: input normalization, terse output shaping, reversible caching for iterative refinement |
 
 ---
@@ -722,14 +750,18 @@ Archviz does not have a full CCR reversibility layer, but inherit the principle:
 
 ## 16. RESOURCES
 
-- [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) — Official
-- [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) — 10.3k stars
-- [mermaid-rs-renderer](https://github.com/1jehuang/mermaid-rs-renderer) — Fast Rust
-- [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) — Swiss PPT
-- [anydesign](https://github.com/archsueh/anydesign) — Design analysis
-- [claude-design-card](https://github.com/geekjourneyx/claude-design-card) — Editorial Parchment language (distilled in `references/editorial-parchment-language.md`)
+| Project | Role for archviz |
+|---|---|
+| [mermaid-js/mermaid](https://github.com/mermaid-js/mermaid) | Default text engine |
+| [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 27-type taxonomy reference (not vendored) |
+| [jgraph/drawio](https://github.com/jgraph/drawio) | Editable professional export |
+| [excalidraw/excalidraw](https://github.com/excalidraw/excalidraw) | Sketch / workshop boards |
+| [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) | Alt Mermaid render |
+| [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) | Swiss PPT |
+| [anydesign](https://github.com/archsueh/anydesign) | Design analysis |
+| [claude-design-card](https://github.com/geekjourneyx/claude-design-card) | Editorial Parchment lineage |
 
-Full design system → DESIGN.md · Editorial cards → `references/editorial-parchment-language.md` · Research → research/
+Routing → `ecosystem-routing.md` · Types → `structural-diagram-types.md` · Brand → `brand-gate.md` · Full design → DESIGN.md
 
 ---
 

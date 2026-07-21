@@ -1,0 +1,36 @@
+%% Sequence Diagram (archviz-diagram)
+%% Use for: API handshake, OAuth, cache miss→origin, async job trace
+%% Env: Mermaid sequenceDiagram (native). Preview-compatible.
+%% Dials: Complexity 4, Density 3, Restraint 8
+%% Anti-pattern: max 8 participants, max 20 messages; async = dashed; notes for PII/auth
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#002FA7', 'actorBkg': '#f5f0eb', 'actorBorder': '#a8a29e', 'actorTextColor': '#1B365D', 'signalColor': '#1B365D', 'signalTextColor': '#1B365D', 'noteBkgColor': '#e8e4e0', 'noteTextColor': '#1B365D', 'fontSize': '13px'}}}%%
+sequenceDiagram
+    autonumber
+    actor U as 用户
+    participant C as Client
+    participant A as Auth
+    participant API as API
+    participant DB as DB
+
+    U->>C: 登录
+    C->>A: 凭证
+    A-->>C: access + refresh
+    Note over C,A: 不落盘 refresh 明文
+    C->>API: 请求 + Bearer
+    API->>A: 校验 token
+    A-->>API: OK / claims
+    API->>DB: 读资源
+    DB-->>API: rows
+    API-->>C: 200 JSON
+    C-->>U: 渲染
+
+%% Caption: 同步鉴权主路径；刷新令牌路径未展开（旁路另图）
+
+%% ASCII fallback:
+%% U → C: 登录
+%% C → A: 凭证
+%% A ⇢ C: tokens
+%% C → API: Bearer
+%% API → A: 校验 → OK
+%% API → DB → API → C → U

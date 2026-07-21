@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "archviz-diagram"
-version = "0.5.0"
+version = "0.5.2"
 description = "Restrained flowchart and framework diagram engine for AI agents"
 readme = "README.md"
 license = {text = "MIT"}

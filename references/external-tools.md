@@ -1,6 +1,7 @@
 # External Tools Reference
 
-Tools from the broader diagram ecosystem that complement archviz-skills.
+Tools from the broader diagram ecosystem that complement archviz-diagram.
+Primary routing table → **`ecosystem-routing.md`**. Structural type map → **`structural-diagram-types.md`**.
 
 ## Terminal Rendering
 
@@ -9,45 +10,80 @@ Tools from the broader diagram ecosystem that complement archviz-skills.
 - **Install**: `pip install termaid`
 - **Usage**: `termaid diagram.mmd --theme mono` or `cat diagram.mmd | termaid`
 - **What it does**: Pure Python Mermaid renderer for terminals. 18 diagram types, 6 color themes, ASCII fallback, terminal-width auto-fit.
-- **When to use**: Instead of hand-crafting ASCII diagrams. `termaid` renders actual Mermaid syntax in the terminal — much higher fidelity than manual ASCII.
-- **Integration point**: archviz-skills ASCII templates are for environments without termaid. When termaid is available, prefer it over manual ASCII.
+- **When to use**: Instead of hand-crafting ASCII diagrams. Prefer termaid when available.
+- **Integration**: ASCII templates are for environments without termaid.
+
+## Text Engines
+
+### Mermaid (mermaid-js/mermaid)
+- **Repo**: https://github.com/mermaid-js/mermaid
+- **Role**: **Default** text engine for Markdown / Obsidian / GitHub.
+- **archviz contract**: custom `%%{init}%%` Warm Paper tokens; never ship default purple theme; avoid `architecture-beta` in favor of flowchart + subgraph.
+- **Templates**: `templates/mermaid/` (gantt, sequence, swimlane, quadrant, state, sankey, …).
+
+## Editorial Structural Gallery (reference)
+
+### diagram-design (cathrynlavery)
+- **Repo**: https://github.com/cathrynlavery/diagram-design (≈2.8k★)
+- **What it does**: 27 editorial diagram types as self-contained HTML+SVG; brand onboarding from a website; light / dark / full-editorial variants.
+- **Borrow**: type taxonomy, deletion bias, density ~4/10, first-run style-guide gate.
+- **Do not**: dump their 27-asset gallery into this repo; do not adopt their default jet-black + atomic-tangerine skin into archviz docs.
+- **Map**: `structural-diagram-types.md` routes each type to Mermaid / HTML / table.
 
 ## Diagram Generation (Draw.io)
 
 ### drawio-skill
 - **Repo**: https://github.com/Agents365-ai/drawio-skill
-- **What it does**: Generates .drawio XML, exports to PNG/SVG/PDF/JPG via draw.io CLI. 10,000+ shape library, self-check loop, style presets.
-- **Key mechanism — Self-healing loop**: Generate → render PNG → read PNG with VLM → find overlaps/clipped labels → fix XML → re-render. Up to 5 rounds.
-- **When to use**: When the diagram needs precise layout, branded shapes (AWS/GCP/Azure), or exportable images with embedded XML.
-- **What archviz-skills borrows**: The self-healing pattern (generate → validate → fix → re-render) as a quality gate.
+- **What it does**: Generates .drawio XML, exports to PNG/SVG/PDF/JPG via draw.io CLI. Self-check loop, style presets.
+- **Key mechanism — Self-healing loop**: Generate → render PNG → VLM → fix → re-render (archviz caps at **2 rounds**).
+- **When to use**: Precise layout, branded cloud shapes, long-lived editable diagrams.
+- **archviz path**: `drawio-output-mode.md`.
 
 ### next-ai-draw-io
 - **Repo**: https://github.com/DayuanJiang/next-ai-draw-io
-- **What it does**: Web app + MCP server for AI-powered draw.io diagrams. Natural language → drawio XML, image-based replication, version history.
-- **MCP Server**: `npx @next-ai-drawio/mcp-server@latest`
-- **Key mechanisms**:
-  - Image → diagram replication (upload screenshot → AI recreates it)
-  - VLM-based validation (screenshot → check → fix)
-  - Animated connectors for better visualization
-  - Version history with restore
-- **When to use**: As an MCP tool for interactive diagram editing, or when you need to replicate an existing diagram from an image.
+- **What it does**: Web app + MCP for natural language → drawio XML; image replication; version history.
+- **MCP**: `npx @next-ai-drawio/mcp-server@latest`
+- **When to use**: Interactive editing or screenshot → diagram replication.
+
+### Draw.io desktop (jgraph/drawio)
+- **Repo**: https://github.com/jgraph/drawio
+- **Export**:
+  ```bash
+  drawio --export --format png diagram.drawio
+  drawio --export --format svg diagram.drawio
+  ```
+
+## Hand-drawn / Whiteboard
+
+### Excalidraw
+- **Repo**: https://github.com/excalidraw/excalidraw
+- **When to use**: Workshop boards, sketchy exploration, teaching whiteboards.
+- **archviz path**: emit `.excalidraw` JSON or Excalidraw Markdown when user asks 手绘/白板; promote to Mermaid/draw.io once structure stabilizes.
+- **Restraint**: still max-1-accent, short labels; no rainbow stickies.
 
 ## Multi-Engine Skills
 
 ### markdown-viewer/skills
 - **Repo**: https://github.com/markdown-viewer/skills
-- **What it does**: 14 skills covering 5 rendering engines (Vega-Lite, Mermaid, PlantUML, D2, Excalidraw).
-- **Key skill — Vega-Lite**: `vega-lite` code fence for data-driven charts (bar, line, scatter, heatmap, area, radar, word cloud). More powerful than Mermaid xychart-beta for complex data viz.
-- **When to use**: When Mermaid's chart types are too limited and you need Vega-Lite's data transformation capabilities.
+- **Engines**: Vega-Lite, Mermaid, PlantUML, D2, Excalidraw.
+- **When**: Mermaid chart types too limited; need Vega-Lite transforms.
 
-## Decision Matrix
+### Lucidchart alternatives
+- **Topic**: https://github.com/topics/diagram
+- Discovery only. Prefer file formats agents can write (`.mmd`, `.drawio`, `.excalidraw`, self-contained HTML).
 
-| Need | Tool | archviz-skills handles? |
+## Decision Matrix (compact)
+
+| Need | Tool | archviz handles? |
 |---|---|---|
 | Diagram in .md | Mermaid (inline) | ✅ Primary |
-| Terminal preview | termaid | ⚠️ Recommend termaid |
-| Professional export (PNG/SVG/PDF) | drawio-skill | ❌ Out of scope → drawio |
-| Interactive editing | next-ai-draw-io MCP | ❌ Out of scope → MCP |
-| Complex data charts | Vega-Lite | ⚠️ Consider for future |
-| 3D archviz | Three.js (inline HTML) | ✅ templates/html/ |
-| Editorial cards | HTML (self-contained) | ✅ templates/html/ |
+| Terminal preview | termaid | ⚠️ Prefer termaid |
+| 27 editorial type pick | structural-diagram-types map | ✅ Routing |
+| Professional editable export | draw.io | ⚠️ Mode doc + CLI |
+| Interactive draw.io MCP | next-ai-draw-io | ❌ Hand off MCP |
+| Sketch whiteboard | Excalidraw | ⚠️ On request |
+| Complex data charts | HTML / Python / Vega-Lite | ✅ HTML+Python |
+| 3D archviz | archviz-3d | ✅ Separate skill |
+| Editorial cards | HTML self-contained | ✅ templates/html |
+
+Last updated: 2026-07-21

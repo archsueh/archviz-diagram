@@ -1,0 +1,38 @@
+%% Quadrant / 2×2 Matrix (archviz-diagram)
+%% Use for: impact×effort, urgency×importance, risk×value, consultant scenarios
+%% Env: Mermaid quadrantChart (Mermaid ≥10.3). Fallback: HTML grid or Markdown table.
+%% Dials: Complexity 3, Density 4, Restraint 8
+%% Anti-pattern: max 12 points; short labels; caption names the strategy per quadrant
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#a8a29e', 'fontSize': '13px', 'quadrant1Fill': '#e8e4e0', 'quadrant2Fill': '#f5f0eb', 'quadrant3Fill': '#f5f0eb', 'quadrant4Fill': '#e4e8f0', 'quadrantPointFill': '#002FA7', 'quadrantPointTextFill': '#1B365D', 'quadrantXAxisTextFill': '#1B365D', 'quadrantYAxisTextFill': '#1B365D', 'quadrantTitleFill': '#1B365D'}}}%%
+quadrantChart
+    title 项目优先级 2×2
+    x-axis 低工作量 --> 高工作量
+    y-axis 低影响 --> 高影响
+    quadrant-1 规划投入
+    quadrant-2 立刻做
+    quadrant-3 延后或砍
+    quadrant-4 快速赢
+    "登录重构": [0.75, 0.85]
+    "文档站": [0.35, 0.70]
+    "主题皮肤": [0.55, 0.40]
+    "内部工具": [0.80, 0.30]
+    "错误埋点": [0.25, 0.75]
+
+%% Caption: 高影响×低工作量优先（文档站、埋点）；登录重构需单独立项
+
+%% Table fallback (always ship beside if preview lacks quadrantChart):
+%% | 项 | 影响 | 工作量 | 象限 |
+%% |---|---|---|---|
+%% | 登录重构 | 高 | 高 | 规划投入 |
+%% | 文档站 | 高 | 低 | 立刻做 |
+%% | 主题皮肤 | 中 | 中 | 延后 |
+%% | 内部工具 | 低 | 高 | 砍/外包 |
+%% | 错误埋点 | 高 | 低 | 快速赢 |
+
+%% ASCII fallback:
+%%          高影响
+%%    立刻做  │  规划投入
+%%  ──────────┼──────────
+%%    延后    │  快速赢?  (若 x 为高工作量则右上=规划)
+%%          低影响

@@ -1,0 +1,41 @@
+%% Swimlane / Cross-functional Workflow (archviz-diagram)
+%% Use for: approval flow, multi-team process, support handoff
+%% Env: Mermaid flowchart + subgraph as lanes (preview-compatible)
+%% Dials: Complexity 5, Density 4, Restraint 8
+%% Anti-pattern: max 5 lanes, max 12 steps; main path solid accent, async dashed
+
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f0eb', 'primaryTextColor': '#1B365D', 'primaryBorderColor': '#a8a29e', 'lineColor': '#a8a29e', 'tertiaryColor': '#e8e4e0', 'fontSize': '13px'}}}%%
+flowchart LR
+    subgraph L1["申请人"]
+        A1[提交申请]
+        A2[补材料]
+    end
+    subgraph L2["审核员"]
+        B1{材料齐?}
+        B2[初审]
+        B3[退回说明]
+    end
+    subgraph L3["负责人"]
+        C1[终审]
+        C2[签发]
+    end
+    subgraph L4["系统"]
+        D1[归档通知]
+    end
+
+    A1 --> B1
+    B1 -->|否| B3 --> A2 --> B1
+    B1 -->|是| B2 --> C1
+    C1 -->|通过| C2 --> D1
+    C1 -->|驳回| B3
+
+    classDef default fill:#f5f0eb,stroke:#a8a29e,color:#1B365D
+    classDef gate fill:#e8e4e0,stroke:#002FA7,color:#1B365D
+    class B1 gate
+
+%% Caption: 三泳道审批；补材料为唯一回环
+
+%% Notes:
+%% - subgraph label = lane / role name (short)
+%% - Prefer LR for few steps; TD when lanes >4 or deep nesting
+%% - Path semantics: 主路径 accent stroke if HTML; Mermaid uses solid vs -.-> for async
