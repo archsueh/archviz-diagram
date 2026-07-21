@@ -2,7 +2,8 @@ import re
 from pathlib import Path
 
 def sync():
-    base_dir = Path("/Users/mac/Developer/archviz")
+    # Repo root = scripts/..
+    base_dir = Path(__file__).resolve().parent.parent
     templates_dir = base_dir / "templates" / "html"
     export_file = templates_dir / "_archviz-export.html"
 

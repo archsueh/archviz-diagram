@@ -2,7 +2,8 @@ import re
 from pathlib import Path
 
 def fix_all():
-    base_dir = Path("/Users/mac/Developer/archviz")
+    # Repo root = scripts/..
+    base_dir = Path(__file__).resolve().parent.parent
     templates_dir = base_dir / "templates" / "html"
     
     # Read the canonical theme block

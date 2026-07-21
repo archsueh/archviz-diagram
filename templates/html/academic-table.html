@@ -276,7 +276,14 @@
     </style>
 
     <script>
-      /* archviz-skills Theme System */
+      /* archviz-skills Theme System
+       * API:
+       *   applyPalette(name)  — set palette by name
+       *   toggleTheme()        — toggle light↔dark
+       *   getCurrentPalette()  — return current palette name
+       *   isDark()             — boolean
+       *   ARCHVIZ_PALETTES     — palette registry
+       */
       (function () {
         "use strict";
 
@@ -293,6 +300,7 @@
           "auto-time": { label: "Auto (Time)", mode: "auto" },
         };
 
+        // Expose globally for export module
         window.ARCHVIZ_PALETTES = PALETTES;
 
         let currentPalette = "warm-paper";
@@ -355,7 +363,9 @@
             btn.textContent = PALETTES[currentPalette]?.label || currentPalette;
         }
 
+        // Auto-init on DOMContentLoaded
         function init() {
+          // Restore saved palette
           const saved = localStorage.getItem("archviz-palette");
           if (saved && PALETTES[saved]) {
             applyPalette(saved);
@@ -363,12 +373,14 @@
             applyPalette("auto-time");
           }
 
+          // Create toggle button
           const btn = document.createElement("button");
           btn.id = "archviz-theme-toggle";
           btn.textContent = PALETTES[currentPalette]?.label || "Theme";
           btn.addEventListener("click", toggleTheme);
           document.body.appendChild(btn);
 
+          // Periodically update theme if auto-time
           setInterval(function () {
             if (currentPalette === "auto-time") {
               const hours = new Date().getHours();
@@ -382,6 +394,7 @@
           }, 60000);
         }
 
+        // Expose API
         window.archvizTheme = {
           applyPalette,
           toggleTheme,

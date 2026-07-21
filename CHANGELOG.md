@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.3 (2026-07-21)
+
+### Fixed
+- Hard-coded `/Users/mac/Developer/archviz` paths in `scripts/sync_theme.py`, `sync_export.py`, `fix_html_syntax.py`, `generate_html_charts.py` → resolve repo root via `Path(__file__).parent.parent` (pre-commit no longer warns missing theme).
+- `scripts/git-pre-commit.sh`: optional `.venv` pip check; `cd` to repo root; `npx --yes prettier`.
+- Stale absolute paths in sankey template comment + `self-contained-html-viz.txt`.
+
 ## 0.5.2 (2026-07-21)
 
 ### Added

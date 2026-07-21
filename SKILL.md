@@ -8,7 +8,7 @@ description: |
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
 license: MIT
 metadata:
-  version: 0.5.2
+  version: 0.5.3
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh

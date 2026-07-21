@@ -1,13 +1,15 @@
 import os
 import sys
+from pathlib import Path
 
-# Add archviz directory to path so we can import engine
-sys.path.insert(0, "/Users/mac/Developer/archviz")
+# Repo root on path so we can import engine
+_REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO))
 
-from archviz.engine import render
+from archviz_diagram.engine import render
 
-# Output directory
-out_dir = "/Users/mac/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_684n8iag9kyn12_e751/temp/drag"
+# Output directory (override with ARCHVIZ_CHART_OUT)
+out_dir = os.environ.get("ARCHVIZ_CHART_OUT", str(_REPO / "exports" / "charts"))
 os.makedirs(out_dir, exist_ok=True)
 
 # ----------------- CHART 1a: 全省文旅总收入 -----------------
