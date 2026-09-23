@@ -4,7 +4,6 @@
   <head>
     <meta charset="UTF-8" />
     <title>ArchViz: Heatmap — archviz-skills</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       body {
         font-family:
@@ -20,10 +19,59 @@
         max-width: 600px;
         margin: 0 auto;
       }
-      canvas {
+      /* 图表是内联 SVG 而非 canvas —— 导出走矢量路径，主题切换靠 CSS 变量自动生效。
+         颜色必须走 CSS 类而不是 fill="var(--x)"：var() 在 SVG 表现属性里跨浏览器行为
+         不一致，写在样式规则里才可靠。 */
+      .chart-container > svg {
+        display: block;
         background: var(--av-surface-raised);
         border: 1px solid var(--av-border);
         border-radius: 4px;
+      }
+      .chart-container .cat-grid {
+        stroke: var(--av-border);
+        stroke-width: 1;
+      }
+      .chart-container .cat-grid-soft {
+        stroke: var(--av-border);
+        stroke-width: 1;
+        opacity: 0.5;
+      }
+      .chart-container .cat-axis {
+        stroke: var(--av-text-secondary);
+        stroke-width: 1;
+      }
+      .chart-container .cat-bar-1 {
+        fill: var(--av-chart-1);
+      }
+      .chart-container .cat-bar-2 {
+        fill: var(--av-chart-2);
+      }
+      .chart-container .cat-bar-3 {
+        fill: var(--av-chart-3);
+      }
+      .chart-container .cat-name {
+        font:
+          13px system-ui,
+          -apple-system,
+          sans-serif;
+        fill: var(--av-text-primary);
+        text-anchor: end;
+      }
+      .chart-container .cat-value {
+        font:
+          13px system-ui,
+          -apple-system,
+          sans-serif;
+        fill: var(--av-text-secondary);
+      }
+      .chart-container .cat-tick {
+        font:
+          12px system-ui,
+          -apple-system,
+          sans-serif;
+        fill: var(--av-text-secondary);
+        text-anchor: middle;
       }
       .chart-meta {
         font-size: 12px;
@@ -444,77 +492,91 @@
       <h3 style="color: var(--av-text-primary)">
         Matrix: Types vs Restraint (heatmap)
       </h3>
-      <canvas
-        id="heatChart"
+      <svg
+        class="archviz-export-target"
+        viewBox="0 0 600 400"
         width="600"
         height="400"
-        class="archviz-export-target"
-      ></canvas>
+        role="img"
+        aria-labelledby="heatmap-title heatmap-desc"
+      >
+        <title id="heatmap-title">Restraint score by chart type</title>
+        <desc id="heatmap-desc">
+          Horizontal bar chart of restraint score for four chart types. Bar 9,
+          line 8, scatter 7, heatmap 9. Scores run from 0 to 10.
+        </desc>
+
+        <!-- 值轴网格（0–10，每 2 一格；x = 120 + 值 × 44） -->
+        <line class="cat-grid" x1="208" y1="40" x2="208" y2="360" />
+        <line class="cat-grid" x1="296" y1="40" x2="296" y2="360" />
+        <line class="cat-grid" x1="384" y1="40" x2="384" y2="360" />
+        <line class="cat-grid" x1="472" y1="40" x2="472" y2="360" />
+
+        <!-- 类目分隔线 -->
+        <line class="cat-grid-soft" x1="120" y1="48" x2="560" y2="48" />
+        <line class="cat-grid-soft" x1="120" y1="128" x2="560" y2="128" />
+        <line class="cat-grid-soft" x1="120" y1="208" x2="560" y2="208" />
+        <line class="cat-grid-soft" x1="120" y1="288" x2="560" y2="288" />
+
+        <!-- 四根条（高 40，间距 40，全部落在 4px 网格上） -->
+        <rect class="cat-bar-1" x="120" y="68" width="396" height="40" rx="0" />
+        <rect
+          class="cat-bar-2"
+          x="120"
+          y="148"
+          width="352"
+          height="40"
+          rx="0"
+        />
+        <rect
+          class="cat-bar-3"
+          x="120"
+          y="228"
+          width="308"
+          height="40"
+          rx="0"
+        />
+        <rect
+          class="cat-bar-1"
+          x="120"
+          y="308"
+          width="396"
+          height="40"
+          rx="0"
+        />
+
+        <!-- 类目标签 -->
+        <text class="cat-name" x="104" y="92">Bar</text>
+        <text class="cat-name" x="104" y="172">Line</text>
+        <text class="cat-name" x="104" y="252">Scatter</text>
+        <text class="cat-name" x="104" y="332">Heatmap</text>
+
+        <!-- 数值标签 -->
+        <text class="cat-value" x="524" y="92">9</text>
+        <text class="cat-value" x="480" y="172">8</text>
+        <text class="cat-value" x="436" y="252">7</text>
+        <text class="cat-value" x="524" y="332">9</text>
+
+        <!-- 轴线 -->
+        <line class="cat-axis" x1="120" y1="40" x2="120" y2="360" />
+        <line class="cat-axis" x1="120" y1="360" x2="560" y2="360" />
+
+        <!-- 刻度 -->
+        <text class="cat-tick" x="120" y="384">0</text>
+        <text class="cat-tick" x="208" y="384">2</text>
+        <text class="cat-tick" x="296" y="384">4</text>
+        <text class="cat-tick" x="384" y="384">6</text>
+        <text class="cat-tick" x="472" y="384">8</text>
+        <text class="cat-tick" x="560" y="384">10</text>
+
+        <!-- 图例 -->
+        <rect class="cat-bar-1" x="120" y="24" width="16" height="8" rx="0" />
+        <text class="cat-value" x="144" y="32">Restraint Score</text>
+      </svg>
       <div class="chart-meta">
         Env: archviz-skills | Type: from report | Icons: minimal
       </div>
     </div>
-
-    <script>
-      function getCSSVar(name) {
-        return getComputedStyle(document.documentElement)
-          .getPropertyValue(name)
-          .trim();
-      }
-
-      let chartInstance = null;
-
-      function drawChart() {
-        const ctx = document.getElementById("heatChart");
-
-        // Destroy previous instance if exists
-        if (chartInstance) chartInstance.destroy();
-
-        chartInstance = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: ["Bar", "Line", "Scatter", "Heatmap"],
-            datasets: [
-              {
-                label: "Restraint Score",
-                data: [9, 8, 7, 9],
-                backgroundColor: [
-                  getCSSVar("--av-chart-1"),
-                  getCSSVar("--av-chart-2"),
-                  getCSSVar("--av-chart-3"),
-                  getCSSVar("--av-chart-1"),
-                ],
-              },
-            ],
-          },
-          options: {
-            indexAxis: "y",
-            responsive: true,
-            scales: {
-              y: {
-                grid: { color: getCSSVar("--av-border") },
-                ticks: { color: getCSSVar("--av-text-secondary") },
-              },
-              x: {
-                grid: { color: getCSSVar("--av-border") },
-                ticks: { color: getCSSVar("--av-text-secondary") },
-              },
-            },
-            plugins: {
-              legend: {
-                labels: { color: getCSSVar("--av-text-primary") },
-              },
-            },
-          },
-        });
-      }
-
-      // Initial draw
-      drawChart();
-
-      // Re-draw on theme change
-      document.addEventListener("archviz-theme-changed", drawChart);
-    </script>
 
     <!-- archviz-export: full export module -->
     <!-- archviz-skills upgrade Phase 1 | 2026-06-13 -->

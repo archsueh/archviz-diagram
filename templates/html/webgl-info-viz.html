@@ -49,8 +49,8 @@
   </head>
   <body>
     <div id="controls">
-      <button onclick="resetView()">Reset</button>
-      <button onclick="toggleLabels()">Toggle Labels</button>
+      <button data-action="resetView">Reset</button>
+      <button data-action="toggleLabels">Toggle Labels</button>
       <span style="font-size: 12px; color: #78716c"
         >Click nodes • Drag to pan</span
       >
@@ -132,6 +132,17 @@
       function toggleLabels() {
         /* simple toggle stub — extend with real labels */ draw();
       }
+
+      // 动作派发：按钮用 data-action 而非内联 onclick ——
+      // GitHub 清洗器会剥掉内联事件且无替代方案（references/export-patterns.md）
+      const ACTIONS = { resetView, toggleLabels };
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const fn = ACTIONS[btn.dataset.action];
+        if (fn) fn();
+      });
 
       // Theme hook (integrate with _archviz-theme if loaded)
       if (window.applyTheme) window.applyTheme("warm-paper");

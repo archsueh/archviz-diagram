@@ -629,10 +629,10 @@
     <!-- Export button -->
     <button id="archviz-export-btn">Export</button>
     <div id="archviz-export-menu">
-      <button onclick="exportPNG()">PNG (4×)</button>
-      <button onclick="exportSVG()">SVG</button>
-      <button onclick="exportWebP()">WebP</button>
-      <button onclick="copyClipboard()">Clipboard</button>
+      <button data-action="exportPNG">PNG (4×)</button>
+      <button data-action="exportSVG">SVG</button>
+      <button data-action="exportWebP">WebP</button>
+      <button data-action="copyClipboard">Clipboard</button>
     </div>
 
     <!-- Table container -->
@@ -851,6 +851,22 @@
         if (!exportBtn.contains(e.target) && !exportMenu.contains(e.target)) {
           exportMenu.classList.remove("open");
         }
+      });
+
+      // 动作派发：按钮用 data-action 而非内联 onclick ——
+      // GitHub 清洗器会剥掉内联事件且无替代方案（references/export-patterns.md）
+      const ACTIONS = {
+        exportPNG,
+        exportSVG,
+        exportWebP,
+        copyClipboard,
+      };
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const fn = ACTIONS[btn.dataset.action];
+        if (fn) fn();
       });
 
       // Keyboard shortcuts
