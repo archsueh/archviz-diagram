@@ -74,7 +74,7 @@
   <p class="kicker">archviz · semantic-component-colors · Aver V1</p>
   <div class="head">
     <h1>Aver V1 技术架构 — 物件陪伴证据 App</h1>
-    <button class="toggle" onclick="tt()">◐ 主题 (T)</button>
+    <button class="toggle" data-action="toggleTheme">◐ 主题 (T)</button>
   </div>
 
   <div class="boundary">
@@ -143,6 +143,11 @@
   }
   addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 't' && !/input|textarea/i.test(e.target.tagName)) tt();
+  });
+  // 按钮用 data-action 而非内联 onclick —— GitHub 清洗器会剥掉内联事件且无替代方案
+  addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (btn && btn.dataset.action === 'toggleTheme') tt();
   });
 </script>
 </body>

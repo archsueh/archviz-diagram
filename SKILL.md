@@ -22,7 +22,8 @@ metadata:
 ## When to Use
 
 - Inline diagrams in Markdown/Obsidian/GitHub (Mermaid, ASCII, embedded SVG/HTML).
-- Architecture, flow, timeline, comparison, state, dependency, or 3D spatial briefs.
+- Architectural diagrams (2D only), flow, timeline, comparison, state, dependency briefs.
+  (3D spatial → `archviz-3d`；动态 GIF 技术图 → `archviz-motion`。)
 - Editorial HTML cards/covers when the deliverable stays **text-first or self-contained HTML** (not Playwright PNG pipeline).
 - Host-document palette matching (Warm Paper, Aver cinnabar, Editorial Parchment).
 
@@ -39,14 +40,21 @@ metadata:
 
 ## Skill Boundaries (curation map)
 
-|| Need | Use |
+**先判静态还是动态**，再按内容类型选：
+
+| Need | Use |
 |---|---|
-|| Flowcharts & Framework Diagrams (process flows, architecture, concepts) | **archviz-diagram** (this skill) |
-|| 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) (specialized extension) |
-|| Dark tech infrastructure diagrams | **archviz-diagram** Dark Mode (built-in, see DESIGN.md §Palette: IKB Dark) |
-|| Educational flat diagrams (physics, chemistry, engineering) | **archviz-diagram** Educational Flat Mode (built-in, see DESIGN.md §Palette: Educational Flat) |
-|| Article illustrations / sketches | [archviz-sketch](https://github.com/archsueh/archviz-sketch) + `sketch-image-pipeline` skill |
-|| DESIGN.md for a product brand | anydesign + host DESIGN.md |
+| **静态** 2D 流程图 / 框架图（process flows, architecture, concepts） | **archviz-diagram** (this skill) |
+| **动态** 技术图（GIF 动效 + Excalidraw 可编辑源，纯代码生成、结果可复现，**无需 image API**） | [archviz-motion](https://github.com/archsueh/archviz-motion) |
+| 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) |
+| Dark tech infrastructure diagrams | **archviz-diagram** Dark Mode (built-in, see DESIGN.md §Palette: IKB Dark) |
+| Educational flat diagrams (physics, chemistry, engineering) | **archviz-diagram** Educational Flat Mode (built-in, see DESIGN.md §Palette: Educational Flat) |
+| Article illustrations / sketches（**前置条件：需要 image_generate 工具**） | [archviz-sketch](https://github.com/archsueh/archviz-sketch) + `sketch-image-pipeline` skill |
+| 编号手绘（041号 / 手绘风格库 / 不会描述画风） | `handdraw-style-prompter` —— **不要**用 archviz-sketch 猜编号 |
+| Presentation board / portfolio / 展板排版 / 交付前打磨 | [archviz-layout](https://github.com/archsueh/archviz-layout) |
+| DESIGN.md for a product brand | anydesign + host DESIGN.md |
+
+**静态 vs 动态判据**：交付物需要**随时间变化**（模块 pulse、流光、状态流转）→ archviz-motion；只需一张能看懂的图 → archviz-diagram。不确定时先出静态图，动效是额外成本而非默认。
 
 **Absorbed capabilities (2026-06):** Dark Mode infrastructure diagram rules and Educational Flat 9-ramp color system were absorbed from the upstream `architecture-diagram` and `concept-diagrams` skills into this skill's DESIGN.md. No external skill routing required for these modes — they are first-class citizens here.
 
@@ -80,6 +88,8 @@ archviz-diagram serve
 | `archviz-diagram` | 14 types (2D charts) | `~/Developer/archviz-diagram` |
 | `archviz-3d` | 2 types (building, floorplan) | `~/Developer/archviz-3d` |
 | `archviz-sketch` | 4 styles (prompt generation) | `~/Developer/archviz-sketch` |
+| `archviz-motion` | 3 deliverables (excalidraw / PNG / GIF) | `~/Developer/archviz-motion` |
+| `archviz-layout` | board layout & pre-delivery polish | `~/Developer/archviz-layout` |
 
 ### Sketch → Image Pipeline
 For hand-drawn illustrations: `archviz_sketch_generate` → Grok `image_generate` → `vision_analyze` QA.
@@ -130,13 +140,47 @@ See `sketch-image-pipeline` skill for full workflow.
 
 ---
 
+## 按需加载地图 (Progressive Disclosure Map)
+
+本文件只保留**路由 + 设计系统 + 门禁**。下列文件按触发条件加载 —— **不要预读全部**。
+
+| 触发条件 | 加载 | 得到什么 |
+|---|---|---|
+| 任何要交付的图 | `references/accessibility-contract.md` | 无障碍 6 条硬规则、对比度真算公式、色盲安全、检查清单 |
+| 图里有连接线 | `references/connector-geometry.md` | 折线 / 跨桥 / 扇形展开 / 标签间隙 6 条铁律 |
+| 定位节点或间距 | `references/grid-and-spacing.md` | 4px 网格允许取值表、圆角语义、字号阶梯 |
+| 交付前定规格 | `references/output-dials.md` | Format / Size / Detail / Audience 四拨盘 + 保真账本 |
+| 类型选不准 | `references/semantic-patterns.md` | 10 个行为模式（**先判行为，再选类型**） |
+| 元素可能超量 | `references/complexity-budgets.md` | 27 类逐类型预算 + 超限决策树 |
+| 生成前扫一遍 | `references/anti-patterns.md` | 反模式表 + 红线（绝不） |
+| 报错时 | `references/troubleshooting.md` | 按症状查表 |
+| 输出超长 / 成本敏感 | `references/token-budget.md` | 压缩策略与预算分档 |
+| 做学术表格 | `references/academic-table-rules.md` | 列宽 / 对齐 / 显著性 / 跨列表头 |
+| 做展板 / 作品集 | `references/presentation-grids.md` | 版式网格 + 交付前打磨清单 |
+| 查某条规则的出处 | `references/credits.md` | 上游来源与致谢 |
+
+**以下 6 个此前是孤儿文件**（内容存在但全仓库无入口），现纳入地图：
+
+| 触发条件 | 加载 | 得到什么 |
+|---|---|---|
+| 甘特图 / 时间线 | `references/gantt-rules.md` | 轴与条、里程碑、标签防溢出 |
+| 暗色模式 | `references/dark-mode-tokens.md` | 暗色 token 全套对照 |
+| 教学图 / "像教科书" | `references/educational-flat-system.md` | Educational Flat 9 色阶系统与适用判据 |
+| HTML 模板加动效 | `references/animation-vocabulary.md` | **共享运动词汇表** —— 命名与时长必须照用，不得自创 |
+| Mermaid init / pretty-mermaid 主题 | `references/style-guide.md` | 主题搭配与描边/圆角约定 |
+| 找素材 / 背景图案 / 图标资源 | `references/design-resources-curated.md` | 从 445 条里筛出的可用资源 |
+
+**可执行校验**：`python3 scripts/self_check.py <file.html>` —— 跑无障碍 / 单文件安全 / 4px 网格 / 对比度 / 连接线几何五类，**退出码非零即不合格**。改完图跑一次，比人眼可靠。
+
+---
+
 ## QUICK REFERENCE (agent loads this in <5 seconds)
 
 ```
 Dials:      COMPLEXITY=4  DENSITY=3  RESTRAINT=8
 Palette:    surface=#f5f0eb  text=#1B365D  border=#a8a29e  accent=#002FA7 (max 1)
 Init:       %%{init: {'theme':'base','themeVariables':{'primaryColor':'#f5f0eb','primaryTextColor':'#1B365D','primaryBorderColor':'#a8a29e','lineColor':'#a8a29e','tertiaryColor':'#d6d3d1','fontSize':'13px'}}}%%
-Contrast:   luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → dark text
+Contrast:   luminance(0.299R+0.587G+0.114B) < 128 → light text, ≥ 128 → dark text（**仅判明暗**；AA 合规要真算，见 references/accessibility-contract.md）
 Labels:     ≤6 words / ≤8 Chinese chars / no ALL CAPS
 Gantt:      codes only inside block + table beside / min 3w / termaid for terminal
 Anti-slop:  no purple default / no rainbow / no flowchart-for-everything / no pie
@@ -261,7 +305,11 @@ Output one line: **"Reading this as: \<type> for \<audience>, \<vibe>, \<palette
 
 **Type routing (技术图):** architecture / workflow / sequence / data flow / lifecycle 五类各有该交代的语义（泳道、主路径/旁路、PII 边界、终态）。选对类型 + 路径语义 → `references/diagram-types-technical.md`. workflow ≠ 通用流程图。
 
+**行为路由（先于类型）：** 类型是*词汇*，行为是*路由*。「要表达审批/回滚/异步/观测/禁止/借道」这类判断 → `references/semantic-patterns.md`（10 个模式 × 触发条件/语义原语/预算/反模式/静态回退）。**先判行为再选类型**，能避免「类型对了但语义错了」。
+
 **Type routing (结构图 27 类):** quadrant / venn / pyramid / org / swimlane / loop 等 → `references/structural-diagram-types.md`（密度 4/10、焦点 1–2、soft-cap 9 nodes）。
+
+**超量处理:** 元素数接近上限、或非节点型维度（生命线/泳道/轴/系列/层/阶段）吃紧时 → `references/complexity-budgets.md`（27 类逐类型预算 + 超限决策树：降级 / 拆图 / 归并 / 换类型）。
 
 **Engine routing:** Mermaid ↔ draw.io ↔ Excalidraw ↔ HTML → `references/ecosystem-routing.md`。
 
@@ -282,6 +330,8 @@ Output one line: **"Reading this as: \<type> for \<audience>, \<vibe>, \<palette
 | RESTRAINT | 8 | 1(expressive)–10(austere) |
 
 Inference: "academic" → 3-5/2-3/9-10 · "playful" → 5-8/3-5/3-5 · "data report" → 6-8/6-8/5-7
+
+**风格拨盘 ≠ 交付拨盘。** 上面三个是*风格*（图长什么样）；交付规格（Format / Size / Detail / Audience，含 Size 决定字号阶梯、Detail 的四步降级阶梯、保真账本）见 `references/output-dials.md`。两者并存，不互相替代。
 
 ---
 
@@ -437,26 +487,8 @@ Trigger: 封面、卡片、信息卡、小红书、公众号、分享图、排�
 
 ## 9c. ARCHVIZ PRESENTATION & GRIDS (Arcviz-Layout)
 
-Trigger: 展板、作品集、画册、网格排版、A0/A1、Portfolio, or CSS Paged Media.
-
-- **Layout Workflow**:
-  1. **Understand**: List drawing list, text blocks, and constraints (A0 vertical vs A3 landscape).
-  2. **Tune**: Select 1 of 3 visual languages: Still Paper (🌿 `#F5F4ED` + Terracotta), Signal Proof (⚡ `#F5F5F4`/`#E4E8F0` + Electric Blue), or Bridge Canvas (🎬 `#141413` + Teal/Gold).
-  3. **Split**: Split layout into semantic narrative zones (e.g. concept -> master plan -> render -> details).
-  4. **Layout**: Fit drawings/texts into grid columns. Focus on Image-First.
-  5. **Verify**: Check flowlines, margins, runts, and contrast.
-- **Grids & Hierarchy**:
-  - Margins: A0 = `50-80mm`; Portfolio = `6%-8%` of short side.
-  - Columns: A0 vertical = `3` or `6`; A0 horizontal = `4`, `8`, or `12`; A3/A4 landscape portfolio = `6` or `12`.
-  - Gutters: A0 = `20mm`; Portfolio = `8-12mm`.
-  - Asset mapping: Tier 1 (Hero render) $\ge 35\%$, Tier 2 (Master plan/Section) $\ge 20\%$, Tier 3 (Drawings) $\ge 15\%$, Tier 4 (Narratives/Diagrams) $\ge 10\%$, Tier 5 (Metadata) $\le 10\%$.
-  - Air bubble: Keep $\ge 1$ grid unit whitespace around Tier 1 hero renders.
-- **Card & Presentation Constraints**:
-  - Safe zones: 16:9 (asymmetric 2/3 text, 1/3 image); 3:4 portrait (density $\ge 75\%$ height); 9:16 vertical (top 14% logo, middle 44%-52% title, bottom 20% + right 15% interactive safety area).
-  - Web-to-print: Use asymmetric `@page :left` and `@page :right` for spine margins. Suppress headers on chapter start. Avoid orphans/widows/runts.
-  - AI asset brand consistency: Reserve 1/3 text zone in prompts with preservation clause. Use canonical logo plate SVG/PNG with `inputImages` reference.
-
----
+> **按需加载** → `references/presentation-grids.md`
+> 展板/作品集版式与网格、交付前打磨清单。做**展板类**交付物时加载（日常图表不需要）。
 
 ## 10. GANTT (hard rules)
 
@@ -470,58 +502,8 @@ Trigger: 展板、作品集、画册、网格排版、A0/A1、Portfolio, or CSS 
 
 ## 10b. ACADEMIC TABLE (hard rules)
 
-Trigger: 论文表格、性能对比表、实验结果表、benchmark table、ablation study、comparison table.
-
-**When to use:**
-- Multi-level headers (e.g., Math Domain / Code Domain / Chat Domain)
-- Row groups (e.g., Target Model → Eagle3/DFlash/DSpark)
-- Bold highlighting for best values
-- Print-ready, A4-friendly layout
-
-**Template:** `templates/html/academic-table.html`
-
-**Data structure (JSON):**
-```json
-{
-  "title": "Table 1: Main speculative decoding results",
-  "subtitle": "Accepted length τ (higher is better) across benchmarks.",
-  "columnGroups": [
-    { "label": "Math Domain", "span": 3 },
-    { "label": "Code Domain", "span": 3 },
-    { "label": "Chat Domain", "span": 3 }
-  ],
-  "columns": ["GSM8K", "MATH", "AIME25", "MBPP", "HumanEval", "LCB", "MT-Bench", "Alpaca", "Arena-Hard"],
-  "rowGroups": [
-    {
-      "label": "Qwen3-4B",
-      "rows": [
-        { "method": "Eagle3", "values": [3.21, 2.87, 2.15, 3.45, 3.12, 2.78, 3.67, 3.89, 3.34] },
-        { "method": "DFlash", "values": [3.56, 3.12, 2.45, 3.78, 3.45, 3.12, 4.01, 4.23, 3.67] },
-        { "method": "DSpark", "values": [4.12, 3.78, 3.01, 4.34, 4.12, 3.67, 4.56, 4.78, 4.23], "best": true }
-      ]
-    }
-  ],
-  "footer": "τ = average accepted tokens per decoding round."
-}
-```
-
-**Styling rules:**
-- Multi-level header: `rowspan` for row group labels, `colspan` for column groups
-- Row groups: distinct background (`--av-surface`), bold label
-- Best values: `font-weight: 600`, `color: var(--av-accent)`
-- Hover effect: `var(--av-accent-soft)` background
-- Typography: 13px body, 12px group headers, 11px column headers
-- Numbers: `font-variant-numeric: tabular-nums` for alignment
-
-**Quality checklist:**
-- [ ] All column headers visible, no truncation
-- [ ] Row group labels clear and distinct
-- [ ] Best values highlighted with accent color
-- [ ] Numbers right-aligned, text left-aligned
-- [ ] Print-friendly (test with Cmd+P)
-- [ ] Theme toggle works (T key)
-
----
+> **按需加载** → `references/academic-table-rules.md`
+> 学术表格硬规则（列宽、对齐、显著性标记、跨列表头）。只在做论文表格时加载。
 
 ## 11. ASCII MODE
 
@@ -614,139 +596,23 @@ templates/
 
 ## 13. TROUBLESHOOTING
 
-| Issue | Fix |
-|---|---|
-| Editorial wrong palette | Host doc wins; else Editorial Parchment `#f5f4ed` + Terracotta `#c96442` — never mix with IKB |
-| Cover too dense | Family A: drop to judgment + promise + one evidence; move rest to Family B |
-| Card needs PNG export | Built-in: press E→P for 4× raster PNG, E→S for SVG, E→C for clipboard. See §Export System. |
-| Mindmap fails | Use flowchart/subgraph |
-| Architecture-beta lexer error | Use flowchart TD + subgraph (preview-compatible) |
-| Mermaid trailing end error | Never close graph/flowchart TD blocks with end; only subgraph blocks require end |
-| Gantt text overflow | Codes only + table + ASCII fallback |
-| Theme too flashy | Force solarized-light/nord-light |
-| Text unreadable | Check contrast rule (QR) |
-| Too many nodes | Split into subgraphs |
-| Canvas blank (Three.js) | Check console for CDN 404 / import errors |
-| animejs not animating | v4 API: `animate(target, props)` not `anime({targets})` |
-| Render loop stops | Don't name loop function `animate` (conflicts with animejs import) |
-| Custom flow nodes "断掉" / bad attach | Paths drawn after nodes or wrong endpoint math | Draw all flow <path> first, then <rect>/<circle> on top. Compute attach = center ± (half-size or r) * unit vector from angle. See examples/us-flows.html + gotchas. |
-| Multiple viz files for same data | User eventually demands "combine into one + clean the rest" | Converge early to single canonical Swiss HTML (shared tokens, one container). Pure attachment + restrained color from energy iteration. |
-| Grid overlay drifts (viewport shift) | Content-box alignment mismatch | Place `.guides` overlay in the SAME container box as the centered content, sharing margins and templates (see `references/swiss-modernist-grid.md`) |
-| CJK text side-bearing offset | Display letters look slightly indented | Implement browser optical alignment to nudge display elements using canvas measurements |
-| Headless Helvetica rendering fallback | System lacks real font, fallback to Arial/Noto | Prioritize `Liberation Sans` in the CSS font stack to preserve metric-compatible grotesque spacing, or embed the webfont directly |
-
----
+> **按需加载** → `references/troubleshooting.md`
+> 按症状查表（渲染空白、字体回退、导出失败、Mermaid 不兼容）。**只在报错时加载**。
 
 ## 14. ANTI-PATTERNS (student work + common mistakes)
 
-| Anti-pattern | Symptom | Fix |
-|---|---|---|
-| **Pie for everything** | Pie chart with >5 slices or similar values | ≤3 slices → table; >3 → treemap or stacked bar |
-| **Rainbow nodes** | Every node a different color | Same hue, vary lightness. Max 1 accent |
-| **Accent as flag system** | 4+ nodes all in accent | Focal 1–2 only; rest ink/muted |
-| **Diagram when prose wins** | One-shape or ≤5 items forced into chart | G0: table or sentence |
-| **Silent default brand** | Warm Paper into Aver/client repo without ask | G0b brand gate |
-| **Flowchart-for-everything** | Non-sequential data forced into flowchart | Match data relationship to type table (§QR) |
-| **Label soup** | Labels >10 words, full sentences | ≤6 words / ≤8 Chinese chars. Detail in caption |
-| **3D decoration** | 3D bar/pie for "visual interest" | Flat only. Depth = data dimension, never decoration |
-| **Dual Y-axis lie** | Two unrelated metrics on shared axis | Split into 2 charts or use indexed/baseline ratio |
-| **Truncated axis** | Bar chart Y-axis starts at non-zero | Always start at 0. Use inset zoom if range matters |
-| **Legend overload** | >7 legend items, hard to match | Aggregate "Other". Use direct labeling |
-| **Default theme** | Mermaid/Chart.js default purple/blue gradient | Always apply custom init + tokens from DESIGN.md |
-| **Mermaid block end** | Append end keyword to close flowchart/graph block | Never close graph/flowchart TD with end; end is exclusively for subgraphs |
-| **Missing caption** | Diagram embedded without context | Caption = finding, not title. "Sales dropped 30% in Q3" not "Q3 Sales Chart" |
-| **Color as only channel** | Red/green distinction for colorblind users | Add pattern/shape/label. Never rely on color alone |
-| **Spaghetti network** | >20 edges in network/graph | Cluster nodes, hide weak edges, or split into subgraphs |
-| **Mixed metaphor** | Flowchart arrows + pie segments + bar heights in one view | One visual language per diagram. Split if needed |
-| **Infinite Gantt** | Gantt with 30+ tasks, unreadable | Group into phases. Detail in separate Gantt or table |
-| **Emoji overload** | 🎯📊🔥 in every node | Max 1 icon per group. No emoji in formal deliverables |
-| **Cover as summary slide** | 4–6 bullets on a platform cover | Family A: judgment + promise + one evidence only |
-| **Editorial serif 700** | Headlines feel bombastic / off-brand | Georgia/Newsreader at 500; enlarge size instead |
-| **Cool SaaS white** | `#ffffff` + `#64748b` on cards | Parchment `#f5f4ed` + Near-Black `#141413` |
-| **Equal card grid** | Every module same weight | One hero + hierarchy via type scale |
-
----
-
-## 14b. Pitfalls & Red Lines (绝不)
-
-| 绝不 | Why |
-|---|---|
-| Ship Mermaid default theme | Reads as AI slop; always custom init |
-| Two accents in one set (IKB + Terracotta + cinnabar) | Breaks restraint dial |
-| `font-weight: 700` on editorial serif | Off-brand; enlarge type instead |
-| `#ffffff` canvas or `#64748b` UI gray | Violates warm editorial contract |
-| Box-drawing in ASCII | Garbles in chat/non-mono viewers |
-| Pie chart >3 slices | Use table or treemap |
-| Skip ASCII fallback when target env unknown | Text-first survivability |
-| Embed diagram without finding-caption | Violates G6 |
-| Duplicate claude-design-card Playwright pipeline inside archviz | Toolkit bloat — boundary in §When NOT |
-
----
+> **按需加载** → `references/anti-patterns.md`
+> 反模式表 + 红线（绝不）。**生成前扫一眼能省一次返工**，但不需要每次全文读。
 
 ## 致谢
 
-本项目参考了以下开源项目：
-
-| 项目 | 作者 | 借鉴内容 |
-|---|---|---|
-| [next-ai-draw-io](https://github.com/DayuanJiang/next-ai-draw-io) | DayuanJiang | 自愈循环机制 |
-| [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Agents365-ai | 样式预设系统 |
-| [termaid](https://github.com/fasouto/termaid) | fasouto | 终端Mermaid渲染 |
-| [archify](https://github.com/tt-a1i/archify) | tt-a1i | 语义化组件配色 + 五类技术图类型词汇（`references/semantic-component-colors.md` · `diagram-types-technical.md`）|
-| [diagram-design](https://github.com/cathrynlavery/diagram-design) | cathrynlavery | 27 类类型词汇 + 删除偏好 + 密度 4/10 + 首跑 brand gate 模式（`structural-diagram-types.md` · `brand-gate.md`）|
-| [headroom](https://github.com/chopratejas/headroom) | chopratejas (Netflix) | Compression mindset: input normalization, terse output shaping, reversible caching for iterative refinement |
-
----
+> **按需加载** → `references/credits.md`
+> 上游来源与致谢。需要追溯某条规则的出处时加载。
 
 ## 15. COMPRESSION & TOKEN BUDGET (Headroom inspired)
 
-Archviz output competes for context window with prompt, tool results, and system memory.
-Render this section as operational rules, not aspirational goals.
-
-### 15.1 Input side (before generation)
-
-| Rule | Why |
-|------|-----|
-| Flatten JSON arrays to `[{label,value}]` before passing to chart | Whitespace and nesting are the token killers headroom targets |
-| Strip decorative prose from data payloads; keep only numeric/label fields | Tool output cost dominates when agent re-reads the same data |
-| One source of truth per diagram; deduplicate cross-references with `key` fields | Duplicate labels break max-1-accent and waste tokens |
-| ASCII fallback prepared in parallel, not after render failure | Avoid the expensive "generate big HTML → fail → retry" loop |
-
-### 15.2 Output side (after generation)
-
-| Rule | Target |
-|------|--------|
-| Embed self-contained HTML only when interactivity/animation is required | Static saves tokens; Mermaid + image export replaces heavy HTML for static deliverables |
-| Export system (E→P/S/W/C) de-prioritizes re-render; use SVG for single-shape, PNG only when client demands raster | PNG at 4× is expensive in output tokens and base64 |
-| Embed dedup: if same diagram appears in 2 notes, link to one canonical HTML; second brief becomes a `[view]` reference | Avoids shipping duplicate 30KB assets |
-| Self-healing loop ≤2 rounds; third failure ships ASCII fallback + documented warning | Prevents the model from "fixing" forever and bloating the conversation |
-
-### 15.3 Output shaping for model-written text
-
-- **Terse by default**: Every archviz output block should use finding-first captions, not description restatements.
-- **Max 15 words for caption**: `"V1 closed loop; 3 feedback paths, 1 integration gap"`, not `"This diagram illustrates the closed loop of V1 with three feedback paths and one integration gap"`.
-- **Skip decorative transitions**: No "Great, let me now show you…", no "I've generated the diagram above for your reference".
-- **Evidence-first body**: Chart itself is the evidence; caption is the claim. Model text explains nothing the chart doesn't already show.
-
-### 15.4 Reversible caching analog (CCR)
-
-Archviz does not have a full CCR reversibility layer, but inherit the principle:
-
-1. **Golden copy**: First successful render of a template is cached at `templates/html/` or `exports/`.
-2. **Rollback contract**: If the self-healing loop or a later edit breaks a diagram, revert to last known good. Do not ship a broken diagram with a "fix in progress" note.
-3. **Audit log**: `CHANGELOG.md` records the before/after state for every major diagram change.
-
-### 15.5 Practical budget tiers
-
-| Context | Allowed format budget |
-|---------|----------------------|
-| Terminal / CLI chat | Mermaid ≤ 30 nodes, ASCII fallback |
-| Obsidian note | Self-contained HTML ≤ 200KB, Mermaid inline |
-| Deliverable PNG | SVG → PNG (4×), no base64 embeds in chat |
-| Batch export | Use `headroom-wrap` for Mermaid/HTML before model re-reads; expect 40–90% token reduction on tool outputs |
-
-
----
+> **按需加载** → `references/token-budget.md`
+> Token 预算分档、输入/输出侧压缩、可逆缓存类比（CCR）。只在**输出超长或成本敏感**时加载。
 
 ## 16. RESOURCES
 
