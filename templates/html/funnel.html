@@ -181,6 +181,27 @@
         --av-chart-5: #44403c;
         --av-chart-6: #292524;
       }
+      /* === Palette: Blueprint === */
+      [data-palette="blueprint"] {
+        --av-surface: #0d1b2a;
+        --av-surface-alt: #14253a;
+        --av-surface-raised: #1a2e44;
+        --av-text-primary: #dbe7f0;
+        --av-text-secondary: #a8c5d6;
+        --av-text-tertiary: #6e93ad;
+        --av-border: #2a4a6b;
+        --av-accent: #5fd0e8;
+        --av-accent-soft: rgba(95, 208, 232, 0.12);
+        --av-success: #6fcf97;
+        --av-warning: #e8c468;
+        --av-danger: #e8836f;
+        --av-chart-1: #5fd0e8;
+        --av-chart-2: #a8c5d6;
+        --av-chart-3: #6e93ad;
+        --av-chart-4: #c7d9e5;
+        --av-chart-5: #3e6a8a;
+        --av-chart-6: #9fb8c9;
+      }
 
       /* === Dark: IKB Dark === */
       [data-palette="ikb-dark"],
@@ -294,6 +315,7 @@
           "still-paper": { label: "Still Paper", mode: "light" },
           "signal-proof": { label: "Signal Proof", mode: "light" },
           "bridge-canvas": { label: "Bridge Canvas", mode: "dark" },
+          blueprint: { label: "Blueprint", mode: "dark" },
           "ikb-dark": { label: "IKB Dark", mode: "dark" },
           "auto-time": { label: "Auto (Time)", mode: "auto" },
         };
@@ -337,6 +359,7 @@
             "still-paper",
             "signal-proof",
             "bridge-canvas",
+            "blueprint",
             "ikb-dark",
             "auto-time",
           ];
@@ -420,102 +443,6 @@
       window.addEventListener("archviz-theme-changed", function () {
         if (typeof drawChart === "function") drawChart();
       });
-    </script>
-    <script>
-      /* archviz-skills Theme System
-       * API:
-       *   applyPalette(name)  — set palette by name
-       *   toggleTheme()        — toggle light↔dark
-       *   getCurrentPalette()  — return current palette name
-       *   isDark()             — boolean
-       *   ARCHVIZ_PALETTES     — palette registry
-       */
-      (function () {
-        "use strict";
-
-        const PALETTES = {
-          "warm-paper": { label: "Warm Paper", mode: "light" },
-          "swiss-neutral": { label: "Swiss Neutral", mode: "light" },
-          "editorial-parchment": { label: "Editorial", mode: "light" },
-          "ikb-dark": { label: "IKB Dark", mode: "dark" },
-        };
-
-        // Expose globally for export module
-        window.ARCHVIZ_PALETTES = PALETTES;
-
-        let currentPalette = "warm-paper";
-
-        function applyPalette(name) {
-          if (!PALETTES[name]) return;
-          currentPalette = name;
-          const root = document.documentElement;
-          root.setAttribute("data-palette", name);
-          root.setAttribute("data-theme", PALETTES[name].mode);
-          localStorage.setItem("archviz-palette", name);
-          updateToggleLabel();
-        }
-
-        function toggleTheme() {
-          const order = [
-            "warm-paper",
-            "swiss-neutral",
-            "editorial-parchment",
-            "ikb-dark",
-          ];
-          const idx = order.indexOf(currentPalette);
-          applyPalette(order[(idx + 1) % order.length]);
-        }
-
-        function getCurrentPalette() {
-          return currentPalette;
-        }
-        function isDark() {
-          return PALETTES[currentPalette]?.mode === "dark";
-        }
-
-        function updateToggleLabel() {
-          const btn = document.getElementById("archviz-theme-toggle");
-          if (btn)
-            btn.textContent = PALETTES[currentPalette]?.label || currentPalette;
-        }
-
-        // Auto-init on DOMContentLoaded
-        function init() {
-          // Restore saved palette
-          const saved = localStorage.getItem("archviz-palette");
-          if (saved && PALETTES[saved]) {
-            applyPalette(saved);
-          } else {
-            // Respect system preference
-            const prefersDark = window.matchMedia(
-              "(prefers-color-scheme: dark)",
-            ).matches;
-            if (prefersDark) applyPalette("ikb-dark");
-          }
-
-          // Create toggle button
-          const btn = document.createElement("button");
-          btn.id = "archviz-theme-toggle";
-          btn.textContent = PALETTES[currentPalette]?.label || "Theme";
-          btn.addEventListener("click", toggleTheme);
-          document.body.appendChild(btn);
-        }
-
-        // Expose API
-        window.archvizTheme = {
-          applyPalette,
-          toggleTheme,
-          getCurrentPalette,
-          isDark,
-          init,
-        };
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
-      })();
     </script>
     <!-- archviz-skills Export Utility Module -->
     <style id="archviz-export-styles">

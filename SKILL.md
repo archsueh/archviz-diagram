@@ -8,7 +8,7 @@ description: |
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
 license: MIT
 metadata:
-  version: 0.5.3
+  version: 0.5.4
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -348,11 +348,12 @@ Defined in DESIGN.md. Summary:
 | **Still Paper (静纸)** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` |
 | **Signal Proof (实证)** | `#f5f5f4` | `#0a0a0a` | `#94a3b8` | `#0039a6` |
 | **Bridge Canvas (图桥)**| `#141413` | `#e8e4e0` | `#44403c` | `#ffd500` |
+| **Technical Blueprint (技术蓝图)** | `#0d1b2a` | `#dbe7f0` | `#2a4a6b` | `#5fd0e8` |
 | **Editorial Parchment** | `#f5f4ed` | `#141413` | `#e8e6dc` | `#c96442` |
 | **Swiss Modernist** | `#ffffff` | `#111111` | `#111111` | `#e4002b` |
 | **Vignelli Canon** | `#f4f1ea` | `#0a0a0a` | `#0a0a0a` | `#f04e23` |
 
-**Rules:** Max 1 accent. No AI-purple. Same doc = same palette. Contrast check mandatory. Light surface uses dark text. Editorial mode: serif display **500 max**, no `#ffffff` canvas, no cool `#64748b` grays. Full rules → `references/editorial-parchment-language.md`. Still Paper, Signal Proof, and Bridge Canvas inherit specific typographic/layout constraints.
+**Rules:** Max 1 accent. No AI-purple. Same doc = same palette. Contrast check mandatory. Light surface uses dark text. Editorial mode: serif display **500 max**, no `#ffffff` canvas, no cool `#64748b` grays. Full rules → `references/editorial-parchment-language.md`. Still Paper, Signal Proof, Bridge Canvas, and Technical Blueprint inherit specific typographic/layout constraints. **Technical Blueprint** (deep navy `#0d1b2a` + cyan hairline `#2a4a6b` + single cyan accent `#5fd0e8`) is the dark engineering-drawing mode — 0 radius, weight ≤600, display negative tracking, Mono technical labels; pairs with archviz-layout's 4th visual language.
 
 **Semantic colors (技术架构/数据流图):** 组件类型 → 固定语义色（frontend 青 / backend 绿 / database 紫 / cloud 琥珀 / security 玫红 / msgbus 橙 / external 石灰），双主题配对。颜色表达"这是什么组件"，和美学调色板分工。与 Max-1-accent / No-AI-purple 的调和见 → `references/semantic-component-colors.md`.
 

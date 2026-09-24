@@ -146,6 +146,7 @@ All HTML templates use CSS custom properties for theming. Variables are defined 
 | IKB Dark | dark | Periwinkle `#6B8AFF` | Dark mode, terminal |
 | Swiss Modernist | light | Swiss Red `#e4002b` | Müller-Brockmann modular grids |
 | Vignelli Canon | light | Vermilion `#f04e23` | Vignelli Canon layouts |
+| Technical Blueprint | dark | Cyan `#5FD0E8` | Technical/engineering dark boards; archviz-layout's 4th visual language |
 | Educational Flat | light | ONE ramp only (e.g. `c-teal`) | Teaching / textbook diagrams; opt-in via brief, does NOT auto-cycle |
 
 ### Runtime Behavior
@@ -558,7 +559,7 @@ Google/WICG [HTML-in-Canvas](https://github.com/WICG/html-in-canvas) renders rea
 
 This section details the layout, grid, and presentation system for architectural visualization, portfolios, A0/A1 competition panels, and social cards, as established in the `arcviz-layout` skill.
 
-### 1. Three Visual Languages (Arcviz Palette Extension)
+### 1. Four Visual Languages (Arcviz Palette Extension)
 
 - **Still Paper (静纸) — 手作纸本风**
   - Surface: `#F5F4ED`, Text: `#141413`, Border: `#C9C7BC`, Accent: `#C96442` (Terracotta).
@@ -572,6 +573,12 @@ This section details the layout, grid, and presentation system for architectural
   - Surface: `#141413` (pure dark), Text: `#E8E4E0`, Border: `#44403C`, Accent: `#FFD500` (Gold/Lemon).
   - Title: Directly overlaid on image shadow or dark backgrounds.
   - Rendering style: Teal-gold split-tone.
+- **Technical Blueprint (技术蓝图) — 深色工程图幅风** *(v0.5.x — 4th language)*
+  - Surface: `#0D1B2A` (deep navy), Text: `#DBE7F0`, Border/hairline: `#2A4A6B`, Accent: `#5FD0E8` (single cyan).
+  - Component radius: `0` (sharp, CAD-sheet). Weight cap 600; display negative tracking; Mono reserved for coordinates / elevations / section tags.
+  - Depth: canvas → surface-1 (`#14253A`) → surface-2 (`#1A2E44`) elevation by surface + 1px hairline; **no shadow, no gradient**.
+  - Rendering style: cool engineering signature. Distinct from Signal Proof (light cool-gray electric blue doc) and Bridge Canvas (black gold-green cinematic).
+  - Contrast note: cyan `#5FD0E8` is the text-safe accent on navy; the mid-tone trap does NOT apply here (cyan on navy is high-contrast). Chart marks must stay in the navy-safe cyan/steel ramp, never dark warm grays.
 
 ### 2. Rational Grid Systems (Modular Grid)
 

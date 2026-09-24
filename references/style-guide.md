@@ -15,7 +15,7 @@ Use with Mermaid init + pretty-mermaid themes, or hybrid SVG.
 - **Swiss Neutral**: #f5f5f4 bg, #1B365D text. Clean, print.
 - **IKB Accent**: e4e8f0 bg, IKB #002FA7 accent. For guizang Swiss PPTs.
 - **Dark Terminal** (inspired): Dark bg for GitHub/dev (use with nord or custom init).
-- **Blueprint** (inspired): Technical, blueprint feel (dark + precise lines).
+- **Technical Blueprint**: `#0d1b2a` navy bg, `#dbe7f0` text, `#2a4a6b` hairline, `#5fd0e8` cyan accent. Technical/engineering dark (archviz-layout's 4th visual language; 0 radius, weight ≤600, Mono labels).
 - **Notion Clean** (inspired): Minimal, light, for modern docs.
 
 Load matching reference if using external styles (see fireworks references/style-*.md for tokens).

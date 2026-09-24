@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.4 (2026-09-24)
+
+### Added
+- **Technical Blueprint palette** — archviz-layout's 4th visual language: deep navy `#0d1b2a` + cyan hairline `#2a4a6b` + single cyan accent `#5fd0e8` (0 radius, weight ≤600, Mono labels). Added to the SKILL.md palette table, `DESIGN.md` (§2 Palette Registry + §Arcviz-Layout Integration, now **Four Visual Languages**), `preview.html`, and all 17 HTML templates (CSS block + JS `PALETTES` registry + `order` array).
+
+### Fixed
+- **Duplicate theme system in 6 templates** (`treemap`, `bubble`, `funnel`, `sunburst`, `waterfall`, `bullet-graph`): a reduced in-body "Theme System Script" clobbered the full `<head>` registry, rendering **two** toggle buttons and hiding `swiss-modernist` / `vignelli-canon` / the three layout languages from the switcher. Removed the redundant block — all 17 templates now expose a single toggle and the full 11-palette registry (verified: 1 button, 11 entries, `blueprint` present, 0 console errors).
+
 ## 0.5.3 (2026-07-21)
 
 ### Fixed
