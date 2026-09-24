@@ -1,4 +1,4 @@
-#!/Users/mac/Developer/archviz/.venv/bin/python3.12
+#!/Users/mac/Developer/archviz-diagram/.venv/bin/python3.14
 import sys
 from httpx import main
 if __name__ == '__main__':

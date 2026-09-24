@@ -20,7 +20,7 @@ def fix_all():
     canonical_theme_block = theme_match.group(1)
 
     for f in templates_dir.glob("*.html"):
-        if f.name in ("_archviz-theme.html", "_archviz-export.html", "_archviz-motion.html", "_flow-attach.html"):
+        if f.name in ("_archviz-theme.html", "_archviz-export.html", "_archviz-animated.html", "_flow-attach.html"):
             continue
             
         content = f.read_text(encoding="utf-8")

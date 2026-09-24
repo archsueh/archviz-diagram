@@ -31,7 +31,7 @@ def sync():
     new_export_block = f"{new_style}\n\n{new_script}\n"
 
     for f in templates_dir.glob("*.html"):
-        if f.name in ("_archviz-export.html", "_archviz-theme.html", "_archviz-motion.html", "_flow-attach.html"):
+        if f.name in ("_archviz-export.html", "_archviz-theme.html", "_archviz-animated.html", "_flow-attach.html"):
             continue
             
         content = f.read_text(encoding="utf-8")

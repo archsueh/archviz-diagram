@@ -136,7 +136,7 @@ def contrast(a, b):
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  .archviz-motion { animation: none !important; transition: none !important; }
+  .archviz-animated { animation: none !important; transition: none !important; }
   .archviz-playback-controls { display: none !important; }
 }
 ```

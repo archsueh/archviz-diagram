@@ -23,7 +23,7 @@ metadata:
 
 - Inline diagrams in Markdown/Obsidian/GitHub (Mermaid, ASCII, embedded SVG/HTML).
 - Architectural diagrams (2D only), flow, timeline, comparison, state, dependency briefs.
-  (3D spatial → `archviz-3d`；动态 GIF 技术图 → `archviz-motion`。)
+  (3D spatial → `archviz-3d`；动态 GIF 技术图 → `archviz-animated`。)
 - Editorial HTML cards/covers when the deliverable stays **text-first or self-contained HTML** (not Playwright PNG pipeline).
 - Host-document palette matching (Warm Paper, Aver cinnabar, Editorial Parchment).
 
@@ -45,7 +45,7 @@ metadata:
 | Need | Use |
 |---|---|
 | **静态** 2D 流程图 / 框架图（process flows, architecture, concepts） | **archviz-diagram** (this skill) |
-| **动态** 技术图（GIF 动效 + Excalidraw 可编辑源，纯代码生成、结果可复现，**无需 image API**） | [archviz-motion](https://github.com/archsueh/archviz-motion) |
+| **动态** 技术图（GIF 动效 + Excalidraw 可编辑源，纯代码生成、结果可复现，**无需 image API**） | [archviz-animated](https://github.com/archsueh/archviz-animated) |
 | 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) |
 | Dark tech infrastructure diagrams | **archviz-diagram** Dark Mode (built-in, see DESIGN.md §Palette: IKB Dark) |
 | Educational flat diagrams (physics, chemistry, engineering) | **archviz-diagram** Educational Flat Mode (built-in, see DESIGN.md §Palette: Educational Flat) |
@@ -54,7 +54,7 @@ metadata:
 | Presentation board / portfolio / 展板排版 / 交付前打磨 | [archviz-layout](https://github.com/archsueh/archviz-layout) |
 | DESIGN.md for a product brand | anydesign + host DESIGN.md |
 
-**静态 vs 动态判据**：交付物需要**随时间变化**（模块 pulse、流光、状态流转）→ archviz-motion；只需一张能看懂的图 → archviz-diagram。不确定时先出静态图，动效是额外成本而非默认。
+**静态 vs 动态判据**：交付物需要**随时间变化**（模块 pulse、流光、状态流转）→ archviz-animated；只需一张能看懂的图 → archviz-diagram。不确定时先出静态图，动效是额外成本而非默认。
 
 **Absorbed capabilities (2026-06):** Dark Mode infrastructure diagram rules and Educational Flat 9-ramp color system were absorbed from the upstream `architecture-diagram` and `concept-diagrams` skills into this skill's DESIGN.md. No external skill routing required for these modes — they are first-class citizens here.
 
@@ -88,7 +88,7 @@ archviz-diagram serve
 | `archviz-diagram` | 14 types (2D charts) | `~/Developer/archviz-diagram` |
 | `archviz-3d` | 2 types (building, floorplan) | `~/Developer/archviz-3d` |
 | `archviz-sketch` | 4 styles (prompt generation) | `~/Developer/archviz-sketch` |
-| `archviz-motion` | 3 deliverables (excalidraw / PNG / GIF) | `~/Developer/archviz-motion` |
+| `archviz-animated` | 3 deliverables (excalidraw / PNG / GIF) | `~/Developer/archviz-animated` |
 | `archviz-layout` | board layout & pre-delivery polish | `~/Developer/archviz-layout` |
 
 ### Sketch → Image Pipeline
