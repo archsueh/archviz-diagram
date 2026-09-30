@@ -44,7 +44,13 @@
 - [ ] Arrow labels have background rects (opacity 0.95).
 - [ ] Legend present if >2 arrow types.
 - [ ] Visual self-review (if images readable): clean routing, sufficient spacing, readable text (>=11px, good contrast).
-## 3D post-gen}: CDN imports resolve? Console clean? Resize works? Camera limits set? Touch/mobile tested?
+## 3D Post-Generation
+
+- [ ] CDN imports resolve?
+- [ ] Console clean?
+- [ ] Resize works?
+- [ ] Camera limits set?
+- [ ] Touch/mobile tested?
 
 ## Educational Flat (Demo Section)
 
@@ -84,7 +90,9 @@ Run this before shipping any diagram.
 - [ ] All hardcoded hex replaced with `--av-*` CSS variables
 - [ ] `class="archviz-export-target"` on the main chart element — **must be an `<svg>` or `<canvas>`**; HTML targets fail fast (see `references/export-patterns.md`)
 - [ ] Canvas charts listen for `archviz-theme-changed` event and redraw
-- [ ] T key cycles through 4 palettes (visual change confirmed)
+- [ ] T key cycles through **every** palette in `ARCHVIZ_PALETTES` (visual change confirmed).
+      Read the registry in `templates/html/_archviz-theme.html` — **don't hardcode a count**;
+      this line said "4" for months while the registry held 11.
 - [ ] E→P exports PNG at 4× resolution (text sharp, no pixelation) — SVG / canvas targets only
 - [ ] E→S exports SVG with current theme vars injected — SVG targets only
 - [ ] E→C copies to clipboard (or logs fallback)

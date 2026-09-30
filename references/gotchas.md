@@ -32,3 +32,10 @@
 - Recurring "Syntax error in text" in shipped Mermaid (e.g. `... --> F3[label]end` / `got 'end'`) is almost always a STRUCTURE defect, not a grammar one: an orphan `end` (no open subgraph), an unbalanced subgraph/end count, a token glued to `end` (`]end` with no newline), or a broken/unterminated ```mermaid fence. A "renders cleanly" eyeball check misses these until the doc renders.
 - Fix: run `python3 scripts/validate-mermaid.py <file.md|file.mmd>` (exit 0 required) BEFORE claiming a Mermaid diagram done. It is a grammar-agnostic structure check — does not replace rendering, stops the cheap mistakes early. Now MANDATORY in validation-checklist.md → Post-Generation → Mermaid.
 - Note: a stray `end` often survives hand-edits of generated blocks. The subgraph may already be closed mid-block; a second `end` at the tail is the classic orphan. Count opens vs closes, not just "looks fine".
+
+## 2026-09-30 session (theme header comment + hardcoded palette count)
+
+- **`sync_theme.py` 的锚点是 `<style id="archviz-theme-vars">`** → 紧贴它**上面**那行 `<!-- Provides: ... -->` 头注释**不在被同步的块内**。改 partial 里的注释**不会**传播到模板，必须逐文件改（当时 5 处各存一份副本）。推论：**任何会漂的信息都不该写进这行注释**。
+- **调色板数量别写死**：`toggleTheme()` 的 `order` 数组当时有 **11** 项，而 `DESIGN.md`、`references/validation-checklist.md` 与 5 处头注释都写着 **4**（数字停在只有 4 套的年代，此后无人发现）。要说数量就写「见 `ARCHVIZ_PALETTES` 注册表」，不要给数。
+- **`scripts/sync_*.py --help` 会真的执行同步**（没有 argparse）—— 想「看用法」会直接改盘上 18 个模板。补救路径：`prettier --write` 之后 `git diff --exit-code` 应回到 0；2026-09-30 复验该不动点成立。
+- **a11y 契约对 canvas 模板结构性跳过**：`self_check.py --all` 对 **22 个模板中的 15 个**报「文档里没有 `<svg>`，跳过无障碍检查」——它们用 `<canvas>`，而 `accessibility-contract.md` 的 R1–R6 全是 `<svg>` 专属。契约在这 ~68% 的模板上是空转的（**未修**，属设计决策）。

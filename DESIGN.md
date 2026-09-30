@@ -152,7 +152,7 @@ All HTML templates use CSS custom properties for theming. Variables are defined 
 ### Runtime Behavior
 
 - `prefers-color-scheme: dark` → auto-applies IKB Dark (when no explicit palette set)
-- Click toggle button or press **T** → cycles through 4 palettes
+- Click toggle button or press **T** → cycles through every palette in `ARCHVIZ_PALETTES` (registry lives in `templates/html/_archviz-theme.html`; **don't hardcode the count here** — it drifts)
 - `localStorage('archviz-palette')` → persists across sessions
 - `window.dispatchEvent(new Event('archviz-theme-changed'))` → canvas charts redraw
 
