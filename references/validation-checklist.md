@@ -82,11 +82,11 @@ Run this before shipping any diagram.
 - [ ] Template includes `_archviz-theme.html` (CSS vars + toggle button)
 - [ ] Template includes `_archviz-export.html` (export menu + keyboard shortcuts)
 - [ ] All hardcoded hex replaced with `--av-*` CSS variables
-- [ ] `class="archviz-export-target"` on main chart/canvas element
+- [ ] `class="archviz-export-target"` on the main chart element — **must be an `<svg>` or `<canvas>`**; HTML targets fail fast (see `references/export-patterns.md`)
 - [ ] Canvas charts listen for `archviz-theme-changed` event and redraw
 - [ ] T key cycles through 4 palettes (visual change confirmed)
-- [ ] E→P exports PNG at 4× resolution (text sharp, no pixelation)
-- [ ] E→S exports SVG with current theme vars injected
+- [ ] E→P exports PNG at 4× resolution (text sharp, no pixelation) — SVG / canvas targets only
+- [ ] E→S exports SVG with current theme vars injected — SVG targets only
 - [ ] E→C copies to clipboard (or logs fallback)
 - [ ] `prefers-color-scheme: dark` auto-applies IKB Dark palette
 - [ ] Export matches current theme (dark export = dark colors)

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.5 (2026-09-30)
+
+### Fixed
+- **Export never actually worked on SVG targets** (`_archviz-export.html`, propagated to all 18 templates). `exportBlob()` compared `target.tagName === "SVG"`, but elements in the SVG namespace report **lowercase** `"svg"` while HTML elements report uppercase `"CANVAS"`. The comparison never matched, so every SVG target fell through to the HTML branch, where the `<foreignObject>` → `<img>` route hangs Chromium's image decoder on any non-trivial subtree — blocking the main thread hard enough that not even a `setTimeout` guard could fire. Symptoms: `E→P`/`E→W`/`E→C` did nothing forever with no toast and no error, and `E→S` always answered "SVG export requires an SVG target" even on a real SVG. Fixed by lowercasing the tagName comparisons and deleting the foreignObject route; HTML targets now fail fast with an actionable message.
+  Verified in headless Chromium (blob captured, no download): `line-chart` PNG 23 ms / WebP 125 ms / SVG 2 ms; `heatmap` 17 / 85 / 2 ms; `webgl-info-viz` (canvas target) 100 / 733 ms. `academic-table` and `network-topology` (HTML targets) now fail in ≤6 ms instead of hanging.
+- **3 templates never received the shared export module** — `academic-table.html`, `network-topology.html`, `webgl-info-viz.html`. `sync_export.py` skipped them silently, and because the skip produced no diff, CI's `git diff --exit-code` guard passed. `academic-table` had kept a hand-rolled stub whose `exportPNG()`/`exportWebP()` only fired `alert("...integrate html2canvas")` and whose `copyToClipboard()` used the deprecated `document.execCommand("copy")` — on the one template G0 points at for permission/access matrices.
+- **`network-topology.html` referenced 11 `--av-*` variables across 40 call sites while defining none.** It pulled in the theme with `<link rel="stylesheet" href="_archviz-theme.html" />`, which is not a stylesheet. Page background and every colour silently fell back to nothing.
+- **CI has been red since 2026-06-28** — 7 consecutive failures on `main`. The step order was `sync → git diff --exit-code → prettier --check`, but Prettier re-indents the embedded `<style>`/`<script>` blocks that the sync scripts paste in, so `sync` alone can never reproduce a committed template: the diff check was unsatisfiable by construction. Reordered to mirror `scripts/git-pre-commit.sh` (`prettier --check → sync → prettier --write → git diff`) and pinned Prettier to 3.9.9 in both places so a release cannot silently change the expected formatting.
+
+### Changed
+- `scripts/sync_theme.py` and `scripts/sync_export.py` now **exit non-zero and name the offending file** when a template is missing its anchor, instead of skipping silently. A skip is now only ever an explicit `EXCLUDED` / `THEME_EXEMPT` entry with a stated reason. Silent skipping is what let this drift hide for three months.
+- `webgl-info-viz.html`: bound its local `--surface` / `--text` / `--border` / `--accent` to `--av-*` (its own comments claimed it inherited from `_archviz-theme`), added the theme block, moved `#controls` off `top:10/right:10` — where it sat under the theme toggle and export button — to `top:56/right:12`, and marked the canvas as the export target.
+- `references/export-patterns.md`: documented the tagName pitfall and the HTML-target limitation; corrected the `file://` row of the cross-platform matrix (it works — verified).
+- `references/validation-checklist.md`: the export-target bullets now state that the target must be an `<svg>` or `<canvas>`.
+
 ## 0.5.4 (2026-09-24)
 
 ### Added

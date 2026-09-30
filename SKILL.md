@@ -8,7 +8,7 @@ description: |
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
 license: MIT
 metadata:
-  version: 0.5.4
+  version: 0.5.5
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -384,14 +384,14 @@ All self-contained HTML templates include two core modules:
 - **4× raster**: SVG uses native viewBox scaling (not bitmap upscale), canvas uses `renderAtScale()` hook or upscale fallback
 - **SVG export**: injects current CSS vars into cloned SVG → standalone file
 - **Clipboard**: `ClipboardItem` API with console fallback
-- **Export target**: `.archviz-export-target` class on main element, or auto-detect SVG/canvas/article
+- **Export target**: `.archviz-export-target` class on the main element, else auto-detect the first `<svg>` / `<canvas>`. **The target must be an `<svg>` or `<canvas>`** — HTML targets are not rasterizable and fail fast with a message (see `references/export-patterns.md`)
 
 ### Template Integration Rules
 1. Every new HTML template MUST include both modules (paste full content)
 2. All hardcoded hex → CSS variables (`#f5f0eb` → `var(--av-surface)`, `#1B365D` → `var(--av-text-primary)`)
 3. Chart colors → `--av-chart-1` through `--av-chart-6`
 4. Canvas charts MUST listen for `archviz-theme-changed` event to redraw
-5. Add `class="archviz-export-target"` to main chart/canvas element
+5. Add `class="archviz-export-target"` to the main chart element — it must be an `<svg>` or `<canvas>`
 6. Reference: `references/export-patterns.md`
 
 ---

@@ -181,13 +181,26 @@ Ctrl+E  → 复制到剪贴板 (macOS: ⌘E)
 | Chrome 120+ | ✅ | ✅ | 基准 |
 | Safari 17+ | ✅ | ✅ | font-family fallback 注意 |
 | Firefox 121+ | ✅ | ⚠️ | ClipboardItem 晚期支持 |
-| `file://` | ⚠️ | ❌ | CSP 阻止 canvas |
+| `file://` | ✅ | ✅ | 实测 Chromium 通过（2026-09-30，blob SVG → canvas → PNG） |
 | `http-server` | ✅ | ✅ | 开发基准 |
 | GitHub README | ✅ | — | 需 sanitize |
 | Obsidian 预览 | ✅ | — | `<img>` 标签加载 |
 | 微信公众号 | ❌ | ✅ | 必须用 PNG，SVG 被过滤 |
 
 ## 已知坑
+
+### `tagName` 大小写：SVG 是小写
+SVG 命名空间元素保留原始限定名，`svgEl.tagName === 'svg'`；HTML 元素才是大写 `'CANVAS'`。
+模块曾拿 `'SVG'` 去比 → **永不匹配** → 所有 SVG 目标掉进 HTML 兜底分支并永久挂起，
+`exportSVG()` 也永远回「requires an SVG target」。
+→ 一律用 `(el.tagName || '').toLowerCase()` 比较。
+
+### HTML 目标不可栅格化（不要再用 foreignObject）
+把 `target.outerHTML` 塞进 `<foreignObject>` 再当 `<img>` 载入，会在非平凡子树上卡死
+Chromium 的图像解码器：主线程被占满，连 `setTimeout` 兜底都触发不了，表现为**永久无响应、
+无 toast、无异常**。而且外部 CSS 不会被内联，就算出图也是无样式的。
+→ 导出目标必须是 `<svg>` 或 `<canvas>`；HTML 目标直接快速失败并给出提示。
+→ 表格、HTML 拓扑图这类交付物，按 G0 本来就该「阅读 / 复制」而非栅格化。
 
 ### CSP 阻止 html2canvas
 `Content-Security-Policy` 设置了 `img-src` 限制时，html2canvas 的 data URI 转换会静默失败。

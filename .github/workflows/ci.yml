@@ -28,20 +28,34 @@ jobs:
     - name: Verify Dependencies Compatibility
       run: pip check
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    # Step order is load-bearing and mirrors scripts/git-pre-commit.sh:
+    #   check formatting -> sync modules -> reformat -> require zero diff
+    #
+    # Prettier re-indents the embedded <style>/<script> blocks that the sync
+    # scripts paste in, so `sync` alone can never reproduce a committed
+    # template. The previous order (sync -> git diff -> prettier --check) was
+    # therefore unsatisfiable: it failed from 2026-06-28 onward, first on the
+    # formatting check, then — once the pre-commit hook started formatting —
+    # on the diff check. Do not reorder these steps.
+    #
+    # Prettier is pinned so a new release cannot silently change the expected
+    # formatting. Bump it here and in scripts/git-pre-commit.sh together.
+    - name: Verify Code Formatting with Prettier
+      run: npx --yes prettier@3.9.9 --check "templates/html/*.html"
+
     - name: Run Sync Scripts
       run: |
         python scripts/sync_theme.py
         python scripts/sync_export.py
 
+    - name: Format Synced Templates with Prettier
+      run: npx --yes prettier@3.9.9 --write "templates/html/*.html"
+
     - name: Check for Uncommitted Sync Changes
       run: |
-        git diff --exit-code || (echo "ERROR: Templates are out of sync with components. Please run sync scripts locally and commit changes!" && exit 1)
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Verify Code Formatting with Prettier
-      run: npx prettier --check "templates/html/*.html"
-
+        git diff --exit-code || (echo "ERROR: Templates are out of sync with components. Run scripts/git-pre-commit.sh locally and commit the result!" && exit 1)

@@ -1,72 +1,112 @@
+"""Sync the shared export module (_archviz-export.html) into every HTML template.
+
+Why this script fails loudly
+----------------------------
+It used to skip a template silently whenever none of the anchor patterns
+matched. `academic-table.html`, `network-topology.html` and
+`webgl-info-viz.html` sat in that blind spot: they kept their own stub
+`exportPNG()` / `exportWebP()` (which only fired an `alert`) or had no export
+at all, and because the skip produced no diff, CI's `git diff --exit-code`
+guard passed green the whole time. The drift was invisible by construction.
+
+Every skip is now either (a) an anchor match, or (b) a named entry in
+EXCLUDED. Anything else is an error and exits non-zero.
+"""
+
 import re
+import sys
 from pathlib import Path
 
-def sync():
-    # Repo root = scripts/..
-    base_dir = Path(__file__).resolve().parent.parent
-    templates_dir = base_dir / "templates" / "html"
+# Partial templates that are not meant to carry the export module.
+EXCLUDED = {
+    "_archviz-export.html",
+    "_archviz-theme.html",
+    "_archviz-animated.html",
+    "_flow-attach.html",
+}
+
+# Anchors left behind by earlier versions of this script. Whichever matches,
+# the span from the anchor through the final </body> is replaced.
+ANCHOR_PATTERNS = (
+    r"<!-- === Export System Script === -->.*?</body>",
+    r"<!-- archviz-skills Export Utility Script -->.*?</body>",
+    r"<!-- Export Utility Module — paste BEFORE </body> of any archviz HTML template -->.*?</body>",
+    r"<!-- archviz-skills Export Utility Module -->.*?</body>",
+    r'<style id="archviz-export-styles">.*?</body>',
+    r"<script>\s*/\* archviz-skills Export System.*?</body>",
+)
+
+ANCHOR_COMMENT = "<!-- archviz-skills Export Utility Module -->"
+
+
+def load_export_block(templates_dir):
     export_file = templates_dir / "_archviz-export.html"
-
     if not export_file.exists():
-        print(f"Export file {export_file} does not exist!")
-        return
+        raise SystemExit(f"ERROR: {export_file} does not exist")
 
-    export_content = export_file.read_text(encoding="utf-8")
-    
-    # We want to keep everything from _archviz-export.html (styles + script)
-    # but remove any comments that are not necessary.
-    # Actually, we can just sync the style block and the script block.
-    # Let's extract the style block and script block from _archviz-export.html
-    style_match = re.search(r'(<style id="archviz-export-styles">.*?</style>)', export_content, re.DOTALL)
-    script_match = re.search(r'(<script>.*?</script>)', export_content, re.DOTALL)
-    
-    if not style_match or not script_match:
-        print("Could not find style or script blocks in _archviz-export.html")
-        return
-        
-    new_style = style_match.group(1)
-    new_script = script_match.group(1)
-    
-    # The complete block we want to insert
-    new_export_block = f"{new_style}\n\n{new_script}\n"
+    content = export_file.read_text(encoding="utf-8")
+    style = re.search(
+        r'(<style id="archviz-export-styles">.*?</style>)', content, re.DOTALL
+    )
+    script = re.search(r"(<script>.*?</script>)", content, re.DOTALL)
+    if not style or not script:
+        raise SystemExit(
+            "ERROR: could not find style or script blocks in _archviz-export.html"
+        )
+    return f"{style.group(1)}\n\n{script.group(1)}\n"
 
-    for f in templates_dir.glob("*.html"):
-        if f.name in ("_archviz-export.html", "_archviz-theme.html", "_archviz-animated.html", "_flow-attach.html"):
+
+def sync():
+    templates_dir = Path(__file__).resolve().parent.parent / "templates" / "html"
+    block = load_export_block(templates_dir)
+
+    synced, drifted = [], []
+
+    for f in sorted(templates_dir.glob("*.html")):
+        if f.name in EXCLUDED:
             continue
-            
+
         content = f.read_text(encoding="utf-8")
-        
-        # We need to find where to replace or insert.
-        # Let's check if there is an existing export block to replace.
-        # Check patterns for the beginning of the export block:
-        patterns = [
-            r'<!-- === Export System Script === -->.*?</body>',
-            r'<!-- archviz-skills Export Utility Script -->.*?</body>',
-            r'<!-- Export Utility Module — paste BEFORE </body> of any archviz HTML template -->.*?</body>',
-            r'<!-- archviz-skills Export Utility Module -->.*?</body>',
-            r'<style id="archviz-export-styles">.*?</body>',
-            r'<script>\s*/\* archviz-skills Export System.*?</body>'
-        ]
-        
-        replaced = False
-        for pattern in patterns:
+
+        start = None
+        for pattern in ANCHOR_PATTERNS:
             match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
             if match:
-                # Find the actual closing body tag at the end of the file
-                match_start = match.start()
-                match_end = content.rfind("</body>")
-                if match_end != -1 and match_end > match_start:
-                    print(f"Syncing export module to {f.name}...")
-                    # Construct new content
-                    new_content = content[:match_start] + "<!-- archviz-skills Export Utility Module -->\n" + new_export_block + content[match_end:]
-                    f.write_text(new_content, encoding="utf-8")
-                    replaced = True
-                    break
-        
-        if not replaced:
-            # If no pattern was matched but the template has window.archvizExport in it, warn
-            if "archvizExport" in content:
-                print(f"WARNING: {f.name} contains archvizExport but no known export block pattern was matched!")
+                start = match.start()
+                break
+
+        end = content.rfind("</body>") if start is not None else -1
+        if start is None or end == -1 or end <= start:
+            drifted.append(f.name)
+            continue
+
+        new_content = content[:start] + ANCHOR_COMMENT + "\n" + block + content[end:]
+        f.write_text(new_content, encoding="utf-8")
+        synced.append(f.name)
+
+    for name in synced:
+        print(f"Syncing export module to {name}...")
+
+    if drifted:
+        print()
+        print("ERROR: export module anchor not found in:")
+        for name in drifted:
+            print(f"  - {name}")
+        print()
+        print("These templates never received the shared export module. Any local")
+        print("exportPNG()/exportWebP() in them is a stub, so PNG / WebP /")
+        print("clipboard export does not actually work. To fix, insert this line")
+        print("immediately before </body>:")
+        print()
+        print(f"  {ANCHOR_COMMENT}")
+        print()
+        print("followed by the style + script blocks from _archviz-export.html.")
+        print("If a template genuinely must not have export, add it to EXCLUDED.")
+        return 1
+
+    print(f"OK: export module in sync across {len(synced)} templates.")
+    return 0
+
 
 if __name__ == "__main__":
-    sync()
+    sys.exit(sync())

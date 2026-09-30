@@ -15,12 +15,18 @@ else
     echo "No .venv/bin/pip — skipping pip check."
 fi
 
+# Order is load-bearing and must match .github/workflows/ci.yml:
+#   sync modules -> prettier --write -> stage
+# Prettier re-indents the embedded <style>/<script> blocks that the sync
+# scripts paste in, so a sync-only commit can never satisfy CI's
+# `git diff --exit-code` check. Both sync scripts exit non-zero if a template
+# is missing its anchor, which aborts the commit on purpose.
 echo "Syncing theme and export templates..."
 python3 "$ROOT/scripts/sync_theme.py"
 python3 "$ROOT/scripts/sync_export.py"
 
 echo "Formatting synced templates with Prettier..."
-npx --yes prettier --write "templates/html/*.html"
+npx --yes prettier@3.9.9 --write "templates/html/*.html"
 
 # Stage HTML templates only if still inside a git commit
 if git rev-parse --git-dir >/dev/null 2>&1; then
