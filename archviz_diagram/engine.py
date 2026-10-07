@@ -286,6 +286,16 @@ PALETTES = {
         "border": "#44403c", "accent": "#ffd500",
         "chart": ["#0d9488", "#d97706", "#e8e4e0", "#78716c", "#44403c", "#292524"],
     },
+    # blueprint 由 v0.5.4 加入模板注册表，但当时漏改了这里：_apply_theme() 会因
+    # `theme_name not in PALETTES` 静默返回原 HTML，于是 `--palette blueprint`
+    # 在 Python API 上等于不生效，list-palettes 也少报一个。
+    # 取值镜像 templates/html/_archviz-theme.html 的 [data-palette="blueprint"]。
+    "blueprint": {
+        "surface": "#0d1b2a", "surface-alt": "#14253a", "surface-raised": "#1a2e44",
+        "text-primary": "#dbe7f0", "text-secondary": "#a8c5d6", "text-tertiary": "#6e93ad",
+        "border": "#2a4a6b", "accent": "#5fd0e8",
+        "chart": ["#5fd0e8", "#a8c5d6", "#6e93ad", "#c7d9e5", "#3e6a8a", "#9fb8c9"],
+    },
     "ikb-dark": {
         "surface": "#1a1a2e", "surface-alt": "#252540", "surface-raised": "#2a2a45",
         "text-primary": "#e8e6de", "text-secondary": "#b4b2a9", "text-tertiary": "#888780",

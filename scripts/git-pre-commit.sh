@@ -15,6 +15,12 @@ else
     echo "No .venv/bin/pip — skipping pip check."
 fi
 
+# Independent of the sync/prettier block below (whose order is load-bearing),
+# so it runs first: fail fast on a drifted palette registry rather than after
+# a formatting pass. Mirrors the same-named CI step.
+echo "Checking palette registry consistency..."
+python3 "$ROOT/scripts/check_palette_registry.py"
+
 # Order is load-bearing and must match .github/workflows/ci.yml:
 #   sync modules -> prettier --write -> stage
 # Prettier re-indents the embedded <style>/<script> blocks that the sync

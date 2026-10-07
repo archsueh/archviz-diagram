@@ -59,3 +59,14 @@ jobs:
     - name: Check for Uncommitted Sync Changes
       run: |
         git diff --exit-code || (echo "ERROR: Templates are out of sync with components. Run scripts/git-pre-commit.sh locally and commit the result!" && exit 1)
+
+    # Placed after the sync/prettier block on purpose: that block's order is
+    # load-bearing (see the comment above), and this check is independent of it.
+    #
+    # The palette registry is written down in four places — the template
+    # (authoritative), engine.py, DESIGN.md, SKILL.md — and they drifted
+    # silently: `blueprint` reached the template and DESIGN.md in v0.5.4 but
+    # never engine.py, so `--palette blueprint` returned the document unchanged
+    # with no error. Nothing could notice. Now something can.
+    - name: Verify Palette Registry Consistency
+      run: python3 scripts/check_palette_registry.py

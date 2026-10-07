@@ -138,21 +138,32 @@ All HTML templates use CSS custom properties for theming. Variables are defined 
 
 ### Palette Registry
 
-| Palette | Mode | Accent | Use |
-|---|---|---|---|
-| Warm Paper | light | IKB `#002FA7` | Default, academic |
-| Swiss Neutral | light | Blue `#185FA5` | Clean, print |
-| Editorial Parchment | light | Terracotta `#c96442` | Editorial cards |
-| IKB Dark | dark | Periwinkle `#6B8AFF` | Dark mode, terminal |
-| Swiss Modernist | light | Swiss Red `#e4002b` | Müller-Brockmann modular grids |
-| Vignelli Canon | light | Vermilion `#f04e23` | Vignelli Canon layouts |
-| Technical Blueprint | dark | Cyan `#5FD0E8` | Technical/engineering dark boards; archviz-layout's 4th visual language |
-| Educational Flat | light | ONE ramp only (e.g. `c-teal`) | Teaching / textbook diagrams; opt-in via brief, does NOT auto-cycle |
+真源：`templates/html/_archviz-theme.html` 的 `ARCHVIZ_PALETTES`。本表是它的镜像，
+**加/删调色板必须同步本表**——`scripts/check_palette_registry.py` 会机械比对四处
+（模板 / `archviz_diagram/engine.py` / 本表 / `SKILL.md`），不一致即失败。
+
+| Palette | id | Mode | Accent | Use |
+|---|---|---|---|---|
+| Warm Paper | `warm-paper` | light | IKB `#002FA7` | Default, academic |
+| Swiss Neutral | `swiss-neutral` | light | Blue `#185FA5` | Clean, print |
+| Editorial Parchment | `editorial-parchment` | light | Terracotta `#c96442` | Editorial cards |
+| Swiss Modernist | `swiss-modernist` | light | Swiss Red `#e4002b` | Müller-Brockmann modular grids |
+| Vignelli Canon | `vignelli-canon` | light | Vermilion `#f04e23` | Vignelli Canon layouts |
+| Still Paper | `still-paper` | light | Terracotta `#c96442` | 手作纸本风，archviz-layout 语言 1。**取值与 `editorial-parchment` 逐项相同**；它是 `auto-time` 的日间档 |
+| Signal Proof | `signal-proof` | light | Electric Blue `#0039A6` | 理性技术图风，archviz-layout 语言 2 |
+| Bridge Canvas | `bridge-canvas` | dark | Gold `#FFD500` | 电影表现力风，archviz-layout 语言 3 |
+| Technical Blueprint | `blueprint` | dark | Cyan `#5FD0E8` | 深色工程图幅风，archviz-layout 语言 4（详见 §Arcviz-Layout Integration） |
+| IKB Dark | `ikb-dark` | dark | Periwinkle `#6B8AFF` | Dark mode, terminal |
+| Auto (Time) | `auto-time` | auto | —（委托给具体 palette） | 06:00–18:00 → Editorial Parchment，其余 → IKB Dark |
+
+> **Educational Flat 不是注册表成员。** 它是独立的色阶系统
+> （`references/educational-flat-system.md`），按 brief 显式启用、**不参与主题循环**，
+> 也没有 `data-palette` CSS 块。此前它被列在上表里，容易被读成「一个可选主题」。
 
 ### Runtime Behavior
 
 - `prefers-color-scheme: dark` → auto-applies IKB Dark (when no explicit palette set)
-- Click toggle button or press **T** → cycles through every palette in `ARCHVIZ_PALETTES` (registry lives in `templates/html/_archviz-theme.html`; **don't hardcode the count here** — it drifts)
+- Click toggle button or press **T** → cycles through every palette in `ARCHVIZ_PALETTES` (registry lives in `templates/html/_archviz-theme.html`; the count is **verified, not maintained by hand** — see `scripts/check_palette_registry.py`)
 - `localStorage('archviz-palette')` → persists across sessions
 - `window.dispatchEvent(new Event('archviz-theme-changed'))` → canvas charts redraw
 

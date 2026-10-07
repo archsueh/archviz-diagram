@@ -372,7 +372,7 @@ Labels: ≤6 words · ≤8 Chinese chars · no ALL CAPS · same language per dia
 All self-contained HTML templates include two core modules:
 
 ### Theme System (`_archviz-theme.html`)
-- **6 palettes**: Warm Paper, Swiss Neutral, Editorial Parchment, Swiss Modernist, Vignelli Canon, IKB Dark
+- **11 palettes** (registry is authoritative; `scripts/check_palette_registry.py` verifies this list): Warm Paper, Swiss Neutral, Editorial Parchment, Swiss Modernist, Vignelli Canon, Still Paper, Signal Proof, Bridge Canvas, Technical Blueprint, IKB Dark, Auto (Time)
 - **Auto-time theme**: By default (no saved preference), pages display Editorial Parchment during the day (6:00 AM – 6:00 PM) and switch to IKB Dark at night (6:00 PM – 6:00 AM). The `auto-time` palette selection is also cycleable.
 - **CSS variables**: `--av-surface`, `--av-text-primary`, `--av-accent`, `--av-chart-1..6` etc.
 - **Auto-detect**: `prefers-color-scheme: dark` → IKB Dark (when `auto-time` is not used)

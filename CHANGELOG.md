@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.5.6 (2026-10-08)
+
+### Fixed
+- **`blueprint` 缺失于 Python 调色板注册表**（`archviz_diagram/engine.py`）。v0.5.4 把 Technical Blueprint 加进了 `_archviz-theme.html`、`DESIGN.md`、`preview.html` 和全部 17 个模板 —— **`engine.py` 不在那份清单里**。`_apply_theme()` 的第一行是 `if theme_name not in PALETTES: return html`，于是 `--palette blueprint` **原样返回文档且不报错**（静默空操作），`list-palettes` 与 `archviz_diagram_list_palettes()` 也少报一个。取值镜像模板的 `[data-palette="blueprint"]` 块。已端到端验证：`render(..., {"theme": "blueprint"})` 现在产出 `<html data-palette="blueprint">`。
+- **同一份调色板注册表写在四个地方，且已各自漂移**：
+
+  | 来源 | 修复前 | 问题 |
+  |---|---|---|
+  | `templates/html/_archviz-theme.html` | 11 | **真源**（CSS + 切换序列） |
+  | `archviz_diagram/engine.py` | 10 | 缺 `blueprint` |
+  | `DESIGN.md` Palette Registry 表 | 8 | 缺 4 个，且多一个非注册表项 |
+  | `SKILL.md` "N palettes" | **6** | 陈旧 5 个 |
+
+- **`DESIGN.md` 把 Educational Flat 列进了 Palette Registry 表**，容易被读成「一个可选主题」。它不是注册表成员：独立色阶系统（`references/educational-flat-system.md`）、按 brief 显式启用、不参与主题循环、也没有 `data-palette` CSS 块。已移出表格并加注说明。
+
+### Added
+- **`scripts/check_palette_registry.py`** —— 零依赖一致性闸门。以模板为唯一真源，机械比对四项：① `engine.py` 的 id 集合 ② `DESIGN.md` 注册表表的 id 集合 ③ `SKILL.md` 声明的数量 ④ 每个 id 是否有 `[data-palette]` CSS 块（`auto-time` 豁免——它在应用时委托给别的调色板，本就不该有块）。带 `--self-test`（5 个用例，含四种漂移各一）。
+- CI 新增 `Verify Palette Registry Consistency` 步骤；`scripts/git-pre-commit.sh` 同步加入（放在 sync/prettier 块**之前**——那块顺序是承重的，本检查与它无关，早失败更好）。
+
+### Changed
+- `DESIGN.md` Palette Registry 表补 `id` 列、补齐到 11 行，并注明「本表是镜像，真源在模板」；`Runtime Behavior` 里那句 "don't hardcode the count here — it drifts" 改为「数量是**被校验的**，不是手工维护的」。
+- `SKILL.md` §3.5 的调色板清单由 6 更正为 11。
+
+### Notes
+- **未改动任何模板**：`blueprint` 的 CSS 与 JS 注册表条目在 v0.5.4 就已就位，本次只补 Python 侧与文档。`sync_theme.py` / `sync_export.py` 无 diff。
+- **顺带发现（未改，留待决定）**：`still-paper` 与 `editorial-parchment` 的 18 个 CSS 变量**逐项完全相同**。`still-paper` 是 `auto-time` 的日间档（`isDaytime ? "still-paper" : "ikb-dark"`），两者是否应有区别是设计决策，不在本次修复范围。已在 `DESIGN.md` 该行标注。
+
 ## 0.5.5 (2026-09-30)
 
 ### Fixed
