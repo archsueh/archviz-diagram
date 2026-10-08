@@ -5,14 +5,16 @@ description: |
   Token-aware: prefers Mermaid/ASCII/compact HTML, defers heavy self-contained HTML to when interaction is required.
   Supports Mermaid, ASCII, self-contained HTML, Python (Plotly). Text-first, preview-compatible, anti-slop.
   For 3D spatial visualization (building, floorplan, exploded view) → use archviz-3d.
+  Paper Framework Mode (论文框架图): S0-S5 human-in-the-loop candidate workflow for publication figures. ⚠️ Requires an image-generation route — inside this mode Mermaid/SVG/Python/canvas substitutes are invalid. See §9d.
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
+  Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.5.5
+  version: 0.6.0
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
-  triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, sequence, swimlane, quadrant, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, 序列图, 泳道图, dependency graph, workflow, concept map
+  triggers: flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, sequence, swimlane, quadrant, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, 序列图, 泳道图, dependency graph, workflow, concept map, 论文框架图, 论文架构图, 方法总览图, 机制图, method overview figure, paper framework figure, mechanism figure
 ---
 
 # archviz-diagram-skills
@@ -49,6 +51,7 @@ metadata:
 | 3D spatial (building, exploded, mechanical) | [archviz-3d](https://github.com/archsueh/archviz-3d) |
 | Dark tech infrastructure diagrams | **archviz-diagram** Dark Mode (built-in, see DESIGN.md §Palette: IKB Dark) |
 | Educational flat diagrams (physics, chemistry, engineering) | **archviz-diagram** Educational Flat Mode (built-in, see DESIGN.md §Palette: Educational Flat) |
+| **论文**框架图 / 方法总览图 / 机制图（S0–S5 人机协作，**前置条件：需要生图通道**） | **archviz-diagram** Paper Framework Mode (built-in, see §9d → `references/paper-framework-workflow.md`) |
 | Article illustrations / sketches（**前置条件：需要 image_generate 工具**） | [archviz-sketch](https://github.com/archsueh/archviz-sketch) + `sketch-image-pipeline` skill |
 | 编号手绘（041号 / 手绘风格库 / 不会描述画风） | `handdraw-style-prompter` —— **不要**用 archviz-sketch 猜编号 |
 | Presentation board / portfolio / 展板排版 / 交付前打磨 | [archviz-layout](https://github.com/archsueh/archviz-layout) |
@@ -171,6 +174,18 @@ See `sketch-image-pipeline` skill for full workflow.
 | 找素材 / 背景图案 / 图标资源 | `references/design-resources-curated.md` | 从 445 条里筛出的可用资源 |
 
 **可执行校验**：`python3 scripts/self_check.py <file.html>` —— 跑无障碍 / 单文件安全 / 4px 网格 / 对比度 / 连接线几何五类，**退出码非零即不合格**。改完图跑一次，比人眼可靠。
+
+**论文框架图模式**（§9d —— 进入该模式时按下表加载，日常图表**不需要**）：
+
+| 触发条件 | 加载 | 得到什么 |
+|---|---|---|
+| 进入论文框架图模式 | `references/paper-framework-workflow.md` | S0–S5 阶段职责、硬人机等待屏障、可复制提示词骨架、终态边界、无通道时的降级路径 |
+| 写 / 审生图 prompt | `references/paper-framework-prompt-contract.md` | 贡献类型视觉优先级、假中继禁令、连线合并、edge-label-first、密度与背景预算、14 项审计清单 |
+| 核对证据与符号 | `references/paper-framework-source-fidelity.md` | 二选一证据原则、S0 语义精度契约、符号消歧、源保真表 |
+| 选表面风格 | `references/paper-framework-surface-styles.md` | 12 种表面风格、两轮默认、ACM/IEEE/AAAI line-art 块、交接提醒规则 |
+| 定配色 | `references/paper-framework-palette.md` | 反「AI 味」配色契约、5 个必记字段 |
+| 出现重复角色 / 条件 / 数据集 | `references/paper-framework-entity-compression.md` | 变体→泳道风险、流程实例预算、S0 锁 |
+| 取用图标 / 图型板 | `references/paper-framework-icon-library.md` | 资产库入口、icon card 字段、端口坐标、使用纪律 |
 
 ---
 
@@ -491,6 +506,42 @@ Trigger: 封面、卡片、信息卡、小红书、公众号、分享图、排�
 > **按需加载** → `references/presentation-grids.md`
 > 展板/作品集版式与网格、交付前打磨清单。做**展板类**交付物时加载（日常图表不需要）。
 
+## 9d. PAPER FRAMEWORK MODE (论文框架图)
+
+> **按需加载** → 进入时先读 `references/paper-framework-workflow.md`
+> 触发：为**论文**出框架图 / 方法总览图 / 架构图 / 流程图 / 机制图，且接受「先出候选、人工筛选、人工定稿」的协作方式。
+
+**⚠️ 前置条件：需要生图通道。** 本模式是 archviz-diagram 中**唯一**要求生图通道的模式。
+进入后，出图环节**禁止**用 Mermaid / SVG / HTML canvas / Python(PIL/Plotly/Matplotlib) / Graphviz / TikZ / PPT / PDF / 截图 / 本地程序化光栅代替。
+无通道时不要硬撑 —— 按 `paper-framework-workflow.md` 的降级路径处理（纯文本阶段可先跑，或退回默认代码优先模式出结构草图）。
+
+**六阶段**（候选数契约是硬的）：
+
+| 阶段 | 类型 | 候选 |
+|---|---|---|
+| `S0-PAPER-FOUNDATION` 论文基础 + 语义精度契约 | TEXT | — |
+| `S1-FIGURE-STRATEGY` 图策略 + S2 prompt 包准备 | TEXT | 8 选 4 → `C01`–`C04` |
+| `S2-SKETCH-EXPLORE` 第一轮探索生图 | **IMAGE** | `C01`–`C04` |
+| `S3-DIRECTION-SELECT` 审候选 + 选方向 | TEXT | — |
+| `S4-CANDIDATE-BRIEF` 正式候选 brief + S5 prompt 包准备 | TEXT | `F01`–`F02` |
+| `S5-CANDIDATE-IMAGE` 正式候选生图 | **IMAGE · 终态** | `F01`–`F02` |
+
+**三条不可让的规则**：
+
+1. **每轮只执行一个公开步骤，做完即停。** 上一阶段完成 / 门禁通过 / 提示词已给出 —— 都**不构成**下一步的授权。绝不把相邻阶段合并进一次回复。
+2. **S2/S5 是纯图像阶段**：只逐行生图并登记，不写审计、排名、解释、修复或下一步文本。逐行原子 —— 一次生图调用只满足一行。S5 之后助手流程结束。
+3. **源证据优先于好看**：指不出证据的箭头不画；指不出消费者的承载量不标。
+
+**S0 的语义精度契约是最容易被跳过、后果最重的一步**：把「保留角色差异」这类含糊指令归一化成具体的视觉实现方式 + 明令禁止的错误实现，否则下游只能猜。见 `paper-framework-source-fidelity.md` §5。
+
+**资产**：`assets/paper-figure/`（39 MB）—— 图标向量库（含端口坐标）+ 图型分类板。
+使用入口与纪律 → `references/paper-framework-icon-library.md`；来源与许可登记 → `assets/paper-figure/ATTRIBUTION.md`。
+**图标是通用视觉语言，不承载论文事实** —— 概念标签必须在出图前换成有源证据支持的标签。
+
+**边界**：只服务论文框架图。海报 / 宣传图 / 封面图 / 展板 / 营销视觉 / 把 PPT 页面塞进图的演示页 → `archviz-layout` 或 Editorial Mode（§9b）。
+
+---
+
 ## 10. GANTT (hard rules)
 
 - Inside gantt block: ultra-short codes only (V1.1, A1, B3)
@@ -627,6 +678,7 @@ templates/
 | [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) | Swiss PPT |
 | [anydesign](https://github.com/archsueh/anydesign) | Design analysis |
 | [claude-design-card](https://github.com/geekjourneyx/claude-design-card) | Editorial Parchment lineage |
+| [paper-framework-figure-studio-pro](https://github.com/c-narcissus/paper-framework-figure-studio-pro) | Paper Framework Mode (§9d) 的流程与 prompt 契约来源；图标资产库出处（MIT-0） |
 
 Routing → `ecosystem-routing.md` · Types → `structural-diagram-types.md` · Brand → `brand-gate.md` · Full design → DESIGN.md
 

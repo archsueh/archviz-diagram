@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.6.0 (2026-10-08)
+
+### Added
+- **Paper Framework Mode（论文框架图，§9d）** —— 从上游 [`c-narcissus/paper-framework-figure-studio-pro`](https://github.com/c-narcissus/paper-framework-figure-studio-pro) v3.2.15f 吸收。这是本技能中**第一个、也是唯一一个要求生图通道的模式**，作为显式门禁的模式存在（写法对齐 `archviz-sketch` 的前置条件），不改变默认的代码优先定位。
+  - **流程**：`S0-PAPER-FOUNDATION` → `S1-FIGURE-STRATEGY` → `S2-SKETCH-EXPLORE`（图）→ `S3-DIRECTION-SELECT` → `S4-CANDIDATE-BRIEF` → `S5-CANDIDATE-IMAGE`（图 · 终态）。候选数契约 `C01`–`C04` / `F01`–`F02`。
+  - **三条不可让的规则**：① 每轮只执行一个公开步骤（硬人机等待屏障）；② S2/S5 是纯图像阶段，逐行原子，不写审计/排名/解释；③ 源证据优先于好看。
+  - 7 个新 reference（上游 **100 个**带版本号的 policy 已按主题收敛）：
+    `paper-framework-workflow.md` · `paper-framework-prompt-contract.md` · `paper-framework-source-fidelity.md` · `paper-framework-surface-styles.md` · `paper-framework-palette.md` · `paper-framework-entity-compression.md` · `paper-framework-icon-library.md`
+- **`assets/paper-figure/`（39 MB，本仓首个 `assets/` 目录）** —— 上游 `assets/` 全量：
+  - `vector-library/iclr_reference_library/` —— 图标向量库。每张 icon card 是自描述 JSON，含**逐图标许可**、`negative_aliases`、`shape_family_id`，以及**归一化端口坐标**（`ports.input/output/control/feedback`）—— 连线可精确落在图标端口而非盒子边缘。
+  - `subtype-atlas/` —— 图型分类板（4 高清板 + 4 缩略图 + `manifest.json`）。
+  - `pptx_icon_catalog/` —— 可编辑 PPTX 图集（含 1192 个嵌入 SVG）。
+  - `ATTRIBUTION.md` —— 来源与许可登记。**逐图标**来源分解：上游自生成 / Tabler(MIT) / Lucide(ISC) / 论文派生 motif / 本地资产。许可声明已存在于各 card 的 `license` + `source_lineage` 字段，**勿删**。
+- `SKILL.md`：`Skill Boundaries` 表加行、按需加载地图加「论文框架图模式」子表、新增 §9d、`description` 与 `triggers` 补触发词、`RESOURCES` 表加上游条目。
+- `references/credits.md`：补上游致谢条目。
+
+### Changed
+- **`SKILL.md` frontmatter `version` 由 `0.5.5` 更正为 `0.6.0`。** 该字段在 v0.5.6 时**忘了跟着升**（v0.5.6 改了 §3.5 的调色板数量，但没动 frontmatter），因此本次是「补一次迟到的升级 + 本次功能升级」合并在一个 minor 版本里。
+
+### Notes
+- **剥离的上游内容（有意为之，非遗漏）**：① 强制在每次非终端回复末尾追加固定句；② 在特定提问下原文背诵作者的私人赠言（个人内容，非能力）；③ ChatGPT 网页端专属机械 —— checkpoint zip 门禁、34 个 `figure_studio_*` guard 脚本、text-only guard 原文（本机有文件系统与 git，不需要长会话恢复机制）；④ 100 个带版本号的 policy 文件名（版本号进文件名 = 维护债）；⑤ 上游打包元数据 `metadata.json` / `PATCH_REPORT_*.md` / `agents/openai.yaml`。
+- **与 `constitution.md` 原则 III（Text-First Survivability）的张力，已识别未擅改**：本模式是 image-first。处理方式是把它定义为**显式门禁的模式**（无生图通道即不可用，且模式内禁止文本替代物），而非改变全局默认。若认为需要给 constitution 加一条修正案，请明示 —— 那是需你拍板的文档变更。
+- **未改任何既有模板 / Python 包 / 调色板注册表**：本次是纯增量（1 个模式段 + 7 个 reference + 1 个资产目录）。
+- **仓库体积**：55 MB → 约 94 MB（资产 39 MB）。其中 `pptx_icon_catalog/` 占 8.4 MB（两个二进制 PPTX）。若嫌重，删该子目录即可，其余资产不受影响。
+
 ## 0.5.6 (2026-10-08)
 
 ### Fixed

@@ -15,5 +15,6 @@
 | [archify](https://github.com/tt-a1i/archify) | tt-a1i | 语义化组件配色 + 五类技术图类型词汇（`references/semantic-component-colors.md` · `diagram-types-technical.md`）|
 | [diagram-design](https://github.com/cathrynlavery/diagram-design) | cathrynlavery | 27 类类型词汇 + 删除偏好 + 密度 4/10 + 首跑 brand gate 模式（`structural-diagram-types.md` · `brand-gate.md`）|
 | [headroom](https://github.com/chopratejas/headroom) | chopratejas (Netflix) | Compression mindset: input normalization, terse output shaping, reversible caching for iterative refinement |
+| [paper-framework-figure-studio-pro](https://github.com/c-narcissus/paper-framework-figure-studio-pro) | c-narcissus | 论文框架图模式（§9d）：S0–S5 人机协作流程、生图 prompt 契约、源证据忠实性与 S0 语义精度契约、表面风格菜单、反「AI 味」配色契约；以及图标向量库 + 图型分类板资产。许可 **MIT No Attribution（MIT-0, Copyright 2026 OpenAI）**，随本仓 MIT 分发合规。落地：`references/paper-framework-*.md`（7 个）· `assets/paper-figure/`（见其 `ATTRIBUTION.md`） |
 
 ---
