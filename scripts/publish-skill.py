@@ -6,8 +6,11 @@ Inspired by qiaomu-skill-publisher automation ideas but reimplemented
 as strict CLI (no Claude Code runtime dependency).
 
 Usage (always from absolute root):
-  python3 /Users/mac/Developer/archviz-skills/scripts/publish-skill.py \
-      /Users/mac/Developer/archviz-skills [--private]
+  python3 /Users/mac/Developer/archviz-diagram/scripts/publish-skill.py \
+      /Users/mac/Developer/archviz-diagram [--private]
+
+The release version is read from SKILL.md `metadata.version` at runtime — never
+hardcode it here. scripts/check_version_consistency.py enforces this.
 
 It will:
 1. Validate SKILL.md frontmatter (name, description, YAML safety)
@@ -22,14 +25,17 @@ Requires: gh CLI logged in, Python with pyyaml (pip install pyyaml)
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 import sys
 import yaml
 from pathlib import Path
 from datetime import datetime
 
-# === Absolute paths only (never change this) ===
-ARCHVIZ_ROOT = Path("/Users/mac/Developer/archviz-skills")
+# === Default skill root: this repo, derived from the script location.
+# Never hardcode an absolute path here — the repo has been renamed before
+# (archviz-skills -> archviz-diagram) and hardcoded paths silently rot.
+ARCHVIZ_ROOT = Path(__file__).resolve().parent.parent
 REQUIRED_FILES = [
     "SKILL.md",
     "README.md",
@@ -101,18 +107,46 @@ def gh_available():
     except Exception:
         die("gh CLI not found or not authenticated. Run: brew install gh && gh auth login")
 
+def read_skill_version(skill_dir: Path) -> str:
+    """Read `metadata.version` from SKILL.md frontmatter.
+
+    Single source of truth for the release tag. The previous implementation
+    hardcoded this ("0.2.5" with a TODO) and silently fell ~9 releases behind,
+    so `gh release create` would have tagged a version the skill never shipped.
+    """
+    md = skill_dir / "SKILL.md"
+    if not md.exists():
+        die("SKILL.md is required")
+    text = md.read_text(encoding="utf-8")
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        die("Malformed frontmatter delimiters in SKILL.md")
+    try:
+        data = yaml.safe_load(parts[1]) or {}
+    except Exception as e:
+        die(f"YAML parse error in SKILL.md frontmatter: {e}")
+
+    meta = data.get("metadata") or {}
+    version = meta.get("version")
+    if not version:
+        die("SKILL.md frontmatter `metadata.version` is required — it is the release tag source")
+    version = str(version).strip()
+    if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        die(f"SKILL.md metadata.version must be X.Y.Z, got: {version!r}")
+    return version
+
+
 def publish(skill_dir: Path, private: bool = False):
     gh_available()
     validate_frontmatter(skill_dir)
     check_files(skill_dir)
 
-    version = "0.2.5"  # TODO: read from SKILL.md metadata or bump script
+    version = read_skill_version(skill_dir)
     tag = f"v{version}"
     # Darwin self-evo gate (per SKILL.md §16 Release Self-Check):
     # Confirm prior darwin re-score (target ≥96) + full Version Bump checklist executed + CHANGELOG surgical entry
-    # before gh release. Cross-ref: /Users/mac/Developer/archviz-skills/SKILL.md §16 and CHANGELOG.md.
-    # Absolute paths only. No new deps or behavior change.
-    repo_name = "archviz-skills"   # or derive from name
+    # before gh release. Cross-ref: <skill_dir>/SKILL.md §16 and CHANGELOG.md.
+    repo_name = skill_dir.name
 
     print("\n=== Dry run summary ===")
     print(f"Project : {skill_dir}")
@@ -144,10 +178,10 @@ def publish(skill_dir: Path, private: bool = False):
     run(["git", "push", "origin", "main", "--tags"], cwd=skill_dir)
 
     # 3. Create GitHub Release
-    notes = f"archviz-skills {tag}\n\nSee CHANGELOG.md for details.\n\nInstall (Claude):\n  npx skills add archsueh/archviz-skills\n\nInstall (general):\n  git clone https://github.com/archsueh/archviz-skills ~/.claude/skills/archviz-skills   # or equivalent for your agent"
+    notes = f"{repo_name} {tag}\n\nSee CHANGELOG.md for details.\n\nInstall (Claude):\n  npx skills add archsueh/{repo_name}\n\nInstall (general):\n  git clone https://github.com/archsueh/{repo_name} ~/.claude/skills/{repo_name}   # or equivalent for your agent"
     run([
         "gh", "release", "create", tag,
-        "--title", f"archviz-skills {tag}",
+        "--title", f"{repo_name} {tag}",
         "--notes", notes
     ], cwd=skill_dir)
 

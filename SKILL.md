@@ -10,7 +10,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.6.0
+  version: 0.6.1
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -66,8 +66,8 @@ metadata:
 archviz-diagram exposes a Python MCP server for AI agents. Any LLM can call it directly.
 
 ```bash
-# Install
-cd ~/Developer/archviz-diagram && pip install -e ".[mcp]"
+# Install (this repo's venv is uv-created and has no pip)
+cd ~/Developer/archviz-diagram && uv pip install --python .venv/bin/python -e ".[mcp]"
 
 # CLI usage
 archviz-diagram list                           # list 14 types
@@ -86,13 +86,29 @@ archviz-diagram serve
 | `archviz_diagram_list_palettes()` | List available color palettes |
 
 ### Family MCP Servers
+
+Three of the five archviz repos ship an MCP server. The other two are skill-only.
+
 | Server | Tools | Location |
 |---|---|---|
-| `archviz-diagram` | 14 types (2D charts) | `~/Developer/archviz-diagram` |
-| `archviz-3d` | 2 types (building, floorplan) | `~/Developer/archviz-3d` |
-| `archviz-sketch` | 4 styles (prompt generation) | `~/Developer/archviz-sketch` |
-| `archviz-animated` | 3 deliverables (excalidraw / PNG / GIF) | `~/Developer/archviz-animated` |
-| `archviz-layout` | board layout & pre-delivery polish | `~/Developer/archviz-layout` |
+| `archviz-diagram` | `archviz_diagram_generate` · `archviz_diagram_list_types` · `archviz_diagram_list_palettes` — 14 2D chart types | `~/Developer/archviz-diagram` |
+| `archviz-3d` | `archviz3d_generate` · `archviz3d_list_types` — 2 types (building, floorplan) | `~/Developer/archviz-3d` |
+| `archviz-sketch` | `archviz_sketch_generate` · `archviz_sketch_list_styles` — 7 styles (prompt generation, returns text not images) | `~/Developer/archviz-sketch` |
+
+**Skill-only — no `mcp_server.py`, driven by `scripts/*.py` instead:**
+
+| Skill | What it does | Location |
+|---|---|---|
+| `archviz-animated` | Animated deliverables (excalidraw / PNG / GIF) | `~/Developer/archviz-animated` |
+| `archviz-layout` | Board layout & pre-delivery polish | `~/Developer/archviz-layout` |
+
+Each MCP server runs from its own repo venv, e.g.:
+
+```bash
+/Users/mac/Developer/archviz-diagram/.venv/bin/python -m archviz_diagram.mcp_server
+```
+
+> Note: `archviz-diagram`'s venv is uv-created and ships **without pip**; use `uv pip install --python .venv/bin/python <pkg>` there. The other two venvs have pip.
 
 ### Sketch → Image Pipeline
 For hand-drawn illustrations: `archviz_sketch_generate` → Grok `image_generate` → `vision_analyze` QA.

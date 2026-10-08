@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.6.1 (2026-10-08)
+
+### Fixed
+- **发布版本号散落在四处且各自漂移** —— 同一个事实写了 4 遍，谁也没拦住谁：
+
+  | 位置 | 原值 | 落后 |
+  |---|---|---|
+  | `SKILL.md` `metadata.version` | 0.6.0 | 真源 |
+  | `CHANGELOG.md` 首条 | 0.6.0 | — |
+  | `pyproject.toml` `version` | **0.5.3** | 4 个版本 |
+  | `scripts/publish-skill.py` | **0.2.5**（写死字面量 + `# TODO`） | ~9 个版本 |
+
+  `publish-skill.py` 那处最危险：`tag` 直接由自己的字面量拼出，**照它发版会打出 `v0.2.5` 的 tag 并创建同名 Release**，而技能实际是 0.6.0。已改为运行时从 `SKILL.md` 的 `metadata.version` 读取（`read_skill_version()`，并校验 X.Y.Z 格式），TODO 一并消除。
+- **`scripts/publish-skill.py` 里的旧仓名与写死路径** —— 脚本残留 `archviz-skills`（改名前的名字）：默认根路径写死 `/Users/mac/Developer/archviz-skills`、`repo_name = "archviz-skills"`、Release 标题与安装说明也全是旧名。`gh repo create` 会去建一个 `archsueh/archviz-skills`，与实际的 `archsueh/archviz-diagram` 不是同一个仓。已改为：默认根路径由脚本自身位置推导（`Path(__file__).resolve().parent.parent`），`repo_name` 由 `skill_dir.name` 推导。
+- **`SKILL.md` §「Family MCP Servers」表三处失真**：
+  - `archviz-sketch` 写作「4 styles」，实测 `list_styles()` 返回 **7 个**（`process-draft` / `minimal-line` / `swiss-modernist` / `product-handdrawn` / `xiaohei` / `watercolor` / `architectural-marker`）—— 连它自己的 `mcp_server.py` docstring 也只列了 6 个。
+  - `archviz-animated` 与 `archviz-layout` 被列在「**MCP Servers**」表内，但两仓**都没有 `mcp_server.py`**，各自 SKILL.md 里 MCP 出现 **0 次**。照表配置只会配出一个永远起不来的服务器。已移出该表，单列为「skill-only」。
+  - 原先只给工具数量，改为给出**真实工具名**（`archviz3d_generate` / `archviz_sketch_list_styles` 等），便于直接照抄配置。
+- **`SKILL.md` 的安装命令 `pip install -e ".[mcp]"` 在本仓必然失败** —— 本仓 `.venv` 是 uv 创建的最小 venv，**不含 pip**（`No module named pip`）。改为 `uv pip install --python .venv/bin/python -e ".[mcp]"`，并注明另两个兄弟仓的 venv 是有 pip 的（已实测：`archviz-3d` / `archviz-sketch` 为 pip 26.1.2）。
+
+### Added
+- **`scripts/check_version_consistency.py`** —— 版本一致性闸门，纯 stdlib。以 `SKILL.md` `metadata.version` 为真源，校验 ① `CHANGELOG.md` 首条 `## X.Y.Z`、② `pyproject.toml` `version`、③ `scripts/publish-skill.py` **不含写死的 semver 字面量**。退出码 0/1/2，写法与既有的 `check_palette_registry.py` 一致。
+  已接入 `.github/workflows/ci.yml` 与 `scripts/git-pre-commit.sh`。
+  > 这是同一类问题的**第二次**出现（第一次是调色板注册表散在四处）。凡是「同一个事实写在多处」的地方，都该有一个闸门 —— 否则它一定会漂移。
+
+### Changed
+- `pyproject.toml` `version` 0.5.3 → **0.6.1**（补上落后 4 个版本的升级）。
+
+### Verified
+- `scripts/check_version_consistency.py` → PASS
+- `scripts/check_palette_registry.py` → PASS（11 个 id 四处一致）
+- frontmatter：`name` 与目录名一致、`metadata.version` = 0.6.1、`license: MIT`、YAML 可解析
+- `SKILL.md` 引用的 35 个 `references/*.md` 断链数 = **0**
+- 家族实际能力均经命令核实：`archviz-diagram` 14 类型 / 3 工具 · `archviz-3d` 2 类型 / 2 工具 · `archviz-sketch` 7 风格 / 2 工具
+- `publish-skill.py` 的 `read_skill_version()` 已实跑，正确读出 `0.6.1`
+
+### Notes
+- 本次未改任何模板、`archviz_diagram/` 包代码或资产；仅文档、版本号、发布脚本与新增闸门。
+- `publish-skill.py` 的发布流程本身（`gh repo create` → commit → tag → push → `gh release create`）**未改动**，只把三处写死的常量改为推导。仍**不自动执行** —— 需要 `input()` 人工确认。
+
 ## 0.6.0 (2026-10-08)
 
 ### Added

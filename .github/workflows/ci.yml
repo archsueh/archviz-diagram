@@ -70,3 +70,10 @@ jobs:
     # with no error. Nothing could notice. Now something can.
     - name: Verify Palette Registry Consistency
       run: python3 scripts/check_palette_registry.py
+
+    # Same class of problem as the palette registry: one fact written down in
+    # several places, drifting silently. pyproject.toml had fallen 4 releases
+    # behind and publish-skill.py hardcoded 0.2.5, so `gh release create` would
+    # have tagged a version the skill never shipped. SKILL.md is the truth.
+    - name: Verify Version Consistency
+      run: python3 scripts/check_version_consistency.py
