@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.7.0 (2026-10-08)
+
+### Added
+- **`self_check.py` 新增第四级发现 `ADVISORY` —— 「经证据证实的、故意的偏离」。**
+  补上的是诊断体系里一个真实的空档：此前只有 `FAIL`（缺陷，阻塞）/ `WARN`（可疑，`--strict` 阻塞）/ `INFO`（说明性），**没有任何载体能表达「这个偏离是有意的，且这里是它无害的证据」**。于是这类情况只能被塞进 WARN（读起来像缺陷）或被基线吞掉（读起来像「知道但不管」）。
+  - **三条不变量，已进 `--self-test`（22 个用例全 PASS）**：① 必须带 `evidence`；② `--strict` 也**不得**提升；③ **不得被基线吞掉**。写在文档里没用 —— 必须让机器把住，否则日后有人顺手改一行就把它退化成措辞软一点的 WARN。
+  - **与 WARN 的分界**：WARN = 「可能有问题，待处理」；ADVISORY = 「已确认无害，这里是证据」。
+  - **与 baseline 的分界**：baseline = 「未修的债务，先压住」；ADVISORY = 「有意接受，本来就不该修」。两者后续处置完全不同，**永不互换** —— 代码里用 `WAIVABLE_LEVELS` 常量声明一次，`write_baseline` / `apply_baseline` 共用（此前这个元组在两个函数里各写了一遍）。
+  - **evidence 必须含 `residual_risk`**，不能只写理由。把「没做校验」说成「确认无害」就是粉饰 —— advisory 的正当性来自**披露**，不来自**宽免**。
+
+- **首个 ADVISORY：`a11y.no_svg`**（原为 `INFO`）。无障碍契约 R1–R6 全部以 `<svg>` 元素为锚点，所以待内嵌片段、静态 `<canvas>` 模板、以及图形尚未生成的模板骨架，在这里都**无从校验**。现在如实报出并附残余风险。
+  - 新增 `detect_renderer()` 三档分类（**必须用剥掉 `<script>` 的版本判定**，理由见下）：
+    | 档 | 判据 | 实测（`--all templates/`） |
+    |---|---|---|
+    | `canvas` | 存在静态 `<canvas>` 元素 | **2**（`waffle` / `webgl-info-viz`） |
+    | `partial` | 无 `<!doctype` / `<html` | **4**（`_archviz-animated` / `_archviz-export` / `_archviz-theme` / `_flow-attach`） |
+    | `no-graphic-element` | 完整文档但无任何静态图形元素 | **14** |
+  - `no-graphic-element` 这一档**刻意不断言意图**：同一个事实在「待填的模板骨架」上是正常的，在「本该有图但没生成」的产物上是缺陷，而 `self_check.py` 分不清二者。所以只说「没查到什么」，不说「所以没问题」，把判断留给读的人。
+
+### Changed
+- **`--json` 输出 schema 变更（消费者注意）**：新增顶层 `summary`（`fail` / `warn` / `advisory` 计数）与 `advisories` 数组；**`findings` 不再包含 ADVISORY**（已迁至 `advisories`）。与 anidiagram 质量报告的 `issues` / `advisories` 双数组同构 —— 逼消费者显式处理 advisory，而不是把它当缺陷一起计数。带 `evidence` 字段（仅非空时出现）。
+- **`Report.passed(strict)` 收成单一真源**。判定表达式 `not fails and not (strict and warns)` 原先在 `emit()` 与 JSON 分支里**各写了一遍** —— 加第四级时才暴露。与版本号四处漂移、调色板数量写死同型。
+- **`apply_baseline()` 行为不变但语义显式化**：ADVISORY 从来就不在豁免范围内，此前靠 `level in ("FAIL", "WARN")` 隐式成立，现改用 `WAIVABLE_LEVELS` 常量并写明理由。
+- 文本输出把 ADVISORY 单列一段（`── N 条 advisory（有意偏离 · 不阻塞 · 不计入判定）`），避免混在 FAIL/WARN 里被读成缺陷；汇总行单列 advisory 数。
+- `references/accessibility-contract.md` §5 补 `a11y.no_svg` 行与 ADVISORY 语义；`references/gotchas.md` **更正一条旧记录的两处错误**（见下）。
+
+### Notes
+- **⚠️ 旧记录更正**：`references/gotchas.md` 的 2026-09-30 条目称 `a11y.no_svg` 命中「22 个模板中的 **15** 个」且「**它们用 `<canvas>`**」。2026-10-08 实测：**20 个**，且「用 canvas」是**假**（真实静态 `<canvas>` 只有 2 个）。原文错在把 `grep -l "<canvas"` 的 19/22 当成了元素统计 —— 其中 18 个的 `<canvas` 在 `<script>` 里，多数还是导出模块**错误提示里的字符串字面量**（`"give it an <svg> or <canvas> element to rasterize"`）。
+- **诊断类字段落笔前必须逐项核。** 本次同一处 `renderer` 误诊两次（先 `canvas`、后 `non-svg`）才对。**一个指向不存在问题的诊断，比沉默更消耗信任。**
+- **静态扫描陷阱（本仓高频）**：模板里 `<svg>` / `<canvas>` 的多数出现都在 JS 字符串里或由运行时创建 —— `area-chart.html` 全文仅 1 处 `<svg`，在 `<script>` 内的字符串中。**任何基于 `grep` 的静态统计，先确认命中的是元素还是字符串**（判据：跑 `strip_script_bodies()` 后再数）。
+- **`advisories` 的设计出处已考证**：它**不在** anidiagram 的文档里，而是其**运行时质量报告的一个字段**（`advisories` 不影响 `score`）。先前评估记录把它当成文档概念，属误记。**「我在它的输出里见过」不等于「它文档里有这个概念」。**
+- 对使用者 **non-breaking**：既有 FAIL / WARN / INFO 行为、退出码、基线机制全部不变。唯一需要跟进的是解析 `--json` 的消费者（见 Changed 第 1 条）。
+
 ## 0.6.2 (2026-10-08)
 
 ### Added

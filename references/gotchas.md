@@ -38,7 +38,10 @@
 - **`sync_theme.py` 的锚点是 `<style id="archviz-theme-vars">`** → 紧贴它**上面**那行 `<!-- Provides: ... -->` 头注释**不在被同步的块内**。改 partial 里的注释**不会**传播到模板，必须逐文件改（当时 5 处各存一份副本）。推论：**任何会漂的信息都不该写进这行注释**。
 - **调色板数量别写死**：`toggleTheme()` 的 `order` 数组当时有 **11** 项，而 `DESIGN.md`、`references/validation-checklist.md` 与 5 处头注释都写着 **4**（数字停在只有 4 套的年代，此后无人发现）。要说数量就写「见 `ARCHVIZ_PALETTES` 注册表」，不要给数。
 - **`scripts/sync_*.py --help` 会真的执行同步**（没有 argparse）—— 想「看用法」会直接改盘上 18 个模板。补救路径：`prettier --write` 之后 `git diff --exit-code` 应回到 0；2026-09-30 复验该不动点成立。
-- **a11y 契约对 canvas 模板结构性跳过**：`self_check.py --all` 对 **22 个模板中的 15 个**报「文档里没有 `<svg>`，跳过无障碍检查」——它们用 `<canvas>`，而 `accessibility-contract.md` 的 R1–R6 全是 `<svg>` 专属。契约在这 ~68% 的模板上是空转的（**未修**，属设计决策）。
+- **a11y 契约对无静态 `<svg>` 的产物结构性跳过**：`self_check.py --all templates/` 对 **22 个模板中的 20 个**报 `a11y.no_svg` —— 契约在这 91% 的模板上无从校验。
+  - **旧记录（2026-09-30）此处有两处错，已更正**：① 数量写「15 个」，实测 **20 个**；② 归因写「它们用 `<canvas>`」，**假**。
+  - **实测分布（2026-10-08）**：静态 `<canvas>` 元素 **2 个**（`waffle` / `webgl-info-viz`）、待内嵌片段 **4 个**（`_archviz-animated` / `_archviz-export` / `_archviz-theme` / `_flow-attach`）、**其余 14 个是完整文档但没有任何静态图形元素**（模板骨架，图形待生成）。
+  - **2026-10-08 起由 INFO 改为 ADVISORY**（附残余风险、不阻塞、`--strict` 不提升），见 `accessibility-contract.md` §5。
 
 ## 2026-10-08 session (constitution 修正案 + 决策记录机制)
 
@@ -51,3 +54,18 @@
 - **修宪的判据优于修宪的例外。** Principle III 原文已含 `reserved for deliverables that earn them` —— **缺的是「earn」的定义，不是例外本身**。给判据（三条：显式门禁 / 声明非文本终态 / 降级路径）后，现有 Paper Framework Mode 逐条核过全部符合，**零行为变更**。反面做法是写成「文本优先，Paper Framework Mode 除外」—— 命名实例而非给判据，下一个同类模式还得再修一次宪。**这与「版本号硬编码在 4 处」同型。**
 
 - **`constitution.md` 的 Governance 要求修正案四项齐备**（显式记录变更 / 改 constitution / 同步 gotchas·SKILL·DESIGN / breaking 时补迁移说明）。本次逐条对账落在 ADR-001 末节表格里。**注意第 ③ 项要真去找**：`DESIGN.md` §1 也断言了 text-first，差点漏掉 —— 用 `grep -niE "text-first|plain text|文本优先"` 扫一遍比凭印象可靠。
+
+## 2026-10-08 session（ADVISORY 等级 + 静态扫描的三个陷阱）
+
+- **诊断不准比不报更糟 —— 本次同一处误诊了两次。** 给 `a11y.no_svg` 写 evidence 时，先写 `renderer=canvas`（因为 20/22 个原始文件含 `<canvas`）。实测才发现：**18 个的 `<canvas` 在 `<script>` 里**，而且多数根本不是元素 —— 是导出模块错误提示里的**字符串字面量**（`"give it an <svg> or <canvas> element to rasterize"`）。真实静态 `<canvas>` 元素只有 **2 个**。第二次改成 `non-svg` 仍不准，因为那 14 个是「完整文档但图形未生成」。
+  **纪律：诊断类字段落笔前，逐项跑命令核；一次核不对就再核一次。** 一个指向不存在问题的诊断，比沉默更消耗信任。
+
+- **静态扫描 vs 运行时构建 —— 这是本仓最容易踩的一类坑。** 模板里 `<svg>` 与 `<canvas>` 的**多数出现都在 JS 字符串里或由运行时创建**：`area-chart.html` 全文只有 1 处 `<svg`，在 `<script>` 内的字符串里；`grep -l "<canvas"` 数出 19/22，但剥掉 `<script>` 后只剩 2 个。**任何基于 `grep` 的静态统计，先确认命中的是元素还是字符串。** 判据：跑 `strip_script_bodies()` 后再数。
+
+- **ADVISORY 的 evidence 必须写 `residual_risk`，不能只写理由。** 把「没做校验」说成「确认无害」就是粉饰。advisory 的正当性来自**披露**，不来自**宽免** —— 所以每条都要如实写下「因此失去了什么校验」。
+
+- **advisory 与 WARN / baseline 的分界线必须由机器把住，写在文档里没用。** 三条不变量已进 `--self-test`：① 必须带 evidence；② `--strict` 也不得提升；③ 不得被基线吞掉。**第 ③ 条尤其重要**：baseline = 「未修的债务，先压住」，advisory = 「有意接受，本来就不该修」，两者后续处置完全不同，永不互换。代码里用 `WAIVABLE_LEVELS` 常量把这条声明一次，`write_baseline` 与 `apply_baseline` 共用。
+
+- **`passed(strict)` 收成了单一真源。** 判定表达式 `not fails and not (strict and warns)` 原先在 `emit()` 与 JSON 分支里**各写了一遍** —— 加第四级时才发现，正好是「同一事实写在多处必然漂移」的现场（与版本号四处漂移、调色板数量写死同型）。**加等级时顺手查一遍：这个判定还有别处也在算吗？**
+
+- **`advisories` 这个设计的出处要考证。** 我先前把它记成「anidiagram 文档里的概念」—— **错**。它在 anidiagram 里是**运行时质量报告的一个字段**（`{"issues": [...], "advisories": [...], "score": ...}`，`advisories` 不影响 `score`），文档里根本没提。**教训：引用外部实现的设计前必须回到原文核；「我在它的输出里见过」不等于「它文档里有这个概念」。** 二手摘要会把观察到的现象升格成设计原则。

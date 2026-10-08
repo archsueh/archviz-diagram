@@ -10,7 +10,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.6.2
+  version: 0.7.0
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -190,6 +190,7 @@ See `sketch-image-pipeline` skill for full workflow.
 | 找素材 / 背景图案 / 图标资源 | `references/design-resources-curated.md` | 从 445 条里筛出的可用资源 |
 
 **可执行校验**：`python3 scripts/self_check.py <file.html>` —— 跑无障碍 / 单文件安全 / 4px 网格 / 对比度 / 连接线几何五类，**退出码非零即不合格**。改完图跑一次，比人眼可靠。
+输出分四级：`FAIL`（阻塞）/ `WARN`（可疑，`--strict` 下阻塞）/ `ADVISORY`（**经证据证实的、故意的偏离** —— 不阻塞、`--strict` 也不提升、且如实附残余风险）/ `INFO`。**看到 `ADVISORY` 不等于没问题，它说的是「这里没做校验，原因如下」** —— 该档刻意不断言无害。
 
 **论文框架图模式**（§9d —— 进入该模式时按下表加载，日常图表**不需要**）：
 

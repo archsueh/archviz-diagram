@@ -170,8 +170,19 @@ python3 scripts/self_check.py --json output/diagram.html
 | id 是否裸用 `title` / `desc` | 裸用 → FAIL |
 | `desc` 是否像几何描述（含「矩形/圆形/上方/下方」等） | 命中 → WARN |
 | 装饰 svg 是否有 `aria-hidden` | 无 `title` 的 svg 且无 `aria-hidden` → WARN |
+| 文档里有无静态 `<svg>` | 无 → **ADVISORY**（契约结构性不适用，见下） |
 
-退出码：`0` 全通过 · `1` 有 FAIL · `0` + stderr 警告（WARN 不影响退出码，可用 `--strict` 提升为 FAIL）。
+**没有静态 `<svg>` 时报 ADVISORY，不是缺陷。** R1–R6 全部以 `<svg>` 元素为锚点，所以
+待内嵌片段（`_archviz-*.html`）、含静态 `<canvas>` 的模板、以及图形尚未生成的模板骨架，
+在这里都**无从校验**。检查器如实报出这一点并附残余风险，但不阻塞 —— 退出码仍为 0，
+`--strict` 也不提升。三档分类见 `self_check.py` 的 `detect_renderer()`。
+
+⚠️ **这一档刻意不断言意图。** 同一个「无图形元素」的事实，在「待填的模板骨架」上是正常的，
+在「本该有图但没生成」的产物上是缺陷 —— `self_check.py` 分不清二者，所以只说「没查到什么」，
+不说「所以没问题」。**看到这条 advisory 时请自行确认图形是否已生成。**
+
+退出码：`0` 全通过 · `1` 有 FAIL。WARN 不影响退出码，`--strict` 下提升为失败。
+**ADVISORY 与 INFO 在任何模式下都不影响退出码。**
 
 ---
 

@@ -20,8 +20,18 @@
     python3 scripts/self_check.py --all templates/ --write-baseline .self-check-baseline.json
     python3 scripts/self_check.py --all templates/ --baseline .self-check-baseline.json
 
+四级发现（severity 与「处置状态」是两根正交的轴，别混）:
+    FAIL      缺陷，阻塞。退出码 1。
+    WARN      可疑，默认不阻塞；--strict 下升级为失败。
+    INFO      说明性输出（跳过了什么、做了什么），无判定含义。
+    ADVISORY  **经证据证实的、故意的偏离**。不阻塞，不影响退出码，--strict 也不升级。
+              与 WARN 的分界：WARN = 「可能有问题，待处理」；ADVISORY = 「已确认无害，
+              且这里是证据」。与 baseline 的分界：baseline 是「未修的债务，先压住」，
+              ADVISORY 是「有意接受，本来就不该修」。两者永不互相转换。
+              ADVISORY 必须带 evidence —— 没有证据的 ADVISORY 是检查器的 bug（见 --self-test）。
+
 退出码:
-    0  通过（可能有 WARN，或全部被基线豁免）
+    0  通过（可能有 WARN / INFO / ADVISORY，或全部被基线豁免）
     1  有 FAIL（含超出基线的新违规）
     2  用法错误 / 文件不可读
 """
@@ -95,16 +105,21 @@ SCRIPT_BODY_RE = re.compile(r"(<script\b[^>]*>)(.*?)(</script\s*>)", re.S | re.I
 
 @dataclass
 class Finding:
-    level: str          # FAIL | WARN | INFO
+    level: str          # FAIL | WARN | INFO | ADVISORY
     category: str
     rule: str           # 稳定标识，基线按它计数
     message: str
     file: str = ""
     where: str = ""
+    evidence: dict = field(default_factory=dict)
 
     def render(self) -> str:
         loc = f" [{self.where}]" if self.where else ""
-        return f"  {self.level:<4} {self.category:<8} {self.message}{loc}"
+        line = f"  {self.level:<8} {self.category:<8} {self.message}{loc}"
+        if self.evidence:
+            ev = ", ".join(f"{k}={v}" for k, v in self.evidence.items())
+            line += f"\n           evidence: {ev}"
+        return line
 
 
 @dataclass
@@ -114,8 +129,14 @@ class Report:
     checked: dict[str, int] = field(default_factory=dict)
     skipped: list[str] = field(default_factory=list)
 
-    def add(self, level: str, category: str, rule: str, message: str, where: str = "") -> None:
-        self.findings.append(Finding(level, category, rule, message, self.file, where))
+    def add(self, level: str, category: str, rule: str, message: str, where: str = "",
+            evidence: dict | None = None) -> None:
+        # ADVISORY 的全部意义在于「这个偏离是故意的，且这里是它无害的证据」——
+        # 不带证据的 ADVISORY 退化成一个措辞软一点的 WARN，是检查器的 bug。
+        # 由 run_self_test() 的不变量断言把住。
+        self.findings.append(
+            Finding(level, category, rule, message, self.file, where, evidence or {})
+        )
 
     @property
     def fails(self) -> list[Finding]:
@@ -124,6 +145,18 @@ class Report:
     @property
     def warns(self) -> list[Finding]:
         return [f for f in self.findings if f.level == "WARN"]
+
+    @property
+    def advisories(self) -> list[Finding]:
+        return [f for f in self.findings if f.level == "ADVISORY"]
+
+    def passed(self, strict: bool) -> bool:
+        """判定。单一真源 —— 曾经这段表达式在 emit() 与 JSON 分支里各写了一遍。
+
+        FAIL 一律阻塞；WARN 仅在 --strict 下阻塞；ADVISORY **永不**阻塞
+        （它是「已确认无害」，不是「待处理的怀疑」—— 后者才是 WARN）。
+        """
+        return not self.fails and not (strict and self.warns)
 
 
 @dataclass
@@ -318,13 +351,71 @@ def off_grid(v: float | None) -> bool:
 # ─────────────────────────── 检查器 ───────────────────────────
 
 
+def detect_renderer(stripped: str) -> str:
+    """这份产物**为什么**没有静态 ``<svg>``。用作 advisory 的 evidence。
+
+    诊断不准比不报更糟 —— 把「待内嵌的片段」说成「渲染器不适用」，读的人会去查
+    一个根本不存在的问题。所以分三类，且**只陈述可验证的事实，不猜意图**。
+
+    注意必须用剥掉 ``<script>`` 的版本判定：模板里 ``<canvas`` 的多数出现是导出模块
+    错误提示里的**字符串字面量**（``"give it an <svg> or <canvas> element"``），
+    真实渲染路径是运行时 ``createElement("canvas")``。按原文判定会把 18 个
+    SVG/骨架模板误诊为 canvas 渲染。
+    """
+    low = stripped.lower()
+    if "<canvas" in low:
+        return "canvas"                    # 文档里存在静态 <canvas> 元素
+    if "<!doctype" not in low and "<html" not in low:
+        return "partial"                   # 待内嵌的片段，非独立文档
+    return "no-graphic-element"            # 完整文档，但没有任何静态图形元素
+
+
+# renderer → (advisory 消息, 残余风险)。key 与 detect_renderer 的返回值一一对应。
+#
+# ⚠️ 措辞纪律：只说「没查到什么」，不说「所以没问题」。
+# no-graphic-element 这一档**刻意不断言意图** —— 同一个事实在「待填的模板骨架」上是
+# 正常的，在「本该有图但没生成的产物」上是缺陷，而 self_check 无法区分二者
+# （见 references/gotchas.md「a11y.no_svg 的语义依赖意图」）。断言意图就会在另一半
+# 场景上骗人。残余风险照实写，让读的人自己判断。
+NO_SVG_CASE = {
+    "canvas": (
+        "存在静态 <canvas>，无障碍契约 R1–R6 以 <svg> 元素为锚点，结构性不适用",
+        "本文件的无障碍未做任何机器校验 —— 契约无 canvas 等价物",
+    ),
+    "partial": (
+        "待内嵌的片段而非独立文档，无障碍契约在片段层不适用",
+        "片段层无校验；风险转移到内嵌它的宿主文档",
+    ),
+    "no-graphic-element": (
+        "文档里没有任何静态图形元素（<svg> / <canvas>），无障碍契约无从校验",
+        "本文件的无障碍未做任何机器校验；若本应有图，说明图形未生成或由运行时构建",
+    ),
+}
+
+
 def check_a11y(report: Report, html: str, stripped: str) -> None:
     # 只在剥掉 <script> 内容的版本上扫 —— 导出模块用 JS 模板字符串拼 <svg>（含
     # foreignObject）做 HTML→图片序列化，那不是文档里的图形，不适用无障碍契约。
     svgs = split_svgs(stripped)
     report.checked["a11y"] = len(svgs)
     if not svgs:
-        report.add("INFO", "a11y", "a11y.no_svg", "文档里没有 <svg>，跳过无障碍检查")
+        # advisory 的教科书用例：不是「可能有问题」（那该是 WARN），而是「契约在这里
+        # 结构性不适用，且我们如实记下因此产生的残余风险」。
+        #
+        # ⚠️ evidence 必须写 residual_risk，不能只写理由。把「没做校验」说成「确认无害」
+        # 就是粉饰 —— advisory 的正当性来自「披露」，不来自「宽免」。
+        renderer = detect_renderer(stripped)
+        msg, risk = NO_SVG_CASE[renderer]
+        report.add(
+            "ADVISORY", "a11y", "a11y.no_svg", msg,
+            evidence={
+                "renderer": renderer,
+                "contract_scope": "svg-only",
+                "rules_not_applied": "R1-R6",
+                "residual_risk": risk,
+                "disclosure": "references/accessibility-contract.md",
+            },
+        )
         return
 
     for idx, (attrs, body, _raw) in enumerate(svgs, 1):
@@ -683,6 +774,11 @@ def check_file(path: str, only: Iterable[str] | None = None) -> Report:
 
 # ─────────────────────────── 基线 ───────────────────────────
 
+# 可被基线豁免的等级。**ADVISORY 不在其列**，这是刻意的：基线是「未修的债务，
+# 先压住别拦路」，ADVISORY 是「有意接受，本来就不该修」。把后者写进基线等于把
+# 两种后续处置完全不同的状态混成一类。两者永不互相转换。
+WAIVABLE_LEVELS = ("FAIL", "WARN")
+
 
 def load_baseline(path: str) -> dict:
     with open(path, encoding="utf-8") as fh:
@@ -692,7 +788,7 @@ def load_baseline(path: str) -> dict:
 def write_baseline(path: str, reports: list[Report], base_dir: str) -> None:
     files: dict[str, dict[str, int]] = {}
     for r in reports:
-        counts = collections.Counter(f.rule for f in r.findings if f.level in ("FAIL", "WARN"))
+        counts = collections.Counter(f.rule for f in r.findings if f.level in WAIVABLE_LEVELS)
         if counts:
             files[os.path.relpath(r.file, base_dir)] = dict(sorted(counts.items()))
     payload = {"version": 1, "files": files}
@@ -712,7 +808,7 @@ def apply_baseline(reports: list[Report], baseline: dict, base_dir: str) -> None
         kept: list[Finding] = []
         waived = 0
         for f in r.findings:
-            if f.level in ("FAIL", "WARN"):
+            if f.level in WAIVABLE_LEVELS:
                 seen[f.rule] += 1
                 if seen[f.rule] <= allowed.get(f.rule, 0):
                     waived += 1
@@ -727,19 +823,48 @@ def apply_baseline(reports: list[Report], baseline: dict, base_dir: str) -> None
 
 
 def emit(report: Report, strict: bool, quiet: bool) -> bool:
-    fails, warns = report.fails, report.warns
-    passed = not fails and not (strict and warns)
+    passed = report.passed(strict)
     if quiet:
         return passed
     counts = " ".join(f"{k}={v}" for k, v in report.checked.items())
     print(f"[{'OK' if passed else 'FAIL'}] {report.file}" + (f"  ({counts})" if counts else ""))
+    # FAIL / WARN / INFO 走主段；ADVISORY 单列一段 —— 否则「故意的偏离」会被读成缺陷。
     for f in report.findings:
-        print(f.render())
+        if f.level != "ADVISORY":
+            print(f.render())
+    advisories = report.advisories
+    if advisories:
+        print(f"  ── {len(advisories)} 条 advisory（有意偏离 · 不阻塞 · 不计入判定）")
+        for f in advisories:
+            print(f.render())
     for s in report.skipped:
         print(f"  SKIP {s}")
     if not report.findings and not report.skipped:
         print("  所有检查通过")
     return passed
+
+
+def finding_json(f: Finding) -> dict:
+    d = {"level": f.level, "category": f.category, "rule": f.rule,
+         "message": f.message, "where": f.where}
+    if f.evidence:
+        d["evidence"] = f.evidence
+    return d
+
+
+def report_json(r: Report, strict: bool) -> dict:
+    return {
+        "file": r.file,
+        "passed": r.passed(strict),
+        # findings 不含 ADVISORY，advisories 单列 —— 与 anidiagram 的 issues / advisories
+        # 同构：逼消费者显式处理 advisory，而不是把它当缺陷一起计数。
+        "summary": {"fail": len(r.fails), "warn": len(r.warns),
+                    "advisory": len(r.advisories)},
+        "checked": r.checked,
+        "skipped": r.skipped,
+        "findings": [finding_json(f) for f in r.findings if f.level != "ADVISORY"],
+        "advisories": [finding_json(f) for f in r.advisories],
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -793,14 +918,7 @@ def main(argv: list[str] | None = None) -> int:
         apply_baseline(reports, load_baseline(args.baseline), base_dir)
 
     if args.json:
-        payload = [{
-            "file": r.file,
-            "passed": not r.fails and not (args.strict and r.warns),
-            "checked": r.checked,
-            "skipped": r.skipped,
-            "findings": [{"level": f.level, "category": f.category, "rule": f.rule,
-                          "message": f.message, "where": f.where} for f in r.findings],
-        } for r in reports]
+        payload = [report_json(r, args.strict) for r in reports]
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0 if all(x["passed"] for x in payload) else 1
 
@@ -812,8 +930,10 @@ def main(argv: list[str] | None = None) -> int:
     if len(reports) > 1:
         n_fail = sum(1 for r in reports if r.fails)
         n_warn = sum(1 for r in reports if r.warns and not r.fails)
+        n_adv = sum(len(r.advisories) for r in reports)
+        tail = f" · {n_adv} 条 advisory（不计入判定）" if n_adv else ""
         print(f"\n汇总: {len(reports)} 个文件 · {len(reports) - n_fail - n_warn} 通过 · "
-              f"{n_warn} 仅警告 · {n_fail} 失败")
+              f"{n_warn} 仅警告 · {n_fail} 失败{tail}")
     return 0 if ok else 1
 
 
@@ -963,6 +1083,22 @@ JS_NOT_AN_ATTR = """<html><body>
 """
 
 
+# canvas 渲染、无静态 <svg> —— 应产出 1 条 ADVISORY，且不阻塞（含 --strict）
+CANVAS_NO_SVG = """<!DOCTYPE html>
+<html><head><style>:root{--av-surface:#f5f0eb;}</style></head><body>
+<canvas id="c" width="400" height="200"></canvas>
+</body></html>"""
+
+# 待内嵌的片段（无 doctype / html）—— 必须与 canvas 区分开，分类为 partial
+PARTIAL_NO_SVG = """<!-- paste into <head> of any archviz HTML template -->
+<style>:root{--av-surface:#f5f0eb;}</style>"""
+
+# 完整文档但无任何图形元素 —— 第三档，刻意不断言「是骨架」还是「图没生成」
+NO_GRAPHIC_NO_SVG = """<!DOCTYPE html>
+<html><head><style>:root{--av-surface:#f5f0eb;}</style></head>
+<body><p>模板骨架，图形待生成</p></body></html>"""
+
+
 def run_self_test() -> int:
     import tempfile
 
@@ -980,6 +1116,9 @@ def run_self_test() -> int:
         ("comment_head_onclick", SAFETY_COMMENT_HEAD_NO_SVG, "safety", False),
         ("pinned_cdn_warns_only", SAFETY_PINNED_CDN_OK, "safety", True),
         ("a11y_svg_in_script", A11Y_SVG_IN_SCRIPT_OK, "a11y", True),
+        ("canvas_no_svg", CANVAS_NO_SVG, "a11y", True),
+        ("partial_no_svg", PARTIAL_NO_SVG, "a11y", True),
+        ("no_graphic_no_svg", NO_GRAPHIC_NO_SVG, "a11y", True),
     ]
     failures = 0
     with tempfile.TemporaryDirectory() as td:
@@ -1023,8 +1162,55 @@ def run_self_test() -> int:
         print(f"  {'PASS' if new_ok else 'MISMATCH':<9} {'baseline_new_fails':<20} "
               f"category=baseline  期望失败 实际{'失败' if new_ok else '通过'}")
 
+        # ── ADVISORY 三条不变量 ────────────────────────────────────────────
+        # 这三条是 ADVISORY 与 WARN / baseline 的分界线。写在文档里没用 ——
+        # 必须让机器把住，否则日后有人「顺手」改一行就把它退化成软一点的 WARN。
+        rep_adv = check_file(os.path.join(td, "canvas_no_svg.html"), only=["a11y"])
+        advs = rep_adv.advisories
+
+        # ① 必须带 evidence。没证据的 advisory 只是措辞软一点的 WARN。
+        adv_ev = bool(advs) and all(f.evidence for f in advs)
+        if not adv_ev:
+            failures += 1
+        print(f"  {'PASS' if adv_ev else 'MISMATCH':<9} {'advisory_evidence':<20} "
+              f"category=advisory  期望有证据 实际{'有' if adv_ev else '无/缺失'}")
+
+        # ② --strict 也不得提升它。若这条挂了，说明它被当成了 WARN。
+        adv_strict = rep_adv.passed(strict=True)
+        if not adv_strict:
+            failures += 1
+        print(f"  {'PASS' if adv_strict else 'MISMATCH':<9} {'advisory_not_strict':<20} "
+              f"category=advisory  期望通过 实际{'通过' if adv_strict else '失败'}")
+
+        # ③ 不得被基线吞掉。baseline = 待还债务，advisory = 有意接受，永不互换。
+        apath = os.path.join(td, "adv-baseline.json")
+        write_baseline(apath, [check_file(os.path.join(td, "canvas_no_svg.html"), only=["a11y"])], td)
+        rep_adv2 = [check_file(os.path.join(td, "canvas_no_svg.html"), only=["a11y"])]
+        apply_baseline(rep_adv2, load_baseline(apath), td)
+        adv_survives = len(rep_adv2[0].advisories) == len(advs)
+        if not adv_survives:
+            failures += 1
+        print(f"  {'PASS' if adv_survives else 'MISMATCH':<9} {'advisory_not_baselined':<20} "
+              f"category=advisory  期望保留 实际{'保留' if adv_survives else '被豁免掉'}")
+
+        # ④ renderer 分类必须三档可辨。笼统报一个 non-svg 会把「待内嵌片段」和
+        # 「图形没生成」指成同一件事 —— 诊断不准比不报更糟。
+        def _renderer_of(name: str) -> str:
+            r = check_file(os.path.join(td, f"{name}.html"), only=["a11y"])
+            return r.advisories[0].evidence.get("renderer", "?") if r.advisories else "无advisory"
+
+        got = (_renderer_of("canvas_no_svg"), _renderer_of("partial_no_svg"),
+               _renderer_of("no_graphic_no_svg"))
+        want = ("canvas", "partial", "no-graphic-element")
+        adv_classify = got == want
+        if not adv_classify:
+            failures += 1
+        print(f"  {'PASS' if adv_classify else 'MISMATCH':<9} {'advisory_renderer_class':<20} "
+              f"category=advisory  期望{('/'.join(want))} "
+              f"实际{('/'.join(got))}")
+
     print()
-    total = len(cases) + 2
+    total = len(cases) + 6
     if failures:
         print(f"自测失败: {failures}/{total} 个用例行为不符")
         return 1
