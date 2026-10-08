@@ -57,3 +57,4 @@ Proposed ──(用户签)──> Accepted ──(被新决策取代)──> Sup
 | ADR | 标题 | Status | Date |
 |---|---|---|---|
 | [001](ADR-001-paper-framework-mode-vs-text-first.md) | Paper Framework Mode 与 Text-First 原则的关系 | Accepted | 2026-10-08 |
+| [002](ADR-002-advisory-level.md) | 新增 ADVISORY 等级，而非复用 WARN 或 baseline | Accepted | 2026-10-08 |
