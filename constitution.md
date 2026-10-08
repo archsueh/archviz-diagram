@@ -13,6 +13,13 @@ Every visualization begins with a brief read + three explicit dials (COMPLEXITY 
 ### III. Text-First Survivability + Earned Self-Contained Deliverables
 Primary artifact is always plain text (.mmd, ASCII, or structured data) that survives Obsidian, GitHub, terminal, and diffs. HTML, Python (Plotly), or 3D (Three.js) are reserved for deliverables that earn them. Self-contained HTML (zero external deps except verified minimal CDN) is the standard for custom flows, precise attachment, or combined multi-viz pages.
 
+**Earning criterion for non-text terminal artifacts** (ADR-001, amended 2026-10-08). A deliverable may terminate in a non-text artifact (HTML, raster image, 3D scene) only when all three hold:
+1. **Explicit mode gate** — it is reached through a named mode that SKILL.md declares, with an entry condition and a stated boundary. It is never the default path for a chart type.
+2. **Declared non-text terminal** — SKILL.md states up front that the mode's terminal state is non-text and that in-mode text substitutes are invalid, so the agent does not silently degrade to a text artifact mid-flow.
+3. **Degradation path** — when the required channel (image generation, browser, etc.) is unavailable, the mode names its fallback explicitly rather than failing open into a fake success.
+
+A mode that cannot satisfy all three is not eligible for the exception and must remain text-first. Current holder: Paper Framework Mode (§9d), which satisfies all three. Rationale and rejected alternatives → `docs/decisions/ADR-001-paper-framework-mode-vs-text-first.md`.
+
 ### IV. Exact Fidelity for Reference Replication & Flow Attachment
 When replicating reference structure (e.g. LLNL Sankey image):
 - Draw all flow paths/edges FIRST in SVG order, then nodes (rects/circles) on top to cleanly cover endpoints.
@@ -51,6 +58,6 @@ After every real delivery or complex iteration, append at least +1 high-value en
 ## Governance
 This constitution supersedes SKILL.md, DESIGN.md, templates, and all prior practices for archviz work. Amendments require: explicit documentation of the change + update to this file + corresponding gotchas/SKILL/DESIGN entries + (if breaking) migration notes. 
 
-**Version**: 0.2 | **Ratified**: 2026-06-13 | **Last Amended**: 2026-06-20
+**Version**: 0.3 | **Ratified**: 2026-06-13 | **Last Amended**: 2026-10-08 (Principle III — earning criterion for non-text terminal artifacts, per ADR-001)
 
 All agents (Claude Code, Grok, Codex, Hermes, etc.) working on or with archviz must load and obey this constitution + the latest gotchas.md.

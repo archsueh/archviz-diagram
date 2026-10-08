@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.6.2 (2026-10-08)
+
+### Added
+- **`docs/decisions/` —— 本仓第一个决策记录载体（ADR）**。此前 `docs/` 下只有空的 `screenshots/`，**零决策记录**。缺口是结构性的：`constitution.md` 的 Development Workflow 第 1 条要求「任何项目级变更先改 constitution」，但 **constitution 不承载「改什么、为什么、被否掉的方案是什么」**——这三件事只活在 CHANGELOG 里，而 CHANGELOG 是**版本作用域**的：新版本一压上去，旧条目滚出视野，冲突却还留在代码里。
+  - `docs/decisions/README.md` —— 格式约定（Status / Date / Deciders / Context / Decision / **Alternatives Considered with explicit rejected reasons** / Consequences / Compatibility）+ 状态流转（Proposed → Accepted → Superseded）。
+  - `docs/decisions/ADR-001-paper-framework-mode-vs-text-first.md` —— 首个 ADR，**Accepted**。
+
+- **`constitution.md` Principle III 修正案（ADR-001 落地）** —— 追加 **Earning criterion for non-text terminal artifacts**：非文本终态产物（HTML / 光栅图 / 3D 场景）须**同时**满足三条才可豁免文本优先 —— ① 显式模式门禁；② 事先声明非文本终态且模式内文本替代无效；③ 具名降级路径。三条不齐者不具豁免资格。
+  - **`Version` 0.2 → 0.3**，`Last Amended` 2026-06-20 → 2026-10-08。
+  - **关键判断**：Principle III 自己的措辞里**已经含了逃生舱**（`reserved for deliverables that earn them`）。缺的不是例外，是**判据**。补判据比另开一条并行规则改动更小、约束更紧。
+  - **对现有实现零行为变更**：逐条核过 Paper Framework Mode 三条齐备（§9d L530 门禁 / L531 禁止替代物 + L543 `IMAGE · 终态` / L532 降级路径）。本次只做「隐含判据显式化」。
+
+### Changed
+- **`SKILL.md` §9d** 加「宪制义务」段 —— 把三条判据写在模式作者会看到的地方（未来同类模式以 §9d 为范本）。同时给后续同类模式立了一条可检查的约束。
+- **`DESIGN.md` §1** 第二签名段补判据指针 —— 该段原本也断言 text-first（`HTML, Python, and 3D are reserved for deliverables that earn them`），「earn」此前**无定义**，现指向 constitution Principle III。
+- **`references/gotchas.md`** 新增条目（见下）。
+- `SKILL.md` `metadata.version` `0.6.1` → `0.6.2`；`pyproject.toml` 同步。
+
+### Notes
+- **为什么不把 Principle III 改成「文本优先，Paper Framework Mode 除外」** —— 那是在**命名实例**而非**给判据**。下一个 image-first 模式（海报？封面？）还得再修一次宪。这跟「版本号硬编码在 4 个地方」（见 §0.6.1）是**同一类病**：同一事实写在多处必然漂移。ADR-001 里另有 3 个被否方案及理由。
+- **Governance 四项逐条对账**（显式记录 / 改 constitution / 同步 gotchas·SKILL·DESIGN / breaking 迁移说明）见 ADR-001 末节表格。
+- **兼容性**：对使用者 **non-breaking** —— 无接口、无 CLI、无产物格式变更。14 类图表、Mermaid/ASCII 路径、模板与 Python 包全部不变。
+
 ## 0.6.1 (2026-10-08)
 
 ### Fixed

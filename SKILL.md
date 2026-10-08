@@ -10,7 +10,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.6.1
+  version: 0.6.2
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -530,6 +530,8 @@ Trigger: 封面、卡片、信息卡、小红书、公众号、分享图、排�
 **⚠️ 前置条件：需要生图通道。** 本模式是 archviz-diagram 中**唯一**要求生图通道的模式。
 进入后，出图环节**禁止**用 Mermaid / SVG / HTML canvas / Python(PIL/Plotly/Matplotlib) / Graphviz / TikZ / PPT / PDF / 截图 / 本地程序化光栅代替。
 无通道时不要硬撑 —— 按 `paper-framework-workflow.md` 的降级路径处理（纯文本阶段可先跑，或退回默认代码优先模式出结构草图）。
+
+> **宪制义务**（`constitution.md` 原则 III「非文本终态产物的挣得判据」，ADR-001）：非文本终态模式必须**同时**满足三条 —— ① 显式模式门禁（具名、有进入条件与边界，永不作为某类图表的默认路径）；② 事先声明非文本终态，且模式内文本替代无效；③ 具名降级路径，不得静默失败或假装成功。**本模式三条齐备**（见下两段）。未来新增同类模式须同样齐备，否则不具豁免资格，必须保持文本优先。
 
 **六阶段**（候选数契约是硬的）：
 
