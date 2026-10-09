@@ -22,10 +22,14 @@ echo "Checking palette registry consistency..."
 python3 "$ROOT/scripts/check_palette_registry.py"
 
 # Same class of problem, same placement: fail fast before the sync/prettier
-# block. SKILL.md metadata.version is the truth; CHANGELOG.md, pyproject.toml
-# and publish-skill.py must agree with it.
-echo "Checking version consistency..."
-python3 "$ROOT/scripts/check_version_consistency.py"
+# block. One kit owns five checks (version / byte budget / routing surface /
+# count claims / CJK encoding); SKILL.md metadata.version is the truth for the
+# version check. Mirrors the same-named CI steps.
+echo "Checking consistency kit..."
+python3 "$ROOT/scripts/check_archviz.py"
+
+echo "Checking consistency kit's own checker..."
+python3 "$ROOT/scripts/check_archviz.py" --self-test >/dev/null
 
 # Order is load-bearing and must match .github/workflows/ci.yml:
 #   sync modules -> prettier --write -> stage

@@ -10,7 +10,7 @@ Usage (always from absolute root):
       /Users/mac/Developer/archviz-diagram [--private]
 
 The release version is read from SKILL.md `metadata.version` at runtime — never
-hardcode it here. scripts/check_version_consistency.py enforces this.
+hardcode it here. scripts/check_archviz.py --only version enforces this.
 
 It will:
 1. Validate SKILL.md frontmatter (name, description, YAML safety)

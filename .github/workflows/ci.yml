@@ -72,8 +72,20 @@ jobs:
       run: python3 scripts/check_palette_registry.py
 
     # Same class of problem as the palette registry: one fact written down in
-    # several places, drifting silently. pyproject.toml had fallen 4 releases
-    # behind and publish-skill.py hardcoded 0.2.5, so `gh release create` would
-    # have tagged a version the skill never shipped. SKILL.md is the truth.
-    - name: Verify Version Consistency
-      run: python3 scripts/check_version_consistency.py
+    # several places, drifting silently. This kit owns five checks — version,
+    # SKILL.md byte budget, description routing surface, count claims, and CJK
+    # encoding — so the family's other four repos can carry the same file with
+    # their own archviz-checks.json instead of five hand-synced copies.
+    #
+    # Version drift this catches: pyproject.toml had fallen 4 releases behind
+    # and publish-skill.py hardcoded 0.2.5, so `gh release create` would have
+    # tagged a version the skill never shipped. SKILL.md is the truth.
+    - name: Verify Consistency Kit
+      run: python3 scripts/check_archviz.py
+
+    # A checker is only a gate if its own failure modes are tested. This runs
+    # the adversarial fixtures: every check is exercised in both polarities,
+    # including the cases that must NOT fire (a semver in a docstring, a name
+    # satisfied by an alias, a charset exemption carrying a reason).
+    - name: Verify Consistency Kit Checker
+      run: python3 scripts/check_archviz.py --self-test

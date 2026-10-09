@@ -5,12 +5,14 @@ description: |
   Token-aware: prefers Mermaid/ASCII/compact HTML, defers heavy self-contained HTML to when interaction is required.
   Supports Mermaid, ASCII, self-contained HTML, Python (Plotly). Text-first, preview-compatible, anti-slop.
   For 3D spatial visualization (building, floorplan, exploded view) → use archviz-3d.
+  Structural diagram types (27, rendered as Mermaid / ASCII / HTML): architecture, flowchart, sequence, state machine, ER / data model, timeline, swimlane, quadrant / 2×2, nested, tree, org chart, venn, layer stack, pyramid / funnel, consultant 2×2, radar / spider, loop / flywheel, IT current-state, high-level stack, bar chart, line chart, gantt, scatter, process, medallion, data flow, DP security matrix.
+  Generated 2D chart types (14, rendered by the bundled Python engine): stacked-bar, area chart, line chart, sunburst, treemap, radar, funnel, gauge, heatmap, bubble, waffle, waterfall, bullet graph, editorial card — 堆叠柱状图, 面积图, 折线图, 旭日图, 矩形树图, 雷达图, 漏斗图, 仪表盘, 热力图, 气泡图, 华夫图, 瀑布图, 子弹图, 编辑卡片. The two lists are different renderers for different needs — structural types describe system shape, chart types describe data shape; they overlap on line chart only.
   Paper Framework Mode (论文框架图): S0-S5 human-in-the-loop candidate workflow for publication figures. ⚠️ Requires an image-generation route — inside this mode Mermaid/SVG/Python/canvas substitutes are invalid. See §9d.
   Use when the user asks for flowchart, architecture diagram, framework diagram, diagram, visualization, state diagram, process flow, 流程图, 架构图, 框架图, 结构图, 关系图, 状态机, 决策矩阵, 依赖图, dependency graph, workflow, concept map.
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.7.0
+  version: 0.8.0
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh

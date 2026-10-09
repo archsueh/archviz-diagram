@@ -1,5 +1,73 @@
 # Changelog
 
+## 0.8.0 (2026-10-09)
+
+一致性套件 `scripts/check_archviz.py` 落地 + description 路由面修复。本版的主体不是新功能，
+而是**把「同一事实写在多处」这一类病一次治干净**——此前 0.6.1 治了版本号（4 处）、
+0.6.1 治了调色板（4 处），但每治一处都要新写一个专用脚本。现在收成一个可移植套件。
+
+### Fixed
+
+- **`description` 路由面命名 0/14 个 MCP 图表类型 —— 这是正在发生的缺陷，不是风格问题。**
+  `description` 是 agent 决定是否加载 skill **之前**唯一能看到的文本。此前它点名了
+  flowchart / architecture / 流程图 / 架构图，但 `heatmap` / `waterfall` / `radar` /
+  `treemap` / `sunburst` / `waffle` / `gauge` / `funnel` / `bubble` / `bullet-graph` /
+  `editorial-card` / `stacked-bar` / `area-chart` **一个都没有**。用户说「画个热力图」
+  「画个瀑布图」「画个雷达图」时没有任何词法钩子。实测 `list_types` = 14 类，
+  命中 **0/14**。
+- **补上一句边界说明**：结构图（27）与图表（14）是两套词表、两个渲染器，此前没有任何
+  地方写明这件事。两者交集只有 `line chart` 一项。
+
+### Added
+
+- **`scripts/check_archviz.py`** —— 可移植一致性套件，纯 stdlib、零依赖、**不 import 本包**
+  （家族里两个仓库没有 `.venv`，跑不起来的检查器不是闸门）。五道检查：
+  | 检查 | 内容 |
+  |---|---|
+  | `version` | SKILL.md `metadata.version` 为真源；校验 CHANGELOG 首条、pyproject、声明代码文件无硬编码 semver |
+  | `budget` | SKILL.md **LF 归一化字节** ≤ 上限；并校验 `.gitattributes` 的 LF pin 存在 |
+  | `routing` | 注册表每个名字必须出现在 `description`（可用别名满足） |
+  | `counts` | 声明的计数断言 vs 计算真值 |
+  | `cjk` | UTF-8 合法性 + HTML charset 声明 + 乱码特征 |
+  配置驱动：每仓一份 `archviz-checks.json`。`--self-test` 带 **22 个对抗性用例**，
+  含必须**不**触发的反极性用例（docstring 里的 semver、别名满足、带理由的 charset 豁免）。
+- **`.gitattributes`** —— 钉 `SKILL.md` 到 `eol=lf`。字节上限按 LF 归一化计数，
+  这样 `core.autocrlf=true` 的检出量到的仍是提交大小；pin 被删掉时闸门直接失败。
+- **`archviz-checks.json`** —— 本仓配置：3 个注册表（27 结构 / 14 MCP / 11 调色板）、
+  4 组计数断言（共 10 处）、CJK 扫描面 75 个文件。
+
+### Changed
+
+- **`scripts/check_version_consistency.py` 已删除，逻辑并入套件的 `version` 检查。**
+  一个实现，不是两个。内容保留在 git 历史 `0a832df`。CI 与 pre-commit 改为调用套件。
+- `SKILL.md` 字节上限设为 **44,000**（棘轮：不许再涨）。当前 43,041（97.8%）。
+  **这是棘轮不是目标** —— 参考项目 `diagram-design` 自设上限 40,000 并主动瘦到 28,869
+  （ADR 0004 Amendments）。本仓超其上限，瘦身列入后续（见 `references/gotchas.md`）。
+
+### 为什么 `counts` 不用裸 `grep` 数字
+
+`references/structural-diagram-types.md` 有一行 `| 14 | Pyramid / funnel |` ——
+那个 14 是**行序号**，不是计数。任何 `grep "14"` 式的朴素计数都会假阳性。
+断言点因此全部用**语义正则**（`27 类逐类型预算`、`Structural diagram types (27,`），
+已实测验证行序号不被任何断言命中。
+
+### Verified
+
+- `scripts/check_archviz.py` → PASS（5/5 项）
+- `scripts/check_archviz.py --self-test` → **22/22** 用例行为符合预期
+- `scripts/check_palette_registry.py` → PASS（11 个 id 四处一致）
+- 反极性实测：注入 `27→28` → FAIL（报出两处断言点）；注入删除 `treemap` → FAIL（点名 `treemap`）；
+  恢复后复跑 PASS。**门禁确认真的抓得住，不是摆设。**
+- `cjk` 首跑抓出 3 个未声明 charset 的文件，经核实**全部是待内嵌片段**
+  （`_archviz-theme` / `_flow-attach` / `_archviz-animated`，本就没有自己的 `<head>`），
+  按 `sync_theme.py` 的既有纪律登记豁免并**逐条写明理由**（无理由的豁免会被套件判 FAIL）。
+
+### Notes
+
+- `_archviz-export.html` 同为片段但**已声明 charset**，因此**未**加豁免 ——
+  多余的豁免就是隐藏。
+- `--json` 无变更；本版不动产物格式，对使用者 non-breaking。
+
 ## 0.7.0 (2026-10-08)
 
 ### Added

@@ -1,0 +1,96 @@
+{
+  "kit": 1,
+  "skill_md": "SKILL.md",
+  "skill_md_max_bytes": 44000,
+  "require_lf_pin": true,
+
+  "version": {
+    "changelog": "CHANGELOG.md",
+    "pyproject": "pyproject.toml",
+    "no_literal_in": ["scripts/publish-skill.py"]
+  },
+
+  "registries": {
+    "mcp_types": {
+      "kind": "source_regex",
+      "file": "archviz_diagram/engine.py",
+      "block": "^TYPE_REGISTRY = \\{(.*?)^\\}",
+      "block_flags": "MS",
+      "entry": "^\\s{4}\"([\\w-]+)\":\\s*\\{",
+      "flags": "M"
+    },
+    "structural_types": {
+      "kind": "markdown_table",
+      "file": "references/structural-diagram-types.md",
+      "entry": "^\\|\\s*\\d+\\s*\\|\\s*([^|]+?)\\s*\\|",
+      "flags": "M"
+    },
+    "palettes": {
+      "kind": "source_regex",
+      "file": "templates/html/_archviz-theme.html",
+      "block": "const PALETTES = \\{(.*?)\\n\\s*\\};",
+      "block_flags": "S",
+      "entry": "^\\s*\"?([\\w-]+)\"?:\\s*\\{\\s*label:",
+      "flags": "M"
+    }
+  },
+
+  "routing": {
+    "registries": ["structural_types", "mcp_types"],
+    "also_check_triggers": false
+  },
+
+  "counts": [
+    {
+      "id": "structural_types",
+      "truth": { "kind": "registry_len", "registry": "structural_types" },
+      "assertions": [
+        { "file": "SKILL.md", "regex": "Structural diagram types \\((\\d+)," },
+        { "file": "SKILL.md", "regex": "(\\d+)\\s*类逐类型预算" },
+        { "file": "SKILL.md", "regex": "结构图\\s*(\\d+)\\s*类" },
+        { "file": "references/complexity-budgets.md", "regex": "逐类型预算表（(\\d+)\\s*类）" },
+        { "file": "references/credits.md", "regex": "(\\d+)\\s*类类型词汇" }
+      ]
+    },
+    {
+      "id": "mcp_types",
+      "truth": { "kind": "registry_len", "registry": "mcp_types" },
+      "assertions": [
+        { "file": "SKILL.md", "regex": "Generated 2D chart types \\((\\d+)," },
+        { "file": "SKILL.md", "regex": "list\\s+(\\d+)\\s+types" },
+        { "file": "SKILL.md", "regex": "(\\d+)\\s+2D chart types" }
+      ]
+    },
+    {
+      "id": "palettes",
+      "truth": { "kind": "registry_len", "registry": "palettes" },
+      "assertions": [
+        { "file": "SKILL.md", "regex": "\\*\\*(\\d+)\\s+palettes\\*\\*" }
+      ]
+    },
+    {
+      "id": "templates",
+      "truth": { "kind": "glob_count", "globs": ["templates/html/*.html"] },
+      "assertions": [
+        { "file": "references/gotchas.md", "regex": "(\\d+)\\s*个模板中的" }
+      ]
+    }
+  ],
+
+  "cjk": {
+    "scan": [
+      "SKILL.md",
+      "README.md",
+      "DESIGN.md",
+      "CHANGELOG.md",
+      "references/*.md",
+      "templates/html/*.html"
+    ],
+    "require_charset": ["templates/html/*.html"],
+    "charset_exempt": {
+      "templates/html/_archviz-theme.html": "paste-in fragment — consumed inside another document's <head>, declares no charset of its own",
+      "templates/html/_archviz-animated.html": "paste-in fragment — animation helper, not a standalone document",
+      "templates/html/_flow-attach.html": "paste-in fragment — flow attachment helper, not a standalone document"
+    }
+  }
+}
