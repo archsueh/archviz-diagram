@@ -12,7 +12,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.8.1
+  version: 0.8.2
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -181,7 +181,7 @@ See `sketch-image-pipeline` skill for full workflow.
 | 查某条规则的出处 | `references/credits.md` | 上游来源与致谢 |
 | 交付前自检 | `references/design-judgment.md` | 五段判断链 / 六维度 / 选模型路由 / 三条硬边界 |
 
-**以下 6 个此前是孤儿文件**（内容存在但全仓库无入口），现纳入地图：
+**以下文件此前是孤儿**（内容存在但全仓库无入口），现纳入地图：
 
 | 触发条件 | 加载 | 得到什么 |
 |---|---|---|
@@ -191,6 +191,7 @@ See `sketch-image-pipeline` skill for full workflow.
 | HTML 模板加动效 | `references/animation-vocabulary.md` | **共享运动词汇表** —— 命名与时长必须照用，不得自创 |
 | Mermaid init / pretty-mermaid 主题 | `references/style-guide.md` | 主题搭配与描边/圆角约定 |
 | 找素材 / 背景图案 / 图标资源 | `references/design-resources-curated.md` | 从 445 条里筛出的可用资源 |
+| 要参考高质量自包含 HTML 样例 | `references/html-effectiveness/INDEX.md` | 6 份样例（dashboard / 对比卡 / 流程 / KPI / 简报 / 条形动画），零依赖、每份 <200 行 |
 
 **可执行校验**：`python3 scripts/self_check.py <file.html>` —— 跑无障碍 / 单文件安全 / 4px 网格 / 对比度 / 连接线几何五类，**退出码非零即不合格**。改完图跑一次，比人眼可靠。
 输出分四级：`FAIL`（阻塞）/ `WARN`（可疑，`--strict` 下阻塞）/ `ADVISORY`（**经证据证实的、故意的偏离** —— 不阻塞、`--strict` 也不提升、且如实附残余风险）/ `INFO`。**看到 `ADVISORY` 不等于没问题，它说的是「这里没做校验，原因如下」** —— 该档刻意不断言无害。

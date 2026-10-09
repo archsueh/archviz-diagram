@@ -2,6 +2,14 @@
 # Use Plotly for interactive HTML export (or Matplotlib for static).
 # Agent vibes this from brief; user runs for 落作品.
 # Restrained: warm paper bg, IKB accent, short labels/codes.
+#
+# Run:        python3 examples/deliverables-python-bar.py
+# OB counterpart (same brief, mermaid/lightweight): examples/ob-lightweight-bar.md
+#
+# Was not runnable before 2026-10-09: this file was a markdown fragment saved
+# with a `.py` extension — a closing ``` fence and a bullet list sat below the
+# code, so it had never once compiled. Nothing imported it, so nothing noticed
+# until the consistency kit gained its `pycompile` check.
 
 import plotly.express as px
 import pandas as pd
@@ -26,16 +34,19 @@ fig.update_layout(
 fig.write_html('project-phases-v1.html')  # Interactive HTML for deliverable
 print('Generated: project-phases-v1.html (open for final work)')
 
-# For static/PDF: uncomment Matplotlib
-# import matplotlib.pyplot as plt
-# plt.style.use('seaborn-v0_8-whitegrid')  # Minimal
-# ... plot, savefig('project-phases-v1.png', facecolor='#f5f0eb', dpi=300)
-```
-
-**Notes (per skill):**
-- Env=deliverables → full Python.
-- Type from report: ranking → bar.
-- For Gantt etc.: adapt to px.timeline.
-- Icons: add as annotations if needed.
-- Author habit: direct.
-- Later run this for 落作品; OB version above for preview.
+# ── Notes (per skill) ───────────────────────────────────────────────────────
+# - Env=deliverables → full Python.
+# - Type from report: ranking → bar.
+# - For Gantt etc.: adapt to px.timeline.
+# - Icons: add as annotations if needed.
+# - Author habit: direct.
+# - Later run this for 落作品; the OB version above is for preview.
+#
+# For static/PDF instead of interactive HTML, swap the write_html line for:
+#   import matplotlib.pyplot as plt
+#   plt.style.use('seaborn-v0_8-whitegrid')  # minimal
+#   ... plot, savefig('project-phases-v1.png', facecolor='#f5f0eb', dpi=300)
+# `seaborn-v0_8-whitegrid` ships with matplotlib itself — the `seaborn>=0.12`
+# requirement was dropped from requirements.txt on 2026-10-09 because nothing
+# in this repo ever imported seaborn. Add it back only if you need seaborn's
+# own API, not for the style name.

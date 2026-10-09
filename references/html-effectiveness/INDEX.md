@@ -1,6 +1,6 @@
 # html-effectiveness — Sample Corpus
 
-Six self-contained HTML examples demonstrating high-quality data visualization patterns. Each file uses the archviz theme system, works standalone (zero dependencies), and stays under 200 lines.
+6 self-contained HTML examples demonstrating high-quality data visualization patterns. Each file uses the archviz theme system, works standalone (zero dependencies), and stays under 200 lines.
 
 | # | File | Teaches |
 |---|------|---------|

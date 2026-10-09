@@ -22,9 +22,11 @@ echo "Checking palette registry consistency..."
 python3 "$ROOT/scripts/check_palette_registry.py"
 
 # Same class of problem, same placement: fail fast before the sync/prettier
-# block. One kit owns five checks (version / byte budget / routing surface /
-# count claims / CJK encoding); SKILL.md metadata.version is the truth for the
-# version check. Mirrors the same-named CI steps.
+# block. The kit owns version / byte budget / routing surface / count claims /
+# reference reachability / declared imports / compilation / CJK encoding.
+# Do not write the count here — run `python3 scripts/check_archviz.py --list`.
+# This comment has drifted twice already. SKILL.md metadata.version is the
+# truth for the version check. Mirrors the same-named CI steps.
 echo "Checking consistency kit..."
 python3 "$ROOT/scripts/check_archviz.py"
 

@@ -72,10 +72,13 @@ jobs:
       run: python3 scripts/check_palette_registry.py
 
     # Same class of problem as the palette registry: one fact written down in
-    # several places, drifting silently. This kit owns five checks — version,
-    # SKILL.md byte budget, description routing surface, count claims, and CJK
-    # encoding — so the family's other four repos can carry the same file with
-    # their own archviz-checks.json instead of five hand-synced copies.
+    # several places, drifting silently. The kit owns version / byte budget /
+    # routing surface / count claims / reference reachability / declared imports
+    # / compilation / CJK encoding — run `python3 scripts/check_archviz.py
+    # --list` for the current set rather than trusting this comment, which has
+    # drifted twice. One file, one `archviz-checks.json` per repo, so the
+    # family's other four repos carry the same kit with their own config
+    # instead of five hand-synced copies.
     #
     # Version drift this catches: pyproject.toml had fallen 4 releases behind
     # and publish-skill.py hardcoded 0.2.5, so `gh release create` would have

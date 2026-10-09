@@ -74,6 +74,14 @@
       "assertions": [
         { "file": "references/gotchas.md", "regex": "(\\d+)\\s*个模板中的" }
       ]
+    },
+    {
+      "id": "html_samples",
+      "truth": { "kind": "glob_count", "globs": ["references/html-effectiveness/*.html"] },
+      "assertions": [
+        { "file": "SKILL.md", "regex": "(\\d+)\\s*份样例" },
+        { "file": "references/html-effectiveness/INDEX.md", "regex": "(\\d+)\\s*self-contained HTML examples" }
+      ]
     }
   ],
 
@@ -81,7 +89,7 @@
     {
       "id": "reference_index",
       "indexed_in": "SKILL.md",
-      "globs": ["references/*.md"],
+      "globs": ["references/**/*.md", "references/**/*.html"],
       "exempt": {
         "references/3d-cleanup-log.md": "维护者迁移日志 —— 记录 2026-06 把 3D 内容迁去 archviz-3d 的过程，不是 agent 面文档。SKILL.md 已 98.7% 顶格，不为一行日志占用路由面预算"
       }
@@ -93,7 +101,14 @@
     "pyproject": "pyproject.toml",
     "python_roots": ["scripts", "templates/python", "examples", "archviz_diagram"],
     "self_packages": ["archviz_diagram"],
-    "map": { "PIL": "Pillow", "yaml": "PyYAML", "sklearn": "scikit-learn" }
+    "map": { "PIL": "Pillow", "yaml": "PyYAML", "sklearn": "scikit-learn" },
+    "unused_exempt": {
+      "termaid": "CLI-only：scripts/reading-to-viz.py 打印 `cat the mmd | termaid --theme mono`，它是被当 shell 工具调用的，从不 import，所以基于 AST 的检查结构上看不见它。声明保留，因为干净检出后这条命令要能用。"
+    }
+  },
+
+  "pycompile": {
+    "globs": ["**/*.py"]
   },
 
   "cjk": {
@@ -102,10 +117,10 @@
       "README.md",
       "DESIGN.md",
       "CHANGELOG.md",
-      "references/*.md",
+      "references/**/*.md",
       "templates/html/*.html"
     ],
-    "require_charset": ["templates/html/*.html"],
+    "require_charset": ["templates/html/*.html", "references/**/*.html"],
     "charset_exempt": {
       "templates/html/_archviz-theme.html": "paste-in fragment — consumed inside another document's <head>, declares no charset of its own",
       "templates/html/_archviz-animated.html": "paste-in fragment — animation helper, not a standalone document",

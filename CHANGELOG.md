@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.8.2 (2026-10-09)
+
+### Fixed
+
+- **`examples/deliverables-python-bar.py` 从来不是一个 Python 文件。** 它是被存成 `.py`
+  的 markdown 片段：第 33 行是一个收尾的 ```` ``` ```` 围栏，第 35–41 行是 markdown
+  列表。`ast.parse` 与 `compile()` 都报 `SyntaxError: invalid character '→' (U+2192)`。
+  它自 `41c50aa`（v0.0.4 发布）就在仓库里，**从未编译过一次**；没有任何文件引用它，
+  所以没有任何东西会注意到。现已改造成可运行的脚本（原 notes 转成注释，内容未删），
+  并在 `examples/README.md` 补上它和它的 OB 配对文件 `ob-lightweight-bar.md`。
+- **`requirements.txt` 声明了一个从未使用的依赖。** `seaborn>=0.12` 在全仓唯一出现处是
+  上面那个文件里**被注释掉**的 `plt.style.use('seaborn-v0_8-whitegrid')`。已删除 ——
+  那个样式名由 matplotlib 自带，不需要装 seaborn。
+- **`references/html-effectiveness/` 整个语料没有任何入口。** INDEX.md 与 6 个样例文件
+  一直存在，但 `coverage` 的 glob 是 `references/*.md`（**非递归**），SKILL.md 从头到尾
+  也没点名。现已把 `## 按需加载地图` 加一行指向 INDEX.md，glob 改为 `references/**/*.md`
+  与 `references/**/*.html`，并新增 `html_samples` 计数断言。
+- `examples/README.md` 漏了 5 个文件（4 个全仓无人引用），已补全并加注说明。
+
+### Added
+
+- **套件第 8 项检查 `pycompile`。** 递归扫全仓 `.py`（带跳过目录表），用内建 `compile()`
+  逐文件编译。它补的是 `deps` 结构上看不见的洞：`deps` 对每个文件调 `ast.parse`，
+  **解析失败的文件被静默跳过** —— 对 `deps` 是对的（解析不了就没有 import），作为闸门是
+  致命的。上面那个 markdown 伪装成 `.py` 的文件正是从这个洞里漏过去的。
+  `compile()` 在进程内执行，**不往被检查的树里写 `__pycache__`**；此前 CI/hook 里的
+  `compileall -q scripts <pkg>` 会写，而且只覆盖两个目录，全族唯一的坏文件在第三个目录。
+- **`deps` 增加反方向核对**：声明了但没有任何代码 import 的依赖会失败。正向检查对这种
+  情形结构性失明 —— 从代码里删掉、却留在 `requirements.txt` 里的包仍然是「已声明」。
+  豁免写在 `deps.unused_exempt` 且**必须带理由**；`termaid` 就是靠这条被记录的（它是被
+  当 CLI 调用的：`cat x.mmd | termaid --theme mono`，从不 import）。
+- **`counts` 新增 `html_samples`**：`references/html-effectiveness/*.html` 的 glob 计数
+  必须等于 SKILL.md 与 INDEX.md 里声明的份数（两处断言）。
+- `pyproject.toml` 的 `[build-system] requires` 与 `[tool.*] packages` 不再被当成运行时
+  依赖 —— 否则反方向检查会把构建后端报成「死依赖」。`_declared_distributions` 改成按
+  TOML 段落取值（`[project] dependencies` + `[project.optional-dependencies]`）。
+
+### Changed
+
+- 套件 `KIT_VERSION` 1 → 2（新增 `pycompile`，`deps` 语义扩展）。五仓副本仍逐字节一致。
+- CI 与 pre-commit 里的 `compileall` 步骤移除（由套件 `pycompile` 接管）；注释里写死的
+  检查条数（「five checks」）删掉 —— 这类注释已经漂移过两次，改成指向
+  `python3 scripts/check_archviz.py --list`。
+- `references/html-effectiveness/INDEX.md` 的 `Six` 改成 `6`，使其可被断言锁定。
+
 ## 0.8.1 (2026-10-09)
 
 ### Fixed
