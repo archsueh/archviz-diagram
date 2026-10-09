@@ -12,7 +12,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.8.0
+  version: 0.8.1
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
@@ -711,3 +711,9 @@ Routing → `ecosystem-routing.md` · Types → `structural-diagram-types.md` ·
 权威落点：`archviz-3d/SKILL.md` → `## Key Gotchas` + `## Detailed Pitfalls & Patterns`
 （importmap、API 迁移、`renderLoop` 命名冲突、相机 tween、DPR cap、光照/explode 约束）。
 本仓库只保留 2D 信息可视化；3D brief → 路由到 archviz-3d。
+
+<!-- design-judgment-integration -->
+## 交付前自检 (Post-Generation Design Judgment)
+
+交付前必须跑 `design-judgment` 技能的五段判断链做自检，不要只交付「技术上成功的第一稿」——
+完整规则（五段链 / 六维度 / 选模型路由 / 三条硬边界）见 [`references/design-judgment.md`](references/design-judgment.md)。

@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.8.1 (2026-10-09)
+
+### Fixed
+
+- **`requirements.txt` 漏了两个真实的 import。** `scripts/publish-skill.py` 顶层
+  `import yaml`、`templates/python/scatter-plot.py` 顶层 `import pandas` —— 两者都不在
+  清单里，干净检出跑这两个文件会直接 `ImportError`。现已补 `PyYAML>=6.0` 与
+  `pandas>=2.0`，并由套件新增的 `deps` 检查守住不再复发。同一缺陷在**家族五个
+  仓库里全部存在**（layout 两个、animated 三个、3d 一个、sketch 一个）。
+
+### Changed
+
+- **`design-judgment` 集成块移出 SKILL.md 正文。** 2026-10-09 20:32:55 有并行会话
+  在五个 archviz 仓库的 SKILL.md 末尾各追加了一段 956 字节的
+  `<!-- design-judgment-integration -->` 块（交付前跑五段判断链自检）。
+  **内容逐字保留，未删改一字**，但 956 字节放在正文里会把本仓顶到 43,998 / 44,000
+  —— 只剩 2 字节余量，等于把棘轮作废。现移入
+  `references/design-judgment.md`，SKILL.md 末尾只留一行指针（366 字节），
+  SKILL.md 回到 43,408 字节。**这是本会话一贯的渐进披露纪律的直接应用**：
+  正文放路由与闸门，细节放 references/。
+
+### Added
+
+- **`coverage` 检查** —— `references/*.md` 必须从 SKILL.md **可达**（传递可达，
+  不是直接点名；本仓 13 个文件是经链路到达的）。索引里漏一个文件，任何计数都
+  还是对的 —— 这个失效模式 `counts` 结构上看不见。本仓实测 49 个文件里只有
+  `3d-cleanup-log.md` 完全不可达，按维护者文档登记豁免（带理由）。
+- **`deps` 检查** —— 把仓库里每个第三方 import 与清单对账。
+
 ## 0.8.0 (2026-10-09)
 
 一致性套件 `scripts/check_archviz.py` 落地 + description 路由面修复。本版的主体不是新功能，

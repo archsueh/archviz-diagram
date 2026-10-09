@@ -15,3 +15,9 @@ seaborn>=0.12
 
 # Numerical computing (for box plots, distributions)
 numpy>=1.24
+
+# YAML parsing — scripts/publish-skill.py reads and rewrites SKILL.md frontmatter
+PyYAML>=6.0
+
+# DataFrame-shaped chart inputs — templates/python/scatter-plot.py
+pandas>=2.0
