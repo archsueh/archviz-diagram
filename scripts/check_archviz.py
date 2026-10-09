@@ -212,15 +212,23 @@ def normalise(name: str) -> str:
     return re.sub(r"[\s_-]+", " ", name.strip().lower())
 
 
-def mentions(haystack: str, needle: str) -> bool:
-    """True if *needle* appears in *haystack* as a whole word.
+ASCII_ONLY_RE = re.compile(r"\A[\x00-\x7F]*\Z")
 
-    Word boundaries rather than a bare substring: `treemap` contains `tree`,
-    so a substring test would report the Tree type as routed by a description
-    that never names it. `\\b` also keeps `bar chart` from being satisfied by
-    `stacked bar chart`'s tail.
+
+def mentions(haystack: str, needle: str) -> bool:
+    """True if *needle* is routed by *haystack*.
+
+    ASCII needles are matched on word boundaries; non-ASCII ones are not.
+
+    Word boundaries are load-bearing for ASCII: `treemap` contains `tree`, so a
+    substring test would report the Tree type as routed by a description that
+    never names it. They are meaningless for CJK, where every character is a
+    word character: `\\b手绘\\b` does not match inside `手绘风格`, so a Chinese
+    alias would silently never be satisfiable. The rule is therefore
+    "boundaries for ASCII, substring for CJK", not one or the other.
     """
-    pattern = r"\b" + re.escape(normalise(needle)).replace(r"\ ", r"\s+") + r"\b"
+    n = normalise(needle)
+    pattern = r"\b" + re.escape(n) + r"\b" if ASCII_ONLY_RE.match(n) else re.escape(n)
     return re.search(pattern, haystack) is not None
 
 
@@ -624,7 +632,7 @@ FIXTURE_CONFIG = {
             "file": "engine.py",
             "block": r"^STYLES = \{(.*?)^\}",
             "entry": r'^\s{4}"([\w-]+)":',
-            "aliases": {"watercolor": ["水彩"]},
+            "aliases": {"watercolor": ["水彩"], "line": ["线条"]},
         }
     },
     "routing": {"registries": ["styles"], "also_check_triggers": False},
@@ -697,6 +705,8 @@ def self_test() -> int:
              "**2 styles**: line, watercolor", "**2 styles**: line, 水彩")}, {}, True),
         ("routing_substring_does_not_satisfy", "routing",
          {"SKILL.md": GOOD_SKILL.replace("line", "linetype")}, {}, False),
+        ("routing_cjk_alias_is_substring_matched", "routing",
+         {"SKILL.md": GOOD_SKILL.replace("line", "线条艺术")}, {}, True),
         ("counts_ok", "counts", {}, {}, True),
         ("counts_stale", "counts", {"SKILL.md": GOOD_SKILL.replace("**2 styles**", "**6 styles**")}, {}, False),
         ("counts_assertion_gone", "counts",
