@@ -179,6 +179,7 @@ See `sketch-image-pipeline` skill for full workflow.
 | 做学术表格 | `references/academic-table-rules.md` | 列宽 / 对齐 / 显著性 / 跨列表头 |
 | 做展板 / 作品集 | `references/presentation-grids.md` | 版式网格 + 交付前打磨清单 |
 | 查某条规则的出处 | `references/credits.md` | 上游来源与致谢 |
+| 交付前自检 | `references/design-judgment.md` | 五段判断链 / 六维度 / 选模型路由 / 三条硬边界 |
 
 **以下 6 个此前是孤儿文件**（内容存在但全仓库无入口），现纳入地图：
 
