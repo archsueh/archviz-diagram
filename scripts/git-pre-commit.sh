@@ -26,8 +26,20 @@ fi
 # Independent of the sync/prettier block below (whose order is load-bearing),
 # so it runs first: fail fast on a drifted palette registry rather than after
 # a formatting pass. Mirrors the same-named CI step.
-echo "Checking palette registry consistency..."
-python3 "$ROOT/scripts/check_palette_registry.py"
+#
+# The palette registry is a **archviz-diagram-only** concept: the other four
+# repos have no `_archviz-theme.html` and no palette gate, so the script is
+# absent there. Guard on existence rather than calling unconditionally — the
+# unconditional call made every commit in the other four repos abort with
+# `can't open file .../check_palette_registry.py` (measured 2026-10-09). A
+# missing script is "not applicable here", not "the check failed"; only a
+# present-and-failing script may abort.
+if [ -f "$ROOT/scripts/check_palette_registry.py" ]; then
+    echo "Checking palette registry consistency..."
+    python3 "$ROOT/scripts/check_palette_registry.py"
+else
+    echo "No check_palette_registry.py — palette gate not applicable to this repo."
+fi
 
 # Same class of problem, same placement: fail fast before the sync/prettier
 # block. The kit owns version / byte budget / routing surface / count claims /
@@ -47,14 +59,26 @@ python3 "$ROOT/scripts/check_archviz.py" --self-test >/dev/null
 # scripts paste in, so a sync-only commit can never satisfy CI's
 # `git diff --exit-code` check. Both sync scripts exit non-zero if a template
 # is missing its anchor, which aborts the commit on purpose.
-echo "Syncing theme and export templates..."
-python3 "$ROOT/scripts/sync_theme.py"
-python3 "$ROOT/scripts/sync_export.py"
+#
+# Same existence-guard as the palette block above: only archviz-diagram and
+# archviz-3d carry the sync scripts and `templates/html`; the other three repos
+# have neither, and an unconditional call aborts their commits (measured
+# 2026-10-09). Guard each piece on its own presence so a repo without HTML
+# templates still gets the kit gates above.
+if [ -f "$ROOT/scripts/sync_theme.py" ] && [ -f "$ROOT/scripts/sync_export.py" ]; then
+    echo "Syncing theme and export templates..."
+    python3 "$ROOT/scripts/sync_theme.py"
+    python3 "$ROOT/scripts/sync_export.py"
 
-echo "Formatting synced templates with Prettier..."
-npx --yes prettier@3.9.9 --write "templates/html/*.html"
+    if compgen -G "$ROOT/templates/html/*.html" >/dev/null; then
+        echo "Formatting synced templates with Prettier..."
+        npx --yes prettier@3.9.9 --write "templates/html/*.html"
 
-# Stage HTML templates only if still inside a git commit
-if git rev-parse --git-dir >/dev/null 2>&1; then
-    git add templates/html/*.html 2>/dev/null || true
+        # Stage HTML templates only if still inside a git commit
+        if git rev-parse --git-dir >/dev/null 2>&1; then
+            git add templates/html/*.html 2>/dev/null || true
+        fi
+    fi
+else
+    echo "No sync scripts — theme/export sync not applicable to this repo."
 fi
