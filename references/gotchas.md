@@ -85,3 +85,5 @@
 - **`counts` 与 `routing` 是互补的，不是冗余的。** 反向验证实测：删掉注册表里的一行（`* **4. 技术蓝图…`）后，`routing` **仍然 PASS**（注册表剩 3 个名字，description 里 3/3 命中），只有 `counts` 抓到「声明 4，实为 3」。**原因**：`routing` 校验的是「注册表里的每个名字都被点名」，注册表变短它就更容易满足 —— 它防的是**漏点名**，防不了**被删条目**。两个检查必须都在。
 
 - **字节编译看不见缺失的依赖。** archviz-layout 的 CI 加了 `python3 -m compileall -q scripts` 兜底（该仓库没有任何脚本被 CI 执行过），但它只能抓语法错。同仓库 `render_board_with_charts.py` 顶层 `import PIL`、`capture_rects.py` 函数内 `import playwright`，而仓库**既无 `requirements.txt` 也无 `pyproject.toml`** —— 干净检出根本跑不起来。**纪律：CI 里「编译通过」永远不等于「能跑」；没有依赖清单的仓库，这一条必须作为已知缺口显式记录，不能算作覆盖。**
+
+- **`--self-test` 通过不代表闸门是好的 —— 它在开发机（Python 3.14）和 CI（`python3`→3.9）上可以给出相反结论。** 实测 2026-10-09：套件 `deps` 在 3.14 上 55/55 通过，在 macOS 自带的 `/usr/bin/python3`（3.9.6）上 12/55 失败，全部是 deps。根因是 `sys.stdlib_module_names` **只在 Python 3.10+ 存在**，3.9 上 fallback 到 `sys.builtin_module_names`（只含编译进解释器的模块），于是 `os`/`json`/`re`/`math` 全被当成未声明依赖。**纪律：验证一个"跨解释器/跨平台"的闸门时，必须用**目标环境**的解释器跑一遍 —— 在功能更全的解释器上通过，恰恰是最容易掩盖这类缺陷的情形。** 修法见 CHANGELOG §0.8.3：`_stdlib_modules()` 回退扫描 stdlib + `lib-dynload`，扩展模块名取第一个点前的部分（`Path.stem` 会把 `math.cpython-39-darwin.so` 切成 `math.cpython-39-darwin`，这一稿第一版正是这么错的，被四仓真实检查当场抓出）。

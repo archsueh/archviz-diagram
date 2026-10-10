@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.8.3 (2026-10-09)
+
+### Fixed
+
+- **套件 `deps` 检查在 Python 3.9 及更早版本上是坏的 —— 静默把整个标准库误判为第三方。**
+  `check_deps` 用 `sys.stdlib_module_names` 判断哪些 import 属于标准库，但这个属性
+  **只在 Python 3.10+ 存在**。kit 自称支持 3.8+，于是在 3.9（macOS 自带的
+  `/usr/bin/python3` 正是 3.9.6）上 fallback 到 `sys.builtin_module_names` ——
+  后者只列**编译进解释器**的模块（`sys` / `builtins` / `_io`…）。`os` / `json` /
+  `re` / `pathlib` 这些纯 Python 标准库全部被当成未声明的第三方 import，
+  `deps` 在真实仓库里假阳性 FAIL，套件自测 **12/55 用例不符**（全部是 deps）。
+
+  **成因**：`--self-test` 在开发者机器上（Hermes 自带的 Python 3.14）跑是 55/55 通过，
+  但 CI / pre-commit 用 `python3` 解析到系统 3.9，于是同一个文件在两台机器上给出
+  相反的结论。**这是「同一事实写在两处必然漂移」的又一实例** —— 这次漂的是解释器版本。
+
+  **修法**：新增 `_stdlib_modules()`，在 `stdlib_module_names` 缺席时回退到扫描
+  `sysconfig` 的 stdlib 目录**及其 `lib-dynload` 子目录**（编译扩展 `math` / `zlib` /
+  `_ssl` 住在这里），并显式排除 `site-packages` / `dist-packages`。扩展模块名取
+  `math.cpython-39-darwin.so` 的第一个点之前的部分 —— 用 `Path.stem` 会得到
+  `math.cpython-39-darwin`（`.stem` 只去掉 `.so`），这一版第一稿正是这么写的，
+  在四仓真实检查里立刻暴露为 `math` / `zlib` 假阳性。
+
+- **套件 `KIT_VERSION` 2 → 3**（`deps` 语义修正：3.9 上从"坏"变"对"）。五仓副本
+  逐字节一致，同一修复同步到 archviz-3d / sketch / animated / layout。
+
 ## 0.8.2 (2026-10-09)
 
 ### Fixed
