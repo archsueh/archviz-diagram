@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.4 (2026-10-09)
+
+### Fixed
+
+- **pre-commit 的 `pip check` 被环境 `PYTHONPATH` 污染，误报并 abort 提交。** Hermes
+  往 `PYTHONPATH` 注入它自己的 Python 3.14 `site-packages`；archviz-3d / sketch 的 venv
+  是 3.12，`pip check` 因此"看见"了一个从未装进本仓的 `ruamel-yaml`，报
+  `ruamel-yaml 0.18.16 requires ruamel-yaml-clib, which is not installed` 并中止提交。
+  **修法**：`env -u PYTHONPATH "$ROOT/.venv/bin/pip" check` —— venv 是自包含的，它的
+  内部一致性只能由它自己的内容判定，不能被调用者 shell 导出的路径左右。五仓脚本同步
+  （sha256 `552e5094`）。教训见 `references/gotchas.md`。
+
+### Changed
+
+- **`references/gotchas.md` 修正一条过时记录。** 「四仓缺 pre-commit 垫片」已在同日补齐；
+  条目更新为「垫片不进版本库，新克隆仍需重装」，并补入 `PYTHONPATH` 污染教训。
+
 ## 0.8.3 (2026-10-09)
 
 ### Fixed

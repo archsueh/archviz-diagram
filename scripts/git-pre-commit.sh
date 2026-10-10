@@ -7,7 +7,15 @@ cd "$ROOT"
 
 echo "Checking python dependencies compatibility..."
 if [ -x "$ROOT/.venv/bin/pip" ]; then
-    if ! "$ROOT/.venv/bin/pip" check; then
+    # `pip check` reads distribution metadata off `sys.path`, so an ambient
+    # PYTHONPATH leaks foreign packages into the verdict. Measured 2026-10-09:
+    # Hermes injects a Python 3.14 site-packages into PYTHONPATH, the 3.12 venv
+    # then "sees" a `ruamel-yaml` that was never installed here, and `pip check`
+    # aborts the commit over a dependency that does not belong to this repo at
+    # all. A venv is self-contained by design — its internal consistency must be
+    # judged on its own contents, not on whatever the calling shell exported.
+    # `-u PYTHONPATH` restores that isolation.
+    if ! env -u PYTHONPATH "$ROOT/.venv/bin/pip" check; then
         echo "ERROR: Broken requirements found in virtual environment. Commit aborted."
         exit 1
     fi

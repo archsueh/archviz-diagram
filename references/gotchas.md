@@ -80,7 +80,9 @@
 
 - **计数断言只认阿拉伯数字 —— 中文数字和英文数词是隐形计数。** archviz-layout 首跑时 `counts` 报「找不到断言点」，核实后：该文件里「四套视觉语言」的四处表述全是**中文数字「四」**，新写的 `description` 用的是英文词 `four`，**全文一个阿拉伯数字都没有**。断言正则 `(\d+)` 因此无处可落，门禁**向失败侧关闭**（这正是设计意图：断言目标消失本身就是缺陷，不是通过）。**纪律：凡是要被门禁约束的计数，必须在文本里以阿拉伯数字出现一次；中文数字/英文数词只作行文，不作锚点。** 修法是让 `description` 领头写 `4 套视觉语言（visual languages）`、小节标题写 `建筑版式 4 套视觉语言`，给出**两个互相独立**的断言点。
 
-- **`.git/hooks/` 不进版本库 —— 仓库里有 pre-commit 脚本不等于它会被执行。** 实测五个仓库：只有 archviz-diagram 在 `.git/hooks/pre-commit` 放了垫片（`exec "$(dirname "$0")/../../scripts/git-pre-commit.sh"`），另外四个**只有脚本、没有垫片**，也就是门禁写了但从未运行。**纪律：交付一个 pre-commit 脚本时，必须同时给出安装动作（垫片文件），并在文档里写清卸载方式；只交付 `scripts/*.sh` 等于交付了一个摆设。**
+- **`.git/hooks/` 不进版本库 —— 仓库里有 pre-commit 脚本不等于它会被执行。** 实测 2026-10-09：当时只有 archviz-diagram 在 `.git/hooks/pre-commit` 放了垫片（`exec "$(dirname "$0")/../../scripts/git-pre-commit.sh"`），另外四个**只有脚本、没有垫片**，也就是门禁写了但从未运行。**纪律：交付一个 pre-commit 脚本时，必须同时给出安装动作（垫片文件），并在文档里写清卸载方式；只交付 `scripts/*.sh` 等于交付了一个摆设。** 同日已补齐五仓垫片 —— 但**垫片不是版本控制的，`git clone` 一个新副本它不会跟着来**，这条纪律对新克隆仍然成立。
+
+- **`pip check` 会被环境里的 `PYTHONPATH` 污染 —— venv 的自洽性不能由外部路径判定。** 实测 2026-10-09：Hermes 往 `PYTHONPATH` 注入了它自己的 Python 3.14 `site-packages`；archviz-3d / sketch 的 venv 是 3.12，`pip check` 却"看见"了那个 3.14 环境里的 `ruamel-yaml`（该包从未装进本仓任何 venv），于是报 `ruamel-yaml 0.18.16 requires ruamel-yaml-clib, which is not installed`，**abort 了两次提交**。`env -u PYTHONPATH .venv/bin/pip check` 立刻返回 `No broken requirements found`。**纪律：任何"检查 venv 内部一致性"的命令都必须先剥掉 `PYTHONPATH`（`env -u PYTHONPATH`）—— 一个自包含环境的体检，不能被调用者的 shell 导出的路径左右。** 这与上面"同一事实写在两处必然漂移"同型：venv 的包清单是一个事实，`PYTHONPATH` 是另一个，混在一起 `pip check` 就会对着错误的事实下判断。
 
 - **`counts` 与 `routing` 是互补的，不是冗余的。** 反向验证实测：删掉注册表里的一行（`* **4. 技术蓝图…`）后，`routing` **仍然 PASS**（注册表剩 3 个名字，description 里 3/3 命中），只有 `counts` 抓到「声明 4，实为 3」。**原因**：`routing` 校验的是「注册表里的每个名字都被点名」，注册表变短它就更容易满足 —— 它防的是**漏点名**，防不了**被删条目**。两个检查必须都在。
 
