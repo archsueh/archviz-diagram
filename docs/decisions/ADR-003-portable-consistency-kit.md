@@ -177,3 +177,8 @@ archviz-sketch 的 `SKILL.md` 里「8 套模板」是错的（真值 7），而�
   依然存在，本轮未解决，靠提交纪律。
 - 闸门数量的权威来源是 `--list`，不是本文档，也不是任何 CI 注释。CI/hook 里写死的
   「five checks」「seven checks」已全部删除并改成指向 `--list`。
+  **⚠️ 2026-10-09 补记**：上面这句当时**只对 archviz-diagram 成立** —— 另外四仓的
+  `ci.yml` 仍写着「Seven checks」（layout 写「Five」），而套件已跑 8 项。这条声明本身
+  就是「把已有一处真源的事实又抄一遍」的又一实例，且它把「打算清理」写成了「已清理」。
+  现已补齐四仓，并加 `prose` 检查（KIT_VERSION 4）——**这类声明以后由闸门把守，不再靠
+  自觉**。教训见 `references/gotchas.md`。
