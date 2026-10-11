@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.8.6 (2026-10-09)
+
+### Added
+
+- **套件新增配置 schema 校验：`archviz-checks.json` 里的未知键直接 FAIL。** 配置是契约，
+  **一个无人读取的键就是一条无人校验的声明** —— 这正是本套件存在的理由。它已经发生过：
+  `archviz-checks.json` 从初始提交起就带着一个 `"kit": 1` 字段，**没有任何代码读它、没有
+  任何文档提它、也没有任何东西更新它**（KIT_VERSION 已到 4，`kit` 仍停在 1）。对仓里
+  每一道闸门来说，一个陈旧且无人读取的版本声明与一个正确的版本声明**无法区分，因为没有
+  闸门看过它**。现在有闸门了：`load_config` 拒绝 `KNOWN_CONFIG_KEYS` 之外的任何键。
+  五仓配置里那个 `kit` 字段已删除。自测加 2 例（已知键通过 / 未知键被拒），计数改为
+  `total`（此前用 `len(cases)`，会漏掉 `cases` 列表之外的用例）。
+
+- **套件 `KIT_VERSION` 4 → 5**（新增配置 schema 校验）。五仓副本逐字节一致。
+
+### Fixed
+
+- **archviz-3d 的 CI 此前每次 push 都失败。** 它的 CI 只有 `sync → git diff`，缺了
+  prettier 步骤 —— sync 脚本注入的 `<style>`/`<script>` 块缩进未经重排，与已提交
+  （prettier 格式化过的）模板不一致，`git diff --exit-code` 必然失败（实测 10s / 7s
+  秒退）。补齐 archviz-diagram 同款顺序：`prettier --check → sync → prettier --write
+  → git diff`。修复后该仓 CI 首次成功（14s）。
+
 ## 0.8.5 (2026-10-09)
 
 ### Added
