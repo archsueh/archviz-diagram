@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.8.7 (2026-10-09)
+
+### Changed
+
+- **`sync_theme.py` 与 `sync_export.py` 的 `EXCLUDED` 集合抽成共享常量。** 两脚本各自
+  写了一遍同一个「片段模板不该被同步」清单——**同一事实写两处**，与版本号/调色板/CI 计数
+  同型。现抽到 `scripts/sync_common.py`，两脚本 import 它。两仓（diagram / 3d）各自落地，
+  3d 的 `sync_common.py` 含它自有的三个 paste-in 片段。
+
+### Added
+
+- **套件 `deps` 检查识别本地模块。** 抽共享常量后，`from sync_common import EXCLUDED`
+  被 `deps` 报成「未声明的第三方 import」——**套件抓对了，但抓错了类别**：`sync_common`
+  是 `scripts/` 下的兄弟模块，不是依赖。修法：`deps` 现在把 `python_roots` 树内的 `.py`
+  模块名（含 `__init__.py` 所属的目录包）视为本仓，不计入第三方。自测加 1 例
+  （`deps_sibling_module_is_local`）。这是 `deps` 的一个真实盲区，此前没有兄弟脚本互相
+  import 的场景触发过它。
+
+- **套件 `KIT_VERSION` 5 → 6**（`deps` 识别本地模块）。五仓副本逐字节一致。
+
 ## 0.8.6 (2026-10-09)
 
 ### Added

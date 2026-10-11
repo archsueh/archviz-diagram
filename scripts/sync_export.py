@@ -17,13 +17,8 @@ import re
 import sys
 from pathlib import Path
 
-# Partial templates that are not meant to carry the export module.
-EXCLUDED = {
-    "_archviz-export.html",
-    "_archviz-theme.html",
-    "_archviz-animated.html",
-    "_flow-attach.html",
-}
+# The shared skip set lives in one place — see sync_common.py for why.
+from sync_common import EXCLUDED
 
 # Anchors left behind by earlier versions of this script. Whichever matches,
 # the span from the anchor through the final </body> is replaced.

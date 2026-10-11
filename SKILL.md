@@ -12,7 +12,7 @@ description: |
   Use Paper Framework Mode when the user asks for 论文框架图, 论文架构图, 方法总览图, method overview figure, framework figure, paper framework figure, mechanism figure, pipeline figure for a paper.
 license: MIT
 metadata:
-  version: 0.8.6
+  version: 0.8.7
   source: https://github.com/archsueh/archviz-diagram
   risk: safe
   author: archsueh
