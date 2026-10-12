@@ -21,6 +21,8 @@ venv.bak/
 *.swp
 *.swo
 *~
+*.bak
+*.orig
 
 # Build / distribution
 build/
