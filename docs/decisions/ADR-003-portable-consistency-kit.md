@@ -182,3 +182,15 @@ archviz-sketch 的 `SKILL.md` 里「8 套模板」是错的（真值 7），而�
   就是「把已有一处真源的事实又抄一遍」的又一实例，且它把「打算清理」写成了「已清理」。
   现已补齐四仓，并加 `prose` 检查（KIT_VERSION 4）——**这类声明以后由闸门把守，不再靠
   自觉**。教训见 `references/gotchas.md`。
+
+## Update — kit v7（2026-10-09，共享内容文件的 hash 闸门）
+
+本 ADR 的「两个手段」（`--self-hash` + `--self-test`）保护的是**套件脚本**，**共享内容
+文件**一直是裸的。实测：`references/design-judgment.md` 五仓逐字节一致（LF-normalized
+sha256 `fce284d7…`），但没有任何东西在比对它们 —— 只改一仓不改其余时，五份副本各自自洽、
+所有闸门全绿，分歧完全静默。
+
+**新增 `shared` 检查（KIT_VERSION 7）**：各仓 `archviz-checks.json` 声明共享文件的期望
+sha256，漂移即 FAIL。改共享文件 = 同步改五仓配置的 hash，一次刻意可见的动作。这把
+「手工同步副本」从「靠自觉保持一致」升级为「不一致会变红」。hash 取 LF-normalized 字节，
+与 `budget` 同理（`core.autocrlf=true` 的检出不能读成不同文件）。
